@@ -1,30 +1,26 @@
 #include "FrameManager.h"
 
-#define SHADER_COLOR_VERT_PATH "../assets/shaders/BasicShader.vert"
-#define SHADER_COLOR_FRAG_PATH "../assets/shaders/BasicShader.frag"
+#define SHADER_COLOR_VERT_PATH "../assets/shaders/ColorShader.vert"
+#define SHADER_COLOR_FRAG_PATH "../assets/shaders/ColorShader.frag"
 #define SHADER_TEX_VERT_PATH "../assets/shaders/TextureShader.vert"
 #define SHADER_TEX_FRAG_PATH "../assets/shaders/TextureShader.frag"
-#define SHADER_RTEX_VERT_PATH "../assets/shaders/RTexShader.vert"
-#define SHADER_RTEX_FRAG_PATH "../assets/shaders/RTexShader.frag"
 #define SHADER_SKY_VERT_PATH "../assets/shaders/SkyboxShader.vert"
 #define SHADER_SKY_FRAG_PATH "../assets/shaders/SkyboxShader.frag"
 
 #define CUBE_TEX_PATH "../assets/textures/pattern.ppm"
-#define SKY_TEX_LEFT_PATH "../assets/textures/cubemap/leftm/"
-#define SKY_TEX_RIGHT_PATH "../assets/textures/cubemap/rightm/"
-#define SKY_TEX_CUSTOM_PATH "../assets/textures/custommap/"
+#define SKY_TEX_PATH "../assets/textures/sky/"
 
 //Shaders
 GLint colorShader;
 GLint textureShader;
 GLint skyboxShader;
-GLint RTexShader;
 
 //Skyboxes
-Skybox * customSkybox;
+Skybox * skybox;
 
 FrameManager::FrameManager() {
 	init();
+	skybox = new Skybox(SKY_TEX_PATH);
 }
 
 void FrameManager::init() {
@@ -35,16 +31,14 @@ void FrameManager::initShaders() {
 	skyboxShader = LoadShaders(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
 	colorShader = LoadShaders(SHADER_COLOR_VERT_PATH, SHADER_COLOR_FRAG_PATH);
 	textureShader = LoadShaders(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
-	RTexShader = LoadShaders(SHADER_RTEX_VERT_PATH, SHADER_RTEX_FRAG_PATH);
 }
 
 FrameManager::~FrameManager() {
-	delete(customSkybox);
+	delete(skybox);
 
 	glDeleteProgram(colorShader);
 	glDeleteProgram(textureShader);
 	glDeleteProgram(skyboxShader);
-	glDeleteProgram(RTexShader);
 }
 
 void FrameManager::update(double deltaTime) {
@@ -56,7 +50,7 @@ void FrameManager::update(double deltaTime) {
 
 //Draw Methods
 void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 headPose) {
-	customSkybox->draw(projection, headPose, skyboxShader);
+	skybox->draw(projection, headPose, skyboxShader);
 }
 
 void FrameManager::drawControllers(glm::mat4 projection, glm::mat4 headPose) {

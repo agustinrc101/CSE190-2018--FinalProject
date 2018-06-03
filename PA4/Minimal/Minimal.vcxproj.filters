@@ -30,8 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="..\assets\shaders\RTexShader.frag" />
-    <None Include="..\assets\shaders\RTexShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FrameManager.h">

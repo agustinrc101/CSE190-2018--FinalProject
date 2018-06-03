@@ -140,8 +140,6 @@
     <ClCompile Include="Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\shaders\RTexShader.frag" />
-    <None Include="..\assets\shaders\RTexShader.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
