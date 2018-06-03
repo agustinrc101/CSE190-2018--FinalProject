@@ -11,15 +11,25 @@
 #define SKY_TEX_PATH "../assets/textures/sky/"
 
 //Shaders
-GLint colorShader;
-GLint textureShader;
-GLint skyboxShader;
+Shader colorShader;
+Shader textureShader;
+Shader skyboxShader;
 
 //Skyboxes
+Skybox* skybox;
 
 FrameManager::FrameManager() {
 	init();
-	
+	std::vector<std::string> faces
+	{
+		std::string(SKY_TEX_PATH) + "",
+		std::string(SKY_TEX_PATH) + "",
+		std::string(SKY_TEX_PATH) + "",
+		std::string(SKY_TEX_PATH) + "",
+		std::string(SKY_TEX_PATH) + "",
+		std::string(SKY_TEX_PATH) + "",
+	};
+	skybox = new Skybox(faces, &skyboxShader);
 }
 
 void FrameManager::init() {
@@ -27,13 +37,13 @@ void FrameManager::init() {
 }
 
 void FrameManager::initShaders() {
-	
+	skyboxShader = Shader(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
+	colorShader = Shader(SHADER_COLOR_VERT_PATH, SHADER_COLOR_FRAG_PATH);
+	textureShader = Shader(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
 }
 
 FrameManager::~FrameManager() {
-	glDeleteProgram(colorShader);
-	glDeleteProgram(textureShader);
-	glDeleteProgram(skyboxShader);
+	delete(skybox);
 }
 
 void FrameManager::update(double deltaTime) {
@@ -44,8 +54,8 @@ void FrameManager::update(double deltaTime) {
 
 
 //Draw Methods
-void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 headPose) {
-
+void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 view) {
+	skybox->draw(&skyboxShader, projection, view);
 }
 
 void FrameManager::drawControllers(glm::mat4 projection, glm::mat4 headPose) {
