@@ -615,10 +615,8 @@ protected:
 		frameManager->setControllerPositions(posL, posR);
 		glm::mat4 hmdpos = ovr::toGlm(trackState.HeadPose.ThePose);
 
-		std::cout << hmdpos[3][0] << std::endl;
 
-
-		//Check button presses				************************BUTTON PRESSES**************
+		//Check button presses				************************BUTTON PRESSES*****************************************************************************
 		ovrInputState inputState;
 		if (OVR_SUCCESS(ovr_GetInputState(_session, ovrControllerType_Touch, &inputState))) {
 			//Index Trigger Press
