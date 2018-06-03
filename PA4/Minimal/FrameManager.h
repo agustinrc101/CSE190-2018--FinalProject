@@ -9,9 +9,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "ShaderLoader.h"
-#include "Skybox.h"
-
 class FrameManager {
 public:
 	bool setSkyboxPos = true;

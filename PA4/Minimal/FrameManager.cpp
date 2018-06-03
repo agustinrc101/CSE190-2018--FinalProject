@@ -16,11 +16,10 @@ GLint textureShader;
 GLint skyboxShader;
 
 //Skyboxes
-Skybox * skybox;
 
 FrameManager::FrameManager() {
 	init();
-	skybox = new Skybox(SKY_TEX_PATH);
+	
 }
 
 void FrameManager::init() {
@@ -28,14 +27,10 @@ void FrameManager::init() {
 }
 
 void FrameManager::initShaders() {
-	skyboxShader = LoadShaders(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
-	colorShader = LoadShaders(SHADER_COLOR_VERT_PATH, SHADER_COLOR_FRAG_PATH);
-	textureShader = LoadShaders(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
+	
 }
 
 FrameManager::~FrameManager() {
-	delete(skybox);
-
 	glDeleteProgram(colorShader);
 	glDeleteProgram(textureShader);
 	glDeleteProgram(skyboxShader);
@@ -50,7 +45,7 @@ void FrameManager::update(double deltaTime) {
 
 //Draw Methods
 void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 headPose) {
-	skybox->draw(projection, headPose, skyboxShader);
+
 }
 
 void FrameManager::drawControllers(glm::mat4 projection, glm::mat4 headPose) {
