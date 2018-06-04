@@ -85,17 +85,11 @@ Transform& Transform::translate(glm::vec3 trans)
 
 Transform& Transform::scale(float amount)
 {
-	totalScale = glm::scale(glm::mat4(1.0f), glm::vec3(pow(1.2f, amount))) * totalScale;
+	totalScale = glm::scale(glm::mat4(1.0f), glm::vec3(amount, amount, amount)) * totalScale;
 	return *this;
 }
 
 Transform& Transform::scale(float x, float y, float z)
-{
-	totalScale = glm::scale(glm::mat4(1.0f), glm::vec3(pow(1.2f, x), pow(1.2f, y), pow(1.2f, z))) * totalScale;
-	return *this;
-}
-
-Transform& Transform::scaleAbs(float x, float y, float z)
 {
 	totalScale = glm::scale(glm::mat4(1.0f), glm::vec3(x, y, z)) * totalScale;
 	return *this;

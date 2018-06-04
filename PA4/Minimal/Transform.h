@@ -21,7 +21,6 @@ public:
 	Transform& translate(glm::vec3 trans);
 	Transform& scale(float amount);
 	Transform& scale(float x, float y, float z);
-	Transform& scaleAbs(float x, float y, float z);
 	Transform& rotate(glm::vec3 rotAxis, float deg);
 	Transform& rotate(glm::mat4 M);
 	Transform& resetTranslate();
