@@ -1,0 +1,8 @@
+Using OpenAL
+	https://www.youtube.com/watch?v=V83Ja4FmrqE
+	https://www.youtube.com/watch?v=BR8KjNkYURk
+Networking
+	https://www.codeproject.com/Articles/412511/Simple-client-server-network-using-Cplusplus-and-W
+PhysicsEngine (collision) - video series
+	https://www.youtube.com/watch?v=3Oay1YxkP5c&list=PLEETnX-uPtBXm1KEr_2zQ6K_0hoGH6JJ0
+	
