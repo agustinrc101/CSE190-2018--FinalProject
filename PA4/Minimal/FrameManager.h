@@ -8,11 +8,15 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <al.h>;
+#include <alc.h>;
+
 
 #include <vector>
 
 #include "shader.h"
 #include "Skybox.h"
+
 
 
 class FrameManager {
