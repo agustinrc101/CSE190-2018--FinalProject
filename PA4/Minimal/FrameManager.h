@@ -14,6 +14,7 @@
 #include "shader.h"
 #include "Skybox.h"
 
+
 class FrameManager {
 public:
 	bool setSkyboxPos = true;

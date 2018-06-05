@@ -22,12 +22,12 @@ FrameManager::FrameManager() {
 	init();
 	std::vector<std::string> faces
 	{
-		std::string(SKY_TEX_PATH) + "",
-		std::string(SKY_TEX_PATH) + "",
-		std::string(SKY_TEX_PATH) + "",
-		std::string(SKY_TEX_PATH) + "",
-		std::string(SKY_TEX_PATH) + "",
-		std::string(SKY_TEX_PATH) + "",
+		std::string(SKY_TEX_PATH) + "nz.tga",
+		std::string(SKY_TEX_PATH) + "pz.tga",
+		std::string(SKY_TEX_PATH) + "py.tga",
+		std::string(SKY_TEX_PATH) + "ny.tga",
+		std::string(SKY_TEX_PATH) + "px.tga",
+		std::string(SKY_TEX_PATH) + "nx.tga",
 	};
 	skybox = new Skybox(faces, &skyboxShader);
 }
