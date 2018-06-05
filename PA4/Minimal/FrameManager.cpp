@@ -46,42 +46,42 @@ FrameManager::~FrameManager() {
 	delete(skybox);
 }
 
+//Update method (called before draw)
 void FrameManager::update(double deltaTime) {
 	
 }
 
-
-
-
-//Draw Methods
+//Draw Methods (Called in order: drawSkybox, drawBody, draw)
 void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 view) {
+	//Draws the skybox(es)
 	skybox->draw(&skyboxShader, projection, view);
 }
 
-void FrameManager::drawControllers(glm::mat4 projection, glm::mat4 headPose) {
+void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
+	//Draws the player(s) head(s) and hands
 
 }
 
-void FrameManager::draw(glm::mat4 projection, glm::mat4 headPose) {
-	
+void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
+	//Draws the scene normally	
 }
-
-
-
-
-
 
 //Setters
-void FrameManager::setControllerPositions(glm::vec3 l, glm::vec3 r) {
-
+void FrameManager::setLeftMat(glm::mat4 m) {
+	_leftRift = m;
 }
 
-void FrameManager::setHMDPos(glm::vec3 pos) {
-	
+void FrameManager::setRightMat(glm::mat4 m) {
+	_rightRift = m;
 }
 
+void FrameManager::setHMDMat(glm::mat4 m) {
+	_hmdRift = m;
+}
 
 //Buttons
+const float MINPRESS = 0.7f;	//Strength of press needed for a valid grip/index button press
+
 void FrameManager::pressA() {
 
 }
@@ -96,4 +96,40 @@ void FrameManager::pressX() {
 
 void FrameManager::pressY() {
 	
+}
+
+void FrameManager::pressLJoystick() {
+
+}
+
+void FrameManager::pressRJoystick() {
+
+}
+
+void FrameManager::moveLJoystick(glm::vec2 xy) {
+
+}
+
+void FrameManager::moveRJoystick(glm::vec2 xy) {
+
+}
+
+void FrameManager::pressLTrigger(float f) {
+	if (f > MINPRESS) {}
+	else {}
+}
+
+void FrameManager::pressRTrigger(float f) {
+	if (f > MINPRESS) {}
+	else {}
+}
+
+void FrameManager::pressLGrip(float f) {
+	if (f > MINPRESS) {}
+	else {}
+}
+
+void FrameManager::pressRGrip(float f) {
+	if (f > MINPRESS) {}
+	else {}
 }

@@ -552,27 +552,17 @@ protected:
 		GlfwApp::onKey(key, scancode, action, mods);
 	}
 
+	//Time Vars
 	double oldTime = -1;
 	double curTime = -1;
-	glm::vec3 oldL = glm::vec3(0);
-	glm::vec3 oldR = glm::vec3(0);
-	glm::vec3 posL = glm::vec3(0);
-	glm::vec3 posR = glm::vec3(0);
 
 	//Button Bools
 	bool xIsPressed = false;
 	bool yIsPressed = false;
 	bool aIsPressed = false;
 	bool bIsPressed = false;
-
-	//toggles
-	bool freezeScreens = false;
-	bool headInHand = false;
-
-	//Vars
-	glm::mat4 lastModelView[2];
-	float moveSpeed = 0.01f;
-	float curScale = 1.0f;	//Range [0.1, 2.0]
+	bool ljIsPressed = false;
+	bool rjIsPressed = false;
 
 	//Draw Begins
 	void draw(FrameManager * frameManager) final override {
@@ -581,7 +571,7 @@ protected:
 		
 		if (oldTime != -1) {
 			double deltaTime = curTime - oldTime;
-			frameManager->update(deltaTime);
+			frameManager->update(deltaTime);						// UPDATE IS CALLED HERE *************************************************
 		}
 
 
@@ -599,61 +589,41 @@ protected:
 		//ControllerInfo
 		double ftiming = ovr_GetPredictedDisplayTime(_session, 0);
 		ovrTrackingState trackState = ovr_GetTrackingState(_session, ftiming, ovrTrue);
-		ovrPosef leftHandPose = trackState.HandPoses[ovrHand_Left].ThePose;
-		ovrPosef rightHandPose = trackState.HandPoses[ovrHand_Right].ThePose;
 
-		oldL = posL;
-		oldR = posR;
-
-		posL = ovr::toGlm(leftHandPose.Position);
-		glm::quat rotL = ovr::toGlm(ovrQuatf(leftHandPose.Orientation));
-		posR = ovr::toGlm(rightHandPose.Position);
-		glm::quat rotR = ovr::toGlm(ovrQuatf(rightHandPose.Orientation));
-
-
-		//Sets controllers
-		frameManager->setControllerPositions(posL, posR);
-		glm::mat4 hmdpos = ovr::toGlm(trackState.HeadPose.ThePose);
-
+		//Sets controllers and hmd pos/rot
+		frameManager->setLeftMat(ovr::toGlm(trackState.HandPoses[ovrHand_Left].ThePose));
+		frameManager->setRightMat(ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
+		frameManager->setHMDMat(ovr::toGlm(trackState.HeadPose.ThePose));
 
 		//Check button presses				************************BUTTON PRESSES*****************************************************************************
 		ovrInputState inputState;
 		if (OVR_SUCCESS(ovr_GetInputState(_session, ovrControllerType_Touch, &inputState))) {
-			//Index Trigger Press
-			if (inputState.IndexTrigger[ovrHand_Left] > 0.7f) {}
+			//Index and Hand Trigger Press
+			frameManager->pressLTrigger(inputState.IndexTrigger[ovrHand_Left]);
+			frameManager->pressRTrigger(inputState.IndexTrigger[ovrHand_Right]);
+			frameManager->pressLGrip(inputState.HandTrigger[ovrHand_Left]);
+			frameManager->pressRGrip(inputState.HandTrigger[ovrHand_Right]);
+			//Move sticks 
+			frameManager->moveLJoystick(ovr::toGlm(inputState.Thumbstick[ovrHand_Left]));
+			frameManager->moveRJoystick(ovr::toGlm(inputState.Thumbstick[ovrHand_Right]));
 
-			if (inputState.IndexTrigger[ovrHand_Right] > 0.7f) {}
-
-			//Hand Trigger Press
-			if (inputState.HandTrigger[ovrHand_Left] > 0.7f) {}
-			if (inputState.HandTrigger[ovrHand_Right] > 0.7f) {}
-
-			//Moved left stick left/right
-			if (inputState.Thumbstick[ovrHand_Left].x) {
-				float s = inputState.Thumbstick[ovrHand_Left].x;
-			}
-			//Moved left stick up/down
-			if (inputState.Thumbstick[ovrHand_Left].y) {
-				float s = inputState.Thumbstick[ovrHand_Left].y;
-
-			}
 			//Pressed left stick
 			if (inputState.Buttons == ovrButton_LThumb) {
-				
+				if (!ljIsPressed) {
+					ljIsPressed = true;
+					frameManager->pressLJoystick();
+				}
 			}
-			
-			//Moved right stick left/right
-			if (inputState.Thumbstick[ovrHand_Right].x) { 
-				float s = inputState.Thumbstick[ovrHand_Right].x;
+			else { ljIsPressed = false; }
 
-			}
-			//Moved right stick up/down
-			if (inputState.Thumbstick[ovrHand_Right].y) {
-				float s = inputState.Thumbstick[ovrHand_Right].y;
-
-			}
 			//Pressed right stick
-			if (inputState.Buttons == ovrButton_RThumb) { }
+			if (inputState.Buttons == ovrButton_RThumb) { 
+				if (!rjIsPressed) {
+					rjIsPressed = true;
+					frameManager->pressRJoystick();
+				}
+			}
+			else { rjIsPressed = false; }
 
 			//Pressed X
 			if (inputState.Buttons == ovrButton_X) {
@@ -687,14 +657,11 @@ protected:
 				if (!bIsPressed) {
 					bIsPressed = true;
 					frameManager->pressB();
-					freezeScreens = true;
 				}
 			}
-			else { bIsPressed = false; freezeScreens = false; }
-
+			else { bIsPressed = false;}
 		}
 
-		
 		//Iterate over each eye
 		ovr::for_each_eye([&](ovrEyeType eye) {
 			const auto& vp = _sceneLayer.Viewport[eye];
@@ -706,9 +673,9 @@ protected:
 			glm::mat4 modelview = glm::inverse(ovr::toGlm(eyePoses[eye]));
 
 			//Draw scene
-			frameManager->drawControllers(projection, modelview);
 			frameManager->drawSkybox(projection, modelview);
-
+			frameManager->drawBody(projection, modelview);
+			frameManager->draw(projection, modelview);
 		});
 
 		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
