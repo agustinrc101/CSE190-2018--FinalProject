@@ -134,11 +134,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClientGame.cpp" />
+    <ClCompile Include="ClientNetwork.cpp" />
     <ClCompile Include="FrameManager.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="Networking.cpp" />
+    <ClCompile Include="NetworkServices.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="ServerGame.cpp" />
+    <ClCompile Include="ServerNetwork.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
@@ -146,12 +152,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClientGame.h" />
+    <ClInclude Include="ClientNetwork.h" />
     <ClInclude Include="FrameManager.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="LoadPPM.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="Networking.h" />
+    <ClInclude Include="NetworkServices.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="ServerGame.h" />
+    <ClInclude Include="ServerNetwork.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="stb_image.h" />

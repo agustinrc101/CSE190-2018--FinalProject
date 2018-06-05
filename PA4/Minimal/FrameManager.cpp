@@ -18,8 +18,17 @@ Shader skyboxShader;
 //Skyboxes
 Skybox* skybox;
 
+//Networking
+Networking * server;
+
 FrameManager::FrameManager() {
 	init();
+	server = new Networking();
+}
+
+void FrameManager::init() {
+	initShaders();
+
 	std::vector<std::string> faces
 	{
 		std::string(SKY_TEX_PATH) + "nz.tga",
@@ -29,11 +38,8 @@ FrameManager::FrameManager() {
 		std::string(SKY_TEX_PATH) + "px.tga",
 		std::string(SKY_TEX_PATH) + "nx.tga",
 	};
-	skybox = new Skybox(faces, &skyboxShader);
-}
 
-void FrameManager::init() {
-	initShaders();
+	skybox = new Skybox(faces, &skyboxShader);
 }
 
 void FrameManager::initShaders() {
@@ -44,6 +50,7 @@ void FrameManager::initShaders() {
 
 FrameManager::~FrameManager() {
 	delete(skybox);
+	delete(server);
 }
 
 //Update method (called before draw)

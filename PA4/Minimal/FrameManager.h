@@ -10,14 +10,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 //Open AL
-#include <al.h>;
-#include <alc.h>;
+#include <al.h>
+#include <alc.h>
 //std
 #include <vector>
 //our scripts
 #include "shader.h"
 #include "Skybox.h"
-
+#include "Networking.h"
 
 
 class FrameManager {
