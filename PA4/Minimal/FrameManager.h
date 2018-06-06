@@ -33,9 +33,9 @@ public:
 	void draw(glm::mat4 projection, glm::mat4 view);
 
 	//Oculus Rift controllers and hmd matrix setters
-	void setLeftMat(glm::mat4 m);
-	void setRightMat(glm::mat4 m);
-	void setHMDMat(glm::mat4 m);
+	void setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh);
+
+	void setOtherPlayer(std::string info);
 
 	//ButtonPress
 	void pressA();
@@ -52,9 +52,9 @@ public:
 	void pressRTrigger(float f);
 
 private:
-	glm::mat4 _leftRift;
-	glm::mat4 _rightRift;
-	glm::mat4 _hmdRift;
+	glm::mat4 _leftHand;
+	glm::mat4 _rightHand;
+	glm::mat4 _head;
 
 	void init();
 	void initShaders();

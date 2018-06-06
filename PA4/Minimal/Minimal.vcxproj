@@ -159,6 +159,7 @@
     <ClInclude Include="LoadPPM.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="NetworkData.h" />
     <ClInclude Include="Networking.h" />
     <ClInclude Include="NetworkServices.h" />
     <ClInclude Include="Node.h" />

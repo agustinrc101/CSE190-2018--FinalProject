@@ -61,8 +61,9 @@ ServerNetwork::ServerNetwork(void){
 		exit(1);
 	}
 
-	//No longer need address info
+	//Don't need address info anymore
 	freeaddrinfo(result);
+
 	//Start listening for new lcinets attempting to connect
 	iResult = listen(ListenSocket, SOMAXCONN);
 	if (iResult == SOCKET_ERROR) {
@@ -76,7 +77,13 @@ ServerNetwork::ServerNetwork(void){
 
 
 ServerNetwork::~ServerNetwork(void){
+	closesocket(ListenSocket);
+	closesocket(ClientSocket);
 
+	std::map<unsigned int, SOCKET>::iterator iter;
+	for (iter = sessions.begin(); iter != sessions.end(); iter++) {
+		
+	}
 }
 
 bool ServerNetwork::acceptNewClient(unsigned int & id) {
@@ -93,4 +100,33 @@ bool ServerNetwork::acceptNewClient(unsigned int & id) {
 	}
 
 	return false;
+}
+
+int ServerNetwork::receiveData(unsigned int client_id, char * recvbuf) {
+	if (sessions.find(client_id) != sessions.end()) {
+		SOCKET currentSocket = sessions[client_id];
+		iResult = NetworkServices::receiveMessage(currentSocket, recvbuf, MAX_PACKET_SIZE);
+		if (iResult == 0) {
+			printf("Connection closed\n");
+			closesocket(currentSocket);
+		}
+		return iResult;
+	}
+	return 0;
+}
+
+void ServerNetwork::sendToAll(char * packets, int totalSize) {
+	SOCKET currentSocket;
+	std::map<unsigned int, SOCKET>::iterator iter;
+	int iSendResult;
+
+	for (iter = sessions.begin(); iter != sessions.end(); iter++) {
+		currentSocket = iter->second;
+		iSendResult = NetworkServices::sendMessage(currentSocket, packets, totalSize);
+
+		if (iSendResult == SOCKET_ERROR) {
+			printf("send failed with error: %d\n", WSAGetLastError());
+			closesocket(currentSocket);
+		}
+	}
 }

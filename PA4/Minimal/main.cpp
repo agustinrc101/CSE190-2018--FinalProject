@@ -591,9 +591,11 @@ protected:
 		ovrTrackingState trackState = ovr_GetTrackingState(_session, ftiming, ovrTrue);
 
 		//Sets controllers and hmd pos/rot
-		frameManager->setLeftMat(ovr::toGlm(trackState.HandPoses[ovrHand_Left].ThePose));
-		frameManager->setRightMat(ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
-		frameManager->setHMDMat(ovr::toGlm(trackState.HeadPose.ThePose));
+		glm::mat4 rh = (ovr::toGlm(trackState.HandPoses[ovrHand_Left].ThePose));
+		glm::mat4 lh = (ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
+		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
+
+		frameManager->setPlayer(h, lh, rh);
 
 		//Check button presses				************************BUTTON PRESSES*****************************************************************************
 		ovrInputState inputState;

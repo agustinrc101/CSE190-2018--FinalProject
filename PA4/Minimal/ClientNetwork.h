@@ -1,8 +1,11 @@
+#pragma once
+
 #include <winsock2.h>
 #include <Windows.h>
 #include "NetworkServices.h"
 #include <ws2tcpip.h>
 #include <stdio.h>
+#include "NetworkData.h"
 
 //Buffer size
 #define DEFAULT_BUFLEN 512
@@ -22,4 +25,6 @@ public:
 	//ctor/dtor
 	ClientNetwork(void);
 	~ClientNetwork(void);
+
+	int receivePackets(char *);
 };

@@ -3,11 +3,14 @@
 #include "NetworkServices.h"
 #include <ws2tcpip.h>
 #include <map>
+#include "NetworkData.h"
 using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "6881"
+
+#pragma once
 
 class ServerNetwork{
 public:
@@ -25,5 +28,11 @@ public:
 
 	//accept new connections
 	bool acceptNewClient(unsigned int &id);
+
+	//recieve incoming data
+	int receiveData(unsigned int client_id, char * recvbuf);
+
+	//send data to all clients
+	void sendToAll(char * packets, int totalSize);
 };
 

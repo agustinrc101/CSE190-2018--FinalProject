@@ -21,6 +21,7 @@ Skybox* skybox;
 //Networking
 Networking * server;
 
+//Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
 	init();
 	server = new Networking();
@@ -53,12 +54,13 @@ FrameManager::~FrameManager() {
 	delete(server);
 }
 
-//Update method (called before draw)
+//Update method (called before draw)*********************************************************************
 void FrameManager::update(double deltaTime) {
-	
+	server->sendPlayerBodyInfo(_head, _leftHand, _rightHand);
+	server->update();
 }
 
-//Draw Methods (Called in order: drawSkybox, drawBody, draw)
+//Draw Methods (Called in order: drawSkybox, drawBody, draw)********************************************
 void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 view) {
 	//Draws the skybox(es)
 	skybox->draw(&skyboxShader, projection, view);
@@ -73,20 +75,20 @@ void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
 	//Draws the scene normally	
 }
 
-//Setters
-void FrameManager::setLeftMat(glm::mat4 m) {
-	_leftRift = m;
+//Setters *********************************************************************************************
+void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
+	//These values are obtained from MAIN
+	_head = hmd;
+	_leftHand = lh;
+	_rightHand = rh;
 }
 
-void FrameManager::setRightMat(glm::mat4 m) {
-	_rightRift = m;
+//Gets information for the other player's location
+void FrameManager::setOtherPlayer(std::string info) {
+	//These values are obtained from the network
 }
 
-void FrameManager::setHMDMat(glm::mat4 m) {
-	_hmdRift = m;
-}
-
-//Buttons
+//Buttons *********************************************************************************************
 const float MINPRESS = 0.7f;	//Strength of press needed for a valid grip/index button press
 
 void FrameManager::pressA() {

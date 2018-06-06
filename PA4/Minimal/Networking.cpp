@@ -1,8 +1,8 @@
 #include "Networking.h"
 
+#include <process.h>
 #include "ServerGame.h"
 #include "ClientGame.h"
-#include <process.h>
 
 ServerGame * server;
 ClientGame * client;
@@ -19,7 +19,12 @@ Networking::Networking() {
 }
 
 Networking::~Networking(){
+	delete(server);
+	delete(client);
+}
 
+void Networking::update() {
+	clientLoop();
 }
 
 void Networking::serverLoop(void * arg) {
@@ -28,9 +33,9 @@ void Networking::serverLoop(void * arg) {
 }
 
 void Networking::clientLoop() {
-	while (true) {
-		//do game stuff
-		//call client->update
-	}
+	client->update();
+}
 
+void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
+	//TODO
 }
