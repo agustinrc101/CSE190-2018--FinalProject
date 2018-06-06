@@ -12,7 +12,9 @@ enum PacketTypes {
 
 struct Packet {
 	unsigned int packet_type;
-	
+	//char data[MAX_PACKET_SIZE];
+	float data[16];
+
 	void serialize(char * data) {
 		memcpy(data, this, sizeof(Packet));
 	}

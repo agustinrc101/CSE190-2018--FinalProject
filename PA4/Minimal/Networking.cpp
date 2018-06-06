@@ -3,6 +3,7 @@
 #include <process.h>
 #include "ServerGame.h"
 #include "ClientGame.h"
+#include <iostream>
 
 ServerGame * server;
 ClientGame * client;
@@ -25,6 +26,7 @@ Networking::~Networking(){
 
 void Networking::update() {
 	clientLoop();
+	//std::cout << sizeof(Packet) << std::endl;
 }
 
 void Networking::serverLoop(void * arg) {
@@ -37,5 +39,14 @@ void Networking::clientLoop() {
 }
 
 void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
-	//TODO
+	float data[16];
+
+	int index = 0;
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++)
+			data[index] = hmd[i][j];
+	}
+
+	client->sendPlayerInfoPackets(data);
 }

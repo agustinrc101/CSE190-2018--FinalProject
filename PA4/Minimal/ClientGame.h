@@ -15,6 +15,7 @@ public:
 	char network_data[MAX_PACKET_SIZE];
 
 	void sendActionPackets();
+	void sendPlayerInfoPackets(float d[]);
 	void update();
 };
 

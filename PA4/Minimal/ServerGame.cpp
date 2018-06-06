@@ -52,6 +52,10 @@ void ServerGame::receiveFromClients(){
 				printf("server received action event packet from client\n");
 				sendActionPackets();
 				break;
+			case PLAYER_INFO:
+				printf("server received player info from client\n");
+				//sendActionPackets();	//????
+				break;
 			default:
 				printf("error in packet type\n");
 				break;

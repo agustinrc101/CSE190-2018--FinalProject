@@ -30,7 +30,22 @@ void ClientGame::sendActionPackets() {
 	Packet packet;
 	packet.packet_type = ACTION_EVENT;
 
-	packet.deserialize(packet_data);
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
+}
+
+void ClientGame::sendPlayerInfoPackets(float d[]) {
+	//send player info packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = PLAYER_INFO;
+	for (int i = 0; i < 16; i++)
+		packet.data[i] = d[i];
+
+	packet.serialize(packet_data);
 
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
@@ -51,6 +66,10 @@ void ClientGame::update() {
 		case ACTION_EVENT:
 			printf("client recieved action event packet form server\n");
 			sendActionPackets();
+			break;
+		case PLAYER_INFO:
+			printf("client received player info packet from server\n");
+			//sendPlayerInfoPackets();
 			break;
 		default:
 			printf("error in packet types\n");
