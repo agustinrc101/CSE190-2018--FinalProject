@@ -6,6 +6,8 @@
 
 #include <stdio.h>
 
+#include "UsefulFunctions.h"
+
 #define THREE_MAT_SIZE 48
 
 class Networking{

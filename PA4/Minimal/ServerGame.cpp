@@ -49,12 +49,13 @@ void ServerGame::receiveFromClients(){
 				sendActionPackets();
 				break;
 			case ACTION_EVENT:
-				printf("server received action event packet from client\n");
+				//printf("server received action event packet from client\n");
 				sendActionPackets();
 				break;
 			case PLAYER_INFO:
 				printf("server received player info from client\n");
-				//sendActionPackets();	//????
+				//UsefulFunctions::printMatrix(packet.body[0]);
+				sendActionPackets();
 				break;
 			default:
 				printf("error in packet type\n");
@@ -71,6 +72,13 @@ void ServerGame::sendActionPackets() {
 
 	Packet packet;
 	packet.packet_type = ACTION_EVENT;
+
+	//for (int i = 0; i < 16; i++)
+	//	packet.data[i] = 0;
+
+	packet.body[0] = glm::mat4(1.0f);
+	packet.body[1] = glm::mat4(1.0f);
+	packet.body[2] = glm::mat4(1.0f);
 
 	packet.serialize(packet_data);
 	network->sendToAll(packet_data, packet_size);

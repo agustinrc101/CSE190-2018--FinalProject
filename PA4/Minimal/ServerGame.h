@@ -1,7 +1,12 @@
 #pragma once
 
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include "ServerNetwork.h"
 #include "NetworkData.h"
+#include "UsefulFunctions.h"
 
 class ServerGame{
 public:

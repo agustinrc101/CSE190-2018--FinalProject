@@ -25,8 +25,7 @@ ClientNetwork::ClientNetwork(void) {
 	hints.ai_protocol = IPPROTO_TCP;	//TCP connection
 
 	//Resolve server address and port
-	//iResult = getaddrinfo("127.0.0.1", DEFAULT_PORT, &hints, &result);	//Localhost (can change later)
-	iResult = getaddrinfo("128.54.70.75", DEFAULT_PORT, &hints, &result);	//Localhost (can change later)
+	iResult = getaddrinfo(DEFAULT_ADDRESS, DEFAULT_PORT, &hints, &result);
 
 	if (iResult != 0) {
 		printf("getaddrinfo fauled with error: %d\n", iResult);

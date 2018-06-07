@@ -20,13 +20,16 @@ Networking::Networking() {
 }
 
 Networking::~Networking(){
-	delete(server);
-	delete(client);
+	//delete(server);
+	//delete(client);
 }
 
 void Networking::update() {
 	clientLoop();
-	//std::cout << sizeof(Packet) << std::endl;
+}
+
+void Networking::clientLoop() {
+	client->update();
 }
 
 void Networking::serverLoop(void * arg) {
@@ -34,19 +37,6 @@ void Networking::serverLoop(void * arg) {
 		server->update();
 }
 
-void Networking::clientLoop() {
-	client->update();
-}
-
 void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
-	float data[16];
-
-	int index = 0;
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++)
-			data[index] = hmd[i][j];
-	}
-
-	client->sendPlayerInfoPackets(data);
+	client->sendPlayerInfoPackets(hmd, lh, rh);
 }

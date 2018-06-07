@@ -2,6 +2,10 @@
 
 #include <string.h>
 
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #define MAX_PACKET_SIZE 1000000
 
 enum PacketTypes {
@@ -12,8 +16,9 @@ enum PacketTypes {
 
 struct Packet {
 	unsigned int packet_type;
-	//char data[MAX_PACKET_SIZE];
-	float data[16];
+	//float data[16];
+	glm::mat4 body[3];
+
 
 	void serialize(char * data) {
 		memcpy(data, this, sizeof(Packet));

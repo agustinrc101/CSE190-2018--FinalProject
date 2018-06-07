@@ -122,11 +122,14 @@ void ServerNetwork::sendToAll(char * packets, int totalSize) {
 
 	for (iter = sessions.begin(); iter != sessions.end(); iter++) {
 		currentSocket = iter->second;
+
 		iSendResult = NetworkServices::sendMessage(currentSocket, packets, totalSize);
 
 		if (iSendResult == SOCKET_ERROR) {
 			printf("send failed with error: %d\n", WSAGetLastError());
-			closesocket(currentSocket);
+
+			if(WSAGetLastError() != 10035)
+				closesocket(currentSocket);
 		}
 	}
 }

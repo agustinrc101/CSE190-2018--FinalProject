@@ -1,3 +1,7 @@
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include <winsock2.h>
 #include <Windows.h>
 #include "NetworkServices.h"

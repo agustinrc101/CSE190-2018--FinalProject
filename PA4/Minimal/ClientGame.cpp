@@ -35,18 +35,25 @@ void ClientGame::sendActionPackets() {
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
-void ClientGame::sendPlayerInfoPackets(float d[]) {
+void ClientGame::sendPlayerInfoPackets(glm::mat4 d1, glm::mat4 d2, glm::mat4 d3) {
 	//send player info packet
 	const unsigned int packet_size = sizeof(Packet);
 	char packet_data[packet_size];
 
 	Packet packet;
 	packet.packet_type = PLAYER_INFO;
-	for (int i = 0; i < 16; i++)
-		packet.data[i] = d[i];
+	
+	/*
+	for(int i = 0; i < 4; ++i)
+		for(int j = 0; j < 4; ++j)
+			packet.data[j + (i * 4)] = float(d1[j][i]);
+	*/
+
+	packet.body[0] = d1;
+	packet.body[1] = d2;
+	packet.body[2] = d3;
 
 	packet.serialize(packet_data);
-
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -64,16 +71,21 @@ void ClientGame::update() {
 
 		switch (packet.packet_type) {
 		case ACTION_EVENT:
-			printf("client recieved action event packet form server\n");
+			//printf("client recieved action event packet form server\n");
 			sendActionPackets();
 			break;
 		case PLAYER_INFO:
 			printf("client received player info packet from server\n");
-			//sendPlayerInfoPackets();
+			//UsefulFunctions::printMatrix(packet.body[0]);
+			getPlayerInfoPackets();
 			break;
 		default:
 			printf("error in packet types\n");
 			break;
 		}
 	}
+}
+
+void ClientGame::getPlayerInfoPackets() {
+	
 }
