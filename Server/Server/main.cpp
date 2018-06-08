@@ -45,6 +45,8 @@ void main() {
 
 	int clientNum = 0;
 
+	std::cout << "=====STARTED SERVER=====" << std::endl;
+
 	while (true) {
 		fd_set copy = master;
 		int socketCount = select(0, &copy, nullptr, nullptr, nullptr);
@@ -81,7 +83,7 @@ void main() {
 					//Send message to other clients, and definetely not the listening socket
 					for (int j = 0; j < master.fd_count; j++) {
 						SOCKET outSock = master.fd_array[j];
-						if (outSock != listening){// && outSock != sock) {							//TODO remove {//
+						if (outSock != listening ){//&& outSock != sock) {							//TODO remove ){//
 							
 							std::ostringstream ss;
 							ss << "SOCKET #" << sock << ": " << buf << "\r\n";
@@ -96,9 +98,7 @@ void main() {
 
 	//Clean up winsock
 	WSACleanup();
-	
-
-
+	std::cout << "=====CLOSED SERVER=====" << std::endl;
 }
 
 /* SINGLE CLIENT
