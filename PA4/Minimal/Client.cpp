@@ -1,9 +1,8 @@
 #include "Client.h"
 
-
-
-Client::Client() {
-	isConnected = connectToServer();
+Client::Client(bool &b) {
+	b = connectToServer();
+	clientId = 0;
 }
 
 bool Client::connectToServer(){
@@ -44,12 +43,39 @@ bool Client::connectToServer(){
 		WSACleanup();
 		return connectionErrorHelper();
 	}
+	std::cout << "Connection successful!" << std::endl;
+	
+	{
+		//Get welcome message
+		char buffer[MAX_PACKET_SIZE];
+		ZeroMemory(buffer, MAX_PACKET_SIZE);
+		int bytesReceived = recv(sock, buffer, MAX_PACKET_SIZE, 0);
+		if (bytesReceived > 0)
+			std::cout << "SERVER> " << std::string(buffer, 0, bytesReceived) << std::endl;
+	}
 
 	return true;
 }
 
-void Client::update() {
+void Client::update() {	//Runs in a separate thread
+	char data[MAX_PACKET_SIZE];
+	ZeroMemory(data, MAX_PACKET_SIZE);
+	int bytesReceived = recv(sock, data, sizeof(Packet), 0);
 
+	int i = 0;
+	if (bytesReceived > 0) {
+		while (i < bytesReceived) {
+			Packet p;
+			p.deserialize(&(data[i]));
+
+			if (p.type == 0)
+				break;
+
+			std::cout << "SERVER> Received package of type " << p.type << std::endl;
+
+			i += sizeof(Packet);
+		}
+	}
 }
 
 void Client::sendTestString() {
@@ -59,34 +85,21 @@ void Client::sendTestString() {
 
 	int sendResult = send(sock, m.c_str(), m.size() + 1, 0);
 	
-	if (sendResult != SOCKET_ERROR) {
-		//Wait for response
-		ZeroMemory(buf, MAX_PACKET_SIZE);
-		int bytesReceived = recv(sock, buf, MAX_PACKET_SIZE, 0);
-		if (bytesReceived > 0)
-			std::cout << "SERVER> " << std::string(buf, 0, bytesReceived) << std::endl;
-	}
+	if (sendResult == SOCKET_ERROR)
+		std::cerr << "Error sending test string" << std::endl;
 }
 
-Packet Client::sendPacket(Packet p) {
-	Packet pack;
-	char data[MAX_PACKET_SIZE];
-	p.serialize(data);
+void Client::sendPacket() {
+	char buf[sizeof(Packet)];
 
-	int sendResult = send(sock, data, MAX_PACKET_SIZE + 1, 0);
-	if (sendResult != SOCKET_ERROR) {
-		char buf[MAX_PACKET_SIZE];
-		ZeroMemory(buf, MAX_PACKET_SIZE);
-		int bytesReceived = recv(sock, buf, MAX_PACKET_SIZE, 0);
-		if (bytesReceived > 0) {
-			pack.deserialize(buf);
-			std::cout << "SERVER> " << "Received message from client " << pack.clientId << std::endl;
-			return pack;
-		}
-	}
+	Packet packet;
+	//packet.clientId = 0;
+	//packet.test = glm::mat4(1.0f);
+	packet.serialize(buf);
 
-	pack.clientId = -1;
-	return pack;
+	int sendResult = send(sock, buf, sizeof(Packet), 0);
+	if (sendResult == SOCKET_ERROR)
+		std::cerr << "Error sending packet, Err#" << WSAGetLastError() << std::endl;
 }
 
 
