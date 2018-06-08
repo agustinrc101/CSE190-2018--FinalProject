@@ -1,42 +1,47 @@
 #include "Networking.h"
 
-#include <process.h>
-#include "ServerGame.h"
-#include "ClientGame.h"
 #include <iostream>
+#include "Client.h"
+#include "NetworkData.h"
 
-ServerGame * server;
-ClientGame * client;
+Client * client;
 
 Networking::Networking() {
-	//Initialize the server
-	server = new ServerGame();
-	//Create thread with arbitrary argument for the run function
-	_beginthread(serverLoop, 0, (void*)12);
-	//Initialize the client
-	client = new ClientGame();
-
-	clientLoop();
+	client = new Client();
 }
 
 Networking::~Networking(){
-	//delete(server);
-	//delete(client);
+	delete(client);
 }
 
 void Networking::update() {
-	clientLoop();
-}
-
-void Networking::clientLoop() {
-	client->update();
-}
-
-void Networking::serverLoop(void * arg) {
-	while (true)
-		server->update();
+	if (client->isConnected) {
+		//TODO
+	}
+	else
+		client->isConnected = client->connectToServer();
 }
 
 void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
-	client->sendPlayerInfoPackets(hmd, lh, rh);
+	if (client->isConnected) {
+		Packet packet;
+		packet.clientId = 0;
+		packet.head = hmd;
+		packet.leftHand = lh;
+		packet.rightHand = rh;
+
+		Packet test = client->sendPacket(packet);
+
+		UsefulFunctions::printMatrix(test.head);
+	}
+	else
+		client->isConnected = client->connectToServer();
 }
+
+void Networking::sendMessage() {
+	if (client->isConnected)
+		client->sendTestString();
+	else
+		client->isConnected = client->connectToServer();
+}
+

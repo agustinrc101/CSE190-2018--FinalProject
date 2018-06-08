@@ -56,8 +56,8 @@ FrameManager::~FrameManager() {
 
 //Update method (called before draw)*********************************************************************
 void FrameManager::update(double deltaTime) {
-	server->sendPlayerBodyInfo(_head, _leftHand, _rightHand);
-	server->update();
+	//server->sendPlayerBodyInfo(_head, _leftHand, _rightHand);
+	//server->update();
 }
 
 //Draw Methods (Called in order: drawSkybox, drawBody, draw)********************************************
@@ -92,11 +92,11 @@ void FrameManager::setOtherPlayer(std::string info) {
 const float MINPRESS = 0.7f;	//Strength of press needed for a valid grip/index button press
 
 void FrameManager::pressA() {
-
+	server->sendMessage();
 }
 
 void FrameManager::pressB() {
-
+	server->sendPlayerBodyInfo(_head, _leftHand, _rightHand);
 }
 
 void FrameManager::pressX() {
