@@ -9,11 +9,11 @@
 
 class Networking{
 public:
+	bool isConnected = false;
+
 	void update();
-
+	static void clientLoop(void *);
 	void sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh);
-
-	void sendMessage();
 
 	Networking();
 	~Networking();

@@ -1,13 +1,15 @@
 #include "Networking.h"
 
 #include <iostream>
+#include <process.h>
 #include "Client.h"
 #include "NetworkData.h"
 
 Client * client;
 
 Networking::Networking() {
-	client = new Client();
+	client = new Client(isConnected);
+	_beginthread(clientLoop, 0, (void*)12);
 }
 
 Networking::~Networking(){
@@ -15,33 +17,20 @@ Networking::~Networking(){
 }
 
 void Networking::update() {
-	if (client->isConnected) {
-		//TODO
-	}
+	if (isConnected) {}
 	else
-		client->isConnected = client->connectToServer();
+		isConnected = client->connectToServer();
+}
+
+void Networking::clientLoop(void *) {
+	while (true)
+		client->update();
 }
 
 void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
-	if (client->isConnected) {
-		Packet packet;
-		packet.clientId = 0;
-		packet.head = hmd;
-		packet.leftHand = lh;
-		packet.rightHand = rh;
-
-		Packet test = client->sendPacket(packet);
-
-		UsefulFunctions::printMatrix(test.head);
-	}
-	else
-		client->isConnected = client->connectToServer();
-}
-
-void Networking::sendMessage() {
-	if (client->isConnected)
-		client->sendTestString();
-	else
-		client->isConnected = client->connectToServer();
+	if (isConnected)
+		client->sendPacket();
+	else 
+		isConnected = client->connectToServer();
 }
 
