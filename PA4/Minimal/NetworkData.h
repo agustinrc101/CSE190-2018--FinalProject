@@ -14,12 +14,16 @@ enum PacketTypes {
 	OBJECT_INFO = 2,
 };
 
-struct Packet {	//Size 196
-	unsigned int type;	//Size 4
+struct Packet {							//TOTAL SIZE: 208 bytes
+	unsigned int type;					//Size 4 bytes
 
-	glm::mat4 m1;		//Size 64
-	glm::mat4 m2;		//Size 64
-	glm::mat4 m3;		//Size 64
+	int objectId = -1;					//Size 4 bytes
+	float lTrigger = -1;				//Size 4 bytes
+	float rTrigger = -1;				//Size 4 bytes
+
+	glm::mat4 m1 = glm::mat4(1.0f);		//Size 64 bytes
+	glm::mat4 m2 = glm::mat4(1.0f);		//Size 64 bytes
+	glm::mat4 m3 = glm::mat4(1.0f);		//Size 64 bytes
 
 	void serialize(char * data) {
 		memcpy(data, this, sizeof(Packet));

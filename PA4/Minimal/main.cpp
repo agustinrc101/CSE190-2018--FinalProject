@@ -590,13 +590,6 @@ protected:
 		double ftiming = ovr_GetPredictedDisplayTime(_session, 0);
 		ovrTrackingState trackState = ovr_GetTrackingState(_session, ftiming, ovrTrue);
 
-		//Sets controllers and hmd pos/rot
-		glm::mat4 lh = (ovr::toGlm(trackState.HandPoses[ovrHand_Left].ThePose));
-		glm::mat4 rh = (ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
-		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
-
-		frameManager->setPlayer(h, lh, rh);
-
 
 		//Check button presses				************************BUTTON PRESSES*****************************************************************************
 		ovrInputState inputState;
@@ -664,6 +657,15 @@ protected:
 			}
 			else { bIsPressed = false;}
 		}
+
+		//Handle movement (TODO)
+
+
+		//Sets controllers and hmd pos/rot
+		glm::mat4 lh = (ovr::toGlm(trackState.HandPoses[ovrHand_Left].ThePose));
+		glm::mat4 rh = (ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
+		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
+		frameManager->setPlayer(h, lh, rh);
 
 		//Iterate over each eye
 		ovr::for_each_eye([&](ovrEyeType eye) {

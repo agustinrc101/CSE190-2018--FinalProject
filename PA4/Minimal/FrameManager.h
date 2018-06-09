@@ -18,7 +18,7 @@
 #include "shader.h"
 #include "Skybox.h"
 #include "Networking.h"
-
+#include "NetworkData.h"
 
 class FrameManager {
 public:
@@ -34,8 +34,6 @@ public:
 
 	//Oculus Rift controllers and hmd matrix setters
 	void setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh);
-
-	void setOtherPlayer(std::string info);
 
 	//ButtonPress
 	void pressA();
@@ -55,9 +53,15 @@ private:
 	glm::mat4 _leftHand;
 	glm::mat4 _rightHand;
 	glm::mat4 _head;
+	float _leftTrigger;
+	float _rightTrigger;
 
-	void init();
+	void initSkybox();
 	void initShaders();
+	void initObjects();
+
+	void getNetworkData();
+	void setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT);
 };
 
 #endif //FRAMEMANAGER_H

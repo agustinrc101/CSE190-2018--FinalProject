@@ -1,14 +1,5 @@
 #include "FrameManager.h"
-
-#define SHADER_COLOR_VERT_PATH "../assets/shaders/ColorShader.vert"
-#define SHADER_COLOR_FRAG_PATH "../assets/shaders/ColorShader.frag"
-#define SHADER_TEX_VERT_PATH "../assets/shaders/TextureShader.vert"
-#define SHADER_TEX_FRAG_PATH "../assets/shaders/TextureShader.frag"
-#define SHADER_SKY_VERT_PATH "../assets/shaders/SkyboxShader.vert"
-#define SHADER_SKY_FRAG_PATH "../assets/shaders/SkyboxShader.frag"
-
-#define CUBE_TEX_PATH "../assets/textures/pattern.ppm"
-#define SKY_TEX_PATH "../assets/textures/sky/"
+#include "FilepathsAndDefinitions.h"
 
 //Shaders
 Shader colorShader;
@@ -23,12 +14,19 @@ Networking * server;
 
 //Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
-	init();
+	initShaders();
+	initSkybox();
+	initObjects();
 	server = new Networking();
 }
 
-void FrameManager::init() {
-	initShaders();
+void FrameManager::initShaders() {
+	skyboxShader = Shader(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
+	colorShader = Shader(SHADER_COLOR_VERT_PATH, SHADER_COLOR_FRAG_PATH);
+	textureShader = Shader(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
+}
+
+void FrameManager::initSkybox() {
 
 	std::vector<std::string> faces
 	{
@@ -43,10 +41,8 @@ void FrameManager::init() {
 	skybox = new Skybox(faces, &skyboxShader);
 }
 
-void FrameManager::initShaders() {
-	skyboxShader = Shader(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
-	colorShader = Shader(SHADER_COLOR_VERT_PATH, SHADER_COLOR_FRAG_PATH);
-	textureShader = Shader(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
+void FrameManager::initObjects() {
+
 }
 
 FrameManager::~FrameManager() {
@@ -56,8 +52,14 @@ FrameManager::~FrameManager() {
 
 //Update method (called before draw)*********************************************************************
 void FrameManager::update(double deltaTime) {
-	//server->sendPlayerBodyInfo(_head, _leftHand, _rightHand);
-	server->update();
+	//Get and send updates from and to the server
+	if (server->isConnected) {
+		getNetworkData();
+		server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, _leftTrigger, _rightTrigger);
+	}
+
+	//do non-network things
+	//
 }
 
 //Draw Methods (Called in order: drawSkybox, drawBody, draw)********************************************
@@ -68,34 +70,64 @@ void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 view) {
 
 void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
 	//Draws the player(s) head(s) and hands
-
+	//Draw this player
+		//lh
+		//rh
+	//Draw other player
+		//head
+		//lh
+		//rh
 }
 
 void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
 	//Draws the scene normally	
+	//scenegraph1->draw(projection, view);
+	//scenegraph2->draw(projection, view);
 }
 
-//Setters *********************************************************************************************
-void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
-	//These values are obtained from MAIN
-	_head = hmd;
-	_leftHand = lh;
-	_rightHand = rh;
-}
-
-//Gets information for the other player's location
-void FrameManager::setOtherPlayer(std::string info) {
+//Network Helpers *************************************************************************************
+void FrameManager::getNetworkData() {//Gets information for the other player's location
 	//These values are obtained from the network
+	//Gets other player's position
+	glm::mat4 otherHmd, otherLH, otherRH;
+	float triggerL, triggerR;
+	server->receivePlayerBodyInfo(otherHmd, otherLH, otherRH, triggerL, triggerR);
+	setOtherPlayerInfo(otherHmd, otherLH, otherRH, triggerL, triggerR);
+
+	//Gets object position (if affected by the other user)
+	std::vector<Packet> objData;
+	server->receiveObjectData(objData);
+
+	//TODO
+	for (int i = 0; i < objData.size(); i++) {
+		if (objData[i].objectId == -1)	//Ignore when objectId = -1
+			continue;
+		//Use objectId as the index of the object in the scenegraph
+		//Use m1 as the new toWorld matrix of the object in the scenegraph
+	}
+
+	server->clearPacketVector();
+}
+
+void FrameManager::setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT) {
+	//TODO
+	//When only one player is in the session, the server sets all matrices to the 
+	//	identity matrix and the trigger values to -1 so...
+	if (lT == -1 || rT == -1) {
+		//Place obj wherever we want (or disable drawing)
+		return;
+	}
+
+	//Update the other player's position, rotation, and trigger values
+
 }
 
 //Buttons *********************************************************************************************
-const float MINPRESS = 0.7f;	//Strength of press needed for a valid grip/index button press
-
 void FrameManager::pressA() {
 }
 
 void FrameManager::pressB() {
-	server->sendPlayerBodyInfo(_head, _leftHand, _rightHand);
+	
 }
 
 void FrameManager::pressX() {
@@ -103,7 +135,7 @@ void FrameManager::pressX() {
 }
 
 void FrameManager::pressY() {
-	
+	server->retryConnection();	//If client is not connected, try to reconnect
 }
 
 void FrameManager::pressLJoystick() {
@@ -123,11 +155,15 @@ void FrameManager::moveRJoystick(glm::vec2 xy) {
 }
 
 void FrameManager::pressLTrigger(float f) {
+	_leftTrigger = f;
+
 	if (f > MINPRESS) {}
 	else {}
 }
 
 void FrameManager::pressRTrigger(float f) {
+	_rightTrigger = f;
+
 	if (f > MINPRESS) {}
 	else {}
 }
@@ -141,3 +177,12 @@ void FrameManager::pressRGrip(float f) {
 	if (f > MINPRESS) {}
 	else {}
 }
+
+//Setters *********************************************************************************************
+void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
+	//These values are obtained from MAIN
+	_head = hmd;
+	_leftHand = lh;
+	_rightHand = rh;
+}
+

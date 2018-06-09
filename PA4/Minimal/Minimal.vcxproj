@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="FilepathsAndDefinitions.h" />
     <ClInclude Include="FrameManager.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="LoadPPM.h" />
