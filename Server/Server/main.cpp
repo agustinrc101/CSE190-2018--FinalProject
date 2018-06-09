@@ -6,7 +6,7 @@
 #pragma comment (lib, "ws2_32.lib")
 
 #define DEFAULT_PORT 54000
-#define MAX_PACKET_SIZE 1000000
+#define MAX_PACKET_SIZE 196
 
 //Source: https://www.youtube.com/watch?v=WDn-htpBlnU
 void main() {
@@ -79,16 +79,16 @@ void main() {
 					FD_CLR(sock, &master);
 				}
 				else {
-					std::cout << "Received message from client" << std::endl;						//TODO delet
 					//Send message to other clients, and definetely not the listening socket
 					for (int j = 0; j < master.fd_count; j++) {
 						SOCKET outSock = master.fd_array[j];
-						if (outSock != listening ){//&& outSock != sock) {							//TODO remove ){//
+						if (outSock != listening){// && outSock != sock) {							//TODO remove ){//
 							
-							std::ostringstream ss;
-							ss << "SOCKET #" << sock << ": " << buf << "\r\n";
-							std::string strOut = ss.str();
-							send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+							//std::ostringstream ss;
+							//ss << "SOCKET #" << sock << ": " << buf << "\r\n";
+							//std::string strOut = ss.str();
+							//send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+							send(outSock, buf, MAX_PACKET_SIZE, 0);
 						}
 					}
 				}

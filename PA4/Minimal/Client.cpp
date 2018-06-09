@@ -60,18 +60,31 @@ bool Client::connectToServer(){
 void Client::update() {	//Runs in a separate thread
 	char data[MAX_PACKET_SIZE];
 	ZeroMemory(data, MAX_PACKET_SIZE);
+	Packet packet;
+
 	int bytesReceived = recv(sock, data, sizeof(Packet), 0);
 
 	int i = 0;
 	if (bytesReceived > 0) {
 		while (i < bytesReceived) {
-			Packet p;
-			p.deserialize(&(data[i]));
+			packet.deserialize(&(data[i]));
 
-			if (p.type == 0)
+			switch(packet.type) {
+			case UNUSED:
+				std::cout << "SERVER> Received package of type UNUSED" << std::endl;
+				return;
+			case PLAYER_INFO:
+				std::cout << "SERVER> Received package of type PLAYER_INFO" << std::endl;
+				UsefulFunctions::printMatrix(packet.m1);
+
 				break;
-
-			std::cout << "SERVER> Received package of type " << p.type << std::endl;
+			case OBJECT_INFO:
+				std::cout << "SERVER> Received package of type OBJECT_INFO" << std::endl;
+				break;
+			default:
+				std::cout << "SERVER> Received package of unknown type" << std::endl;
+				return;
+			}
 
 			i += sizeof(Packet);
 		}
@@ -93,6 +106,10 @@ void Client::sendPacket() {
 	char buf[sizeof(Packet)];
 
 	Packet packet;
+	packet.type = OBJECT_INFO;
+	packet.m1 = glm::mat4(1.0f);
+	packet.m2 = glm::mat4(1.0f);
+	packet.m3 = glm::mat4(1.0f);
 	//packet.clientId = 0;
 	//packet.test = glm::mat4(1.0f);
 	packet.serialize(buf);

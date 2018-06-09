@@ -12,14 +12,14 @@ enum PacketTypes {
 	UNUSED = 0,
 	PLAYER_INFO = 1,
 	OBJECT_INFO = 2,
-	TEST_PACKET = 3,
 };
 
-struct Packet {
-	int type = PLAYER_INFO;
+struct Packet {	//Size 196
+	unsigned int type;	//Size 4
 
-	//int clientId;
-	//glm::mat4 test;
+	glm::mat4 m1;		//Size 64
+	glm::mat4 m2;		//Size 64
+	glm::mat4 m3;		//Size 64
 
 	void serialize(char * data) {
 		memcpy(data, this, sizeof(Packet));

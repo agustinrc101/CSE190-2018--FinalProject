@@ -8,6 +8,7 @@
 Client * client;
 
 Networking::Networking() {
+
 	client = new Client(isConnected);
 	_beginthread(clientLoop, 0, (void*)12);
 }
