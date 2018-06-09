@@ -113,27 +113,12 @@ void Client::update() {	//Runs in a separate thread
 	}
 }
 
-void Client::sendTestString() {
-	//send and receive data
-	char buf[MAX_PACKET_SIZE];
-	std::string m = "Test string";
-
-	int sendResult = send(sock, m.c_str(), m.size() + 1, 0);
-
-	if (sendResult == SOCKET_ERROR)
-		std::cerr << "Error sending test string" << std::endl;
-}
-
 //Send identity matrices (use for testing)
 void Client::sendPacket() {
 	char buf[sizeof(Packet)];
 
 	Packet packet;
 	packet.type = UNUSED;
-	packet.m1 = glm::mat4(1.0f);
-	packet.m2 = glm::mat4(1.0f);
-	packet.m3 = glm::mat4(1.0f);
-	packet.objectId = -1;
 	packet.serialize(buf);
 
 	int sendResult = send(sock, buf, sizeof(Packet), 0);
@@ -164,9 +149,9 @@ void Client::sendPacket(glm::mat4 toWorld, int objId) {
 	char buf[sizeof(Packet)];
 
 	Packet packet;
-	packet.type = OBJECT_INFO;
-	packet.m1 = toWorld;
-	packet.objectId = objId;
+		packet.type = OBJECT_INFO;
+		packet.m1 = toWorld;
+		packet.objectId = objId;
 	packet.serialize(buf);
 
 	int sendResult = send(sock, buf, sizeof(Packet), 0);

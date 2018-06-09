@@ -17,6 +17,7 @@ public:
 	static void clientLoop(void *);
 	void sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT);
 	void receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, float & lT, float & rT);
+	void sendObjectData(glm::mat4 m, int id);
 	void receiveObjectData(std::vector<Packet> & v);
 	void clearPacketVector();
 

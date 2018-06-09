@@ -21,10 +21,6 @@ void Networking::clientLoop(void *) {
 		client->update();
 }
 
-void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT) {
-	client->sendPacket(hmd, lh, rh, lT, rT);
-}
-
 void Networking::retryConnection() {
 	if (!isConnected) {
 		isConnected = client->connectToServer();
@@ -33,12 +29,20 @@ void Networking::retryConnection() {
 	}
 }
 
+void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT) {
+	client->sendPacket(hmd, lh, rh, lT, rT);
+}
+
 void Networking::receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, float & lT, float & rT) {
 	hmd = client->getHmd();
 	lh = client->getlh();
 	rh = client->getrh();
 	lT = client->getlTrigger();
 	rT = client->getrTrigger();
+}
+
+void Networking::sendObjectData(glm::mat4 m, int id) {
+	client->sendPacket(m, id);
 }
 
 void Networking::receiveObjectData(std::vector<Packet> & v) {

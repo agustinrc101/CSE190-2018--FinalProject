@@ -71,12 +71,12 @@ void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 view) {
 void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
 	//Draws the player(s) head(s) and hands
 	//Draw this player
-		//lh
-		//rh
+		//draw lh
+		//draw rh
 	//Draw other player
-		//head
-		//lh
-		//rh
+		//draw head
+		//draw lh
+		//draw rh
 }
 
 void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
@@ -102,8 +102,8 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 	for (int i = 0; i < objData.size(); i++) {
 		if (objData[i].objectId == -1)	//Ignore when objectId = -1
 			continue;
-		//Use objectId as the index of the object in the scenegraph
-		//Use m1 as the new toWorld matrix of the object in the scenegraph
+		//objData[i].objectId : index of the object in the scenegraph
+		// objData[i].m1      : new toWorld matrix of the object
 	}
 
 	server->clearPacketVector();
