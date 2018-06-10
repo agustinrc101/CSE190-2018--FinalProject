@@ -18,6 +18,7 @@
 #define TEXTURE_PATH "../assets/textures/"
 
 //Finishers (for textures) i.e TEXTURE_GROUND + TEXTURE_TYPE_ALBEDO_PNG
+#define TEXTURE_TYPE_ALBEDO_JPG "Albedo.jpg"
 #define TEXTURE_TYPE_ALBEDO_TGA "Albedo.tga"
 #define TEXTURE_TYPE_NORMAL_TGA "Normal.tga"
 #define TEXTURE_TYPE_ALBEDO_PNG "Albedo.png"
@@ -51,6 +52,7 @@
 #define TEXTURE_WEAPON_SCIFI_PISTOL "../assets/models/scifi-weapons/Pistol/Textures/Shared/Pistol.fbx"
 #define TEXTURE_WEAPON_SCIFI_RIFLE "../assets/models/scifi-weapons/Rifle/Textures/Shared/Rifle.fbx"
 #define TEXTURE_WEAPON_SCIFI_SNIPER "../assets/models/scifi-weapons/Sniper/Textures/Shared/Sniper.fbx"
+#define TEXTURE_CAN_JPG "../assets/models/Props/Can/Matcha_Can_"
 
 //Models
 #define MODEL_ROCKS "../assets/models/Environment/Rocks/Rocks.fbx"
@@ -78,6 +80,7 @@
 #define MODEL_WEAPON_SCIFI_PISTOL "../assets/models/scifi-weapons/Pistol/Pistol.fbx"
 #define MODEL_WEAPON_SCIFI_RIFLE "../assets/models/scifi-weapons/Rifle/Rifle.fbx"
 #define MODEL_WEAPON_SCIFI_SNIPER "../assets/models/scifi-weapons/Sniper/Sniper.fbx"
+#define MODEL_CAN "../assets/models/Props/Can/Matcha_Can.obj"
 
 //Sounds
 #define SOUND_MUSIC_SWEETWATER "../assets/audio/Music/Sweetwater.wav"
