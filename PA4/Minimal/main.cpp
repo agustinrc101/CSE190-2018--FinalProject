@@ -681,6 +681,7 @@ protected:
 		}
 
 		//Sets controllers and hmd pos/rot
+		//Use glm::translate if this is buggy
 		h[3] = glm::vec4(h[0].x + displacement.x, h[3][1], h[3][2] + displacement.z, 1.0f);
 		lh[3] = glm::vec4(lh[0].x + displacement.x, lh[3][1], lh[3][2] + displacement.z, 1.0f);
 		rh[3] = glm::vec4(rh[0].x + displacement.x, rh[3][1], rh[3][2] + displacement.z, 1.0f);

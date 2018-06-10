@@ -17,7 +17,7 @@ FrameManager::FrameManager() {
 	initShaders();
 	initSkybox();
 	initObjects();
-	//server = new Networking();
+	server = new Networking();
 }
 
 void FrameManager::initShaders() {
@@ -53,10 +53,10 @@ FrameManager::~FrameManager() {
 //Update method (called before draw)*********************************************************************
 void FrameManager::update(double deltaTime) {
 	//Get and send updates from and to the server
-	//if (server->isConnected) {
-	//	getNetworkData();
-	//	server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, _leftTrigger, _rightTrigger);
-	//}
+	if (server->isConnected) {
+		getNetworkData();
+		server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, _leftTrigger, _rightTrigger);
+	}
 
 	//do non-network things
 	//
