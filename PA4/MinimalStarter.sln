@@ -11,8 +11,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletDynamics", "packages\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinearMath", "packages\BulletPhysics\build3\vs2010\LinearMath.vcxproj", "{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenAL", "packages\OpenAL\OpenAL.vcxproj", "{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -89,18 +87,6 @@ Global
 		{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
 		{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}.RelWithDebInfo|x86.Build.0 = Release|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.Debug|x64.ActiveCfg = Debug|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.Debug|x86.ActiveCfg = Debug|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.Debug|x86.Build.0 = Debug|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.MinSizeRel|x64.ActiveCfg = MinSizeRel|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.MinSizeRel|x86.ActiveCfg = MinSizeRel|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.MinSizeRel|x86.Build.0 = MinSizeRel|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.Release|x64.ActiveCfg = Release|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.Release|x86.ActiveCfg = Release|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.Release|x86.Build.0 = Release|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
-		{BCF43EC8-7508-327F-9EDF-82A505E5DDB3}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
