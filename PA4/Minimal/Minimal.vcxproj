@@ -74,13 +74,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\packages\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>LibOVR.lib;OpenAL32.lib;opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\packages\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -88,13 +88,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\packages\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>LibOVR.lib;OpenAL32.lib;opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\packages\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,7 +104,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\packages\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -112,7 +112,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>LibOVR.lib;OpenAL32.lib;opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\packages\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -122,7 +122,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Include\AL;$(SolutionDir)\packages\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -130,7 +130,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>LibOVR.lib;OpenAL32.lib;opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\packages\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -165,15 +165,6 @@
     <ClInclude Include="UsefulFunctions.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BulletPhysics\build3\vs2010\BulletCollision.vcxproj">
-      <Project>{b91153c5-259d-c089-2eae-437e9ab81c8a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\BulletPhysics\build3\vs2010\BulletDynamics.vcxproj">
-      <Project>{45122e0f-31e0-2115-1a74-923b06e1fd79}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\BulletPhysics\build3\vs2010\LinearMath.vcxproj">
-      <Project>{eaf25dfd-d6aa-9f4a-3fb2-78a62b893a3b}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\BulletPhysics\src\BulletCollision\BulletCollision.vcxproj">
       <Project>{368d446d-77f6-3de7-bf77-2c0132498263}</Project>
     </ProjectReference>
@@ -182,6 +173,18 @@
     </ProjectReference>
     <ProjectReference Include="..\BulletPhysics\src\LinearMath\LinearMath.vcxproj">
       <Project>{0ed791d3-739d-3552-944a-0380c108a8d0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\BulletPhysics\build3\vs2010\BulletCollision.vcxproj">
+      <Project>{b91153c5-259d-c089-2eae-437e9ab81c8a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\BulletPhysics\build3\vs2010\BulletDynamics.vcxproj">
+      <Project>{45122e0f-31e0-2115-1a74-923b06e1fd79}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\BulletPhysics\build3\vs2010\LinearMath.vcxproj">
+      <Project>{eaf25dfd-d6aa-9f4a-3fb2-78a62b893a3b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\packages\OpenAL\OpenAL.vcxproj">
+      <Project>{bcf43ec8-7508-327f-9edf-82a505e5ddb3}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
