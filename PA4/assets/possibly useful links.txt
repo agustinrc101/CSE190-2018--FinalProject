@@ -1,6 +1,7 @@
 Using OpenAL
 	https://www.youtube.com/watch?v=V83Ja4FmrqE
 	https://www.youtube.com/watch?v=BR8KjNkYURk
+	https://ffainelli.github.io/openal-example/
 Networking
 	https://www.codeproject.com/Articles/412511/Simple-client-server-network-using-Cplusplus-and-W
 PhysicsEngine (collision) - video series

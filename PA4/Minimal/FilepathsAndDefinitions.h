@@ -79,6 +79,18 @@
 #define MODEL_WEAPON_SCIFI_RIFLE "../assets/models/scifi-weapons/Rifle/Rifle.fbx"
 #define MODEL_WEAPON_SCIFI_SNIPER "../assets/models/scifi-weapons/Sniper/Sniper.fbx"
 
+//Sounds
+#define SOUND_MUSIC_SWEETWATER "../assets/audio/Music/Sweetwater.wav"
+#define SOUND_MUSIC_DESERTCITY "../assets/audio/Music/Desert_City.wav"
+#define SOUND_FX_BULLET_CASING "../assets/audio/FX/bullet_casing.wav"
+#define SOUND_FX_BULLET_FLYBY "../assets/audio/FX/bullet_flyby.wav"
+#define SOUND_FX_BULLET_IMPACT "../assets/audio/FX/bullet_impact.wav"
+#define SOUND_FX_BULLET_SHELL_BOUNCE "../assets/audio/FX/bullet_shell_bounce_wood.wav"
+#define SOUND_FX_PLAYER_HURT "../assets/audio/FX/classic_hurt.wav"
+#define SOUND_FX_EXPLOSION "../assets/audio/FX/explosion.wav"
+#define SOUND_FX_GUN_SUBMACHINE "../assets/audio/FX/gun_submachine.wav"
+#define SOUND_FX_GUNSHOT "../assets/audio/FX/gunshot.wav"
+#define SOUND_FX_GUNSHOT_SILENCED "../assets/audio/FX/silence_gunshot.wav"
 
 //Definitions
 #define PI 3.14159265359f
