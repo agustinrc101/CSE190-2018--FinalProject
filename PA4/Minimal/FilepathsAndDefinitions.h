@@ -1,5 +1,6 @@
 #pragma once
 
+//Paths
 #define SHADER_COLOR_VERT_PATH "../assets/shaders/ColorShader.vert"
 #define SHADER_COLOR_FRAG_PATH "../assets/shaders/ColorShader.frag"
 #define SHADER_TEX_VERT_PATH "../assets/shaders/TextureShader.vert"
@@ -14,5 +15,6 @@
 #define AUDIO_FX_PATH "../assets/audio/FX/"
 #define TEXTURE_PATH "../assets/textures/"
 
-//Defines the minimum press strength required for the triggers
-#define MINPRESS 0.7f
+//Definitions
+#define PI 3.14159265359f
+#define MINPRESS 0.7f //Defines the minimum press strength required for the triggers

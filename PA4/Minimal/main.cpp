@@ -154,6 +154,8 @@ void glDebugCallbackHandler(GLenum source, GLenum type, GLuint id, GLenum severi
 //
 
 #include "FrameManager.h"
+#include "UsefulFunctions.h"
+#include "FilepathsAndDefinitions.h"
 
 namespace glfw {
 	inline GLFWwindow * createWindow(const uvec2 & size, const ivec2 & position = ivec2(INT_MIN)) {
@@ -326,6 +328,8 @@ private:
 
 #include <OVR_CAPI.h>
 #include <OVR_CAPI_GL.h>
+#include <Extras\OVR_Math.h>
+
 
 namespace ovr {
 	// Convenience method for looping over each eye with a lambda
@@ -555,6 +559,7 @@ protected:
 	//Time Vars
 	double oldTime = -1;
 	double curTime = -1;
+	double deltaTime = 0;
 
 	//Button Bools
 	bool xIsPressed = false;
@@ -564,28 +569,24 @@ protected:
 	bool ljIsPressed = false;
 	bool rjIsPressed = false;
 
+	//Vars
+	const float Yaw = PI;
+
+	glm::vec3 displacement = glm::vec3(0.0f, 0.0f, 0.0f);
+	OVR::Vector3f pos2 = OVR::Vector3f(0.0f, 0.0f, 0.0f);
+
 	//Draw Begins
 	void draw(FrameManager * frameManager) final override {
-		oldTime = curTime;
-		curTime = ovr_GetTimeInSeconds();
-		
-		if (oldTime != -1) {
-			double deltaTime = curTime - oldTime;
-			frameManager->update(deltaTime);						// UPDATE IS CALLED HERE *************************************************
-		}
+			ovrPosef eyePoses[2];
+			ovr_GetEyePoses(_session, frame, true, _viewScaleDesc.HmdToEyePose, eyePoses, &_sceneLayer.SensorSampleTime);
 
-
-		ovrPosef eyePoses[2];
-		ovr_GetEyePoses(_session, frame, true, _viewScaleDesc.HmdToEyePose, eyePoses, &_sceneLayer.SensorSampleTime);
-
-		int curIndex;
-		ovr_GetTextureSwapChainCurrentIndex(_session, _eyeTexture, &curIndex);
-		GLuint curTexId;
-		ovr_GetTextureSwapChainBufferGL(_session, _eyeTexture, curIndex, &curTexId);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fbo);
-		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, curTexId, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+			int curIndex;
+			ovr_GetTextureSwapChainCurrentIndex(_session, _eyeTexture, &curIndex);
+			GLuint curTexId;
+			ovr_GetTextureSwapChainBufferGL(_session, _eyeTexture, curIndex, &curTexId);
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fbo);
+			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, curTexId, 0);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//ControllerInfo
 		double ftiming = ovr_GetPredictedDisplayTime(_session, 0);
 		ovrTrackingState trackState = ovr_GetTrackingState(_session, ftiming, ovrTrue);
@@ -658,14 +659,40 @@ protected:
 			else { bIsPressed = false;}
 		}
 
-		//Handle movement (TODO)
-
-
-		//Sets controllers and hmd pos/rot
+		//Gets controllers and hmd pos/rot
 		glm::mat4 lh = (ovr::toGlm(trackState.HandPoses[ovrHand_Left].ThePose));
 		glm::mat4 rh = (ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
 		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
+
+		//Handles movement
+		if (frameManager->locomotion(deltaTime)) {	//Locomotion Begin
+			OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
+			OVR::Matrix4f finalRollPitchYaw = rollPitchYaw * OVR::Matrix4f(eyePoses[0].Orientation);
+			OVR::Vector3f finalForward = finalRollPitchYaw.Transform(OVR::Vector3f(0, 0, -1));
+			finalForward.x = -finalForward.x;
+			finalForward.y = 0;
+			finalForward.z = -finalForward.z;
+
+			finalForward *= 2.5f * deltaTime;
+		
+			OVR::Vector3f dir = OVR::Matrix4f::RotationY(Yaw).Transform(finalForward);
+			pos2 += dir;
+			displacement += ovr::toGlm(dir);
+		}
+
+		//Sets controllers and hmd pos/rot
+		h[3] = glm::vec4(h[0].x + displacement.x, h[3][1], h[3][2] + displacement.z, 1.0f);
+		lh[3] = glm::vec4(lh[0].x + displacement.x, lh[3][1], lh[3][2] + displacement.z, 1.0f);
+		rh[3] = glm::vec4(rh[0].x + displacement.x, rh[3][1], rh[3][2] + displacement.z, 1.0f);
 		frameManager->setPlayer(h, lh, rh);
+
+		//Update
+		oldTime = curTime;
+		curTime = ovr_GetTimeInSeconds();
+		if (oldTime != -1) {
+			deltaTime = curTime - oldTime;
+			frameManager->update(deltaTime);
+		}
 
 		//Iterate over each eye
 		ovr::for_each_eye([&](ovrEyeType eye) {
@@ -676,11 +703,25 @@ protected:
 			//Get proj and modelview
 			glm::mat4 projection = _eyeProjections[eye];
 			glm::mat4 modelview = glm::inverse(ovr::toGlm(eyePoses[eye]));
+			
+			//
+			OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
+			OVR::Matrix4f finalRollPitchYaw = rollPitchYaw * OVR::Matrix4f(eyePoses[eye].Orientation);
+			OVR::Vector3f finalUp = finalRollPitchYaw.Transform(OVR::Vector3f(0, 1, 0));
+			OVR::Vector3f finalForward = finalRollPitchYaw.Transform(OVR::Vector3f(0, 0, -1));
+			OVR::Vector3f shiftedEyePos = pos2 + rollPitchYaw.Transform(eyePoses[eye].Position);
+
+			OVR::Matrix4f view = OVR::Matrix4f::LookAtRH(shiftedEyePos, shiftedEyePos + finalForward, finalUp);
+			OVR::Matrix4f proj = ovrMatrix4f_Projection(_hmdDesc.DefaultEyeFov[eye], 0.2f, 1000.0f, ovrProjection_None);
+			//
+
+			modelview = ovr::toGlm(view);
+			projection = ovr::toGlm(proj);
 
 			//Draw scene
 			frameManager->drawSkybox(projection, modelview);
-			frameManager->drawBody(projection, modelview);
 			frameManager->draw(projection, modelview);
+			frameManager->drawBody(projection, modelview);
 		});
 
 		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);

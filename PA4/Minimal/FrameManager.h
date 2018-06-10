@@ -48,11 +48,16 @@ public:
 	void pressRGrip(float f);
 	void pressLTrigger(float f);
 	void pressRTrigger(float f);
+	bool locomotion(float deltaTime);
 
 private:
-	glm::mat4 _leftHand;
-	glm::mat4 _rightHand;
-	glm::mat4 _head;
+	glm::mat4 _leftHand = glm::mat4(1.0f);
+	glm::mat4 _rightHand = glm::mat4(1.0f);
+	glm::mat4 _head = glm::mat4(1.0f);
+	
+	bool pressedLeftGrip = false;
+	bool pressedRightGrip = false;
+	
 	float _leftTrigger;
 	float _rightTrigger;
 
@@ -62,6 +67,9 @@ private:
 
 	void getNetworkData();
 	void setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT);
+
+	void setUpLocomotionData();
+	void locomotionHelper(float higher, float lower);
 };
 
 #endif //FRAMEMANAGER_H

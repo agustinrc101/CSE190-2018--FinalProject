@@ -17,7 +17,7 @@ FrameManager::FrameManager() {
 	initShaders();
 	initSkybox();
 	initObjects();
-	server = new Networking();
+	//server = new Networking();
 }
 
 void FrameManager::initShaders() {
@@ -53,10 +53,10 @@ FrameManager::~FrameManager() {
 //Update method (called before draw)*********************************************************************
 void FrameManager::update(double deltaTime) {
 	//Get and send updates from and to the server
-	if (server->isConnected) {
-		getNetworkData();
-		server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, _leftTrigger, _rightTrigger);
-	}
+	//if (server->isConnected) {
+	//	getNetworkData();
+	//	server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, _leftTrigger, _rightTrigger);
+	//}
 
 	//do non-network things
 	//
@@ -169,15 +169,80 @@ void FrameManager::pressRTrigger(float f) {
 }
 
 void FrameManager::pressLGrip(float f) {
-	if (f > MINPRESS) {}
-	else {}
+	if (f > MINPRESS) { pressedLeftGrip = true; }
+	else { pressedLeftGrip = false; }
 }
 
 void FrameManager::pressRGrip(float f) {
-	if (f > MINPRESS) {}
-	else {}
+	if (f > MINPRESS) { pressedRightGrip = true; }
+	else { pressedRightGrip = false; }
 }
 
+//Locomotion ******************************************************************************************
+	float _time = 0.0f;
+	float _coolDown = 0.0f;
+	float _minHandDistance = 0.25f;
+
+	bool _curHigh = false;	//false for left, true for right
+	float _leftY;
+	float _rightY;
+
+	bool isGetData = true;
+
+	bool FrameManager::locomotion(float deltaTime) {
+		if (pressedLeftGrip && pressedRightGrip) {
+			_leftY = _leftHand[3][1];
+			_rightY = _rightHand[3][1];
+
+			_time += deltaTime;
+			if (_time > 0.3f) {
+				setUpLocomotionData();
+				if (!_curHigh)
+					locomotionHelper(_leftY, _rightY);
+				else
+					locomotionHelper(_rightY, _leftY);
+			}
+		}
+		else {
+			_time = 0.0f;
+			isGetData = true;
+		}
+
+		if (_coolDown > 0.0f) {
+			_coolDown -= deltaTime;
+			return true;
+		}
+		
+		return false;
+	}
+
+	void FrameManager::setUpLocomotionData() {
+		if (isGetData) {
+			isGetData = false;
+			if (_leftY > _rightY)
+				_curHigh = false;	//current highest hand is left
+			else
+				_curHigh = true;	//current highest hand is right
+		}
+	}
+
+	void FrameManager::locomotionHelper(float higher, float lower) {
+		float diff = glm::abs(higher - lower);
+		if (diff < _minHandDistance) {
+			if (!_curHigh) {
+				if (_leftY < _rightY) {
+					_curHigh = !_curHigh;
+					_coolDown = 0.3f;
+				}
+			}
+			else{
+				if (_rightY < _leftY) {
+					_curHigh = !_curHigh;
+					_coolDown = 0.3f;
+				}
+			}
+		}
+	}
 //Setters *********************************************************************************************
 void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	//These values are obtained from MAIN

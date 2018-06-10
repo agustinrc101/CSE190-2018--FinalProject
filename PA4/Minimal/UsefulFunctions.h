@@ -19,4 +19,21 @@ public:
 		}
 		std::cout << "============\n";
 	}
+
+	static void printVector(glm::vec2 v) {
+		std::cout << "(" << v.x << ", " 
+			<< v.y << ")" << std::endl;
+	}
+
+	static void printVector(glm::vec3 v) {
+		std::cout << "(" << v.x << ", " 
+			<< v.y << ", " << v.z << ")" 
+			<< std::endl;
+	}
+
+	static void printVector(glm::vec4 v) {
+		std::cout << "(" << v.x << ", " 
+			<< v.y << ", " << v.z << ", " 
+			<< v.w << ")" << std::endl;
+	}
 };
