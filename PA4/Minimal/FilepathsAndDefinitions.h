@@ -43,8 +43,8 @@
 #define TEXTURE_TIRE "../assets/models/Props/Tires/Textures/TireWall_"
 #define TEXTURE_CRATE1 "../assets/models/Props/Textures/WoodenCrate_"
 #define TEXTURE_CRATE2 "../assets/models/Props/Textures/WoodenCrate2_"
-#define TEXTURE_WEAPON_SHOTGUN "../assets/models/modern-weapons/870 Shotgun/Textures/870_Shotgun.fbx
-#define TEXTURE_WEAPON_AK47 "../assets/models/modern-weapons/AK-47/Textures/AK-47_.fbx
+#define TEXTURE_WEAPON_SHOTGUN "../assets/models/modern-weapons/870 Shotgun/Textures/870_Shotgun.fbx"
+#define TEXTURE_WEAPON_AK47 "../assets/models/modern-weapons/AK-47/Textures/AK-47_.fbx"
 #define TEXTURE_WEAPON_SNIPER "../assets/models/modern-weapons/L96 Sniper Rifle/Textures/L96_Sniper_Rifle_"
 #define TEXTURE_WEAPON_M4 "../assets/models/modern-weapons/M4 Carbine/Textures/M4_Carbine_"
 #define TEXTURE_WEAPON_PISTOL "../assets/models/modern-weapons/Pistol/Textures/Pistol_"
@@ -71,8 +71,8 @@
 #define MODEL_TIRE "../assets/models/Props/Tires/SingleTire.fbx"
 #define MODEL_TIRE_WALL "../assets/models/Props/Tires/TireWall.fbx"
 #define MODEL_CRATE "../assets/models/Props/WoodenCrate/WoodenCrate.fbx"
-#define MODEL_WEAPON_SHOTGUN "../assets/models/modern-weapons/870 Shotgun/870_Shotgun.fbx
-#define MODEL_WEAPON_AK47 "../assets/models/modern-weapons/AK-47/AK-47.fbx
+#define MODEL_WEAPON_SHOTGUN "../assets/models/modern-weapons/870 Shotgun/870_Shotgun.fbx"
+#define MODEL_WEAPON_AK47 "../assets/models/modern-weapons/AK-47/AK-47.fbx"
 #define MODEL_WEAPON_SNIPER "../assets/models/modern-weapons/L96 Sniper Rifle/L96_Sniper_Rifle.fbx"
 #define MODEL_WEAPON_M4 "../assets/models/modern-weapons/M4 Carbine/M4_Carbine.fbx"
 #define MODEL_WEAPON_PISTOL "../assets/models/modern-weapons/Pistol/Pistol.fbx"

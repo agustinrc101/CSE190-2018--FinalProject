@@ -6,4 +6,10 @@ Networking
 	https://www.codeproject.com/Articles/412511/Simple-client-server-network-using-Cplusplus-and-W
 PhysicsEngine (collision) - video series
 	https://www.youtube.com/watch?v=3Oay1YxkP5c&list=PLEETnX-uPtBXm1KEr_2zQ6K_0hoGH6JJ0
-	
+Raycasting
+	http://www.realtimerendering.com/intersections.html
+	Without PhysicsEngine
+		http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/
+		https://github.com/opengl-tutorials/ogl/blob/master/misc05_picking/misc05_picking_custom.cpp
+	With PhysicsEngine:
+		http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-a-physics-library/
