@@ -142,6 +142,7 @@
     <ClCompile Include="Networking.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UsefulFunctions.h" />
