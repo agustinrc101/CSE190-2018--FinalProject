@@ -4,8 +4,16 @@
 #include<list>
 #include<glm/gtc/matrix_transform.hpp>
 #include<stack>
+#include <btBulletDynamicsCommon.h>
 #include"Node.h"
 #include"shader.h"
+#include "ShaderLoader.h"
+
+enum SHAPE {
+	PLANE = 0,
+	SPHERE = 1,
+	RECTANGLE = 2,
+};
 
 class Transform : public Node
 {
@@ -28,6 +36,18 @@ public:
 	Transform& setAnimation(glm::mat4 (*animate)(glm::mat4 M));
 	glm::mat4 getToWorld(glm::mat4 C = glm::mat4(1.0f)) final;
 
+	//BulletPhysics
+	btCollisionShape * collider;
+	btDefaultMotionState * motionState;
+	btRigidBody * rigidbody;
+	btScalar mass;
+
+	void setCollisionShapeSphere(float radius);
+	void setCollisionShapePlane(btVector3 planeNormal = btVector3(0, 1, 0));
+	void setCollisionShapeBox(btVector3 halfExtents);
+
+	btRigidBody * getRigidbody();
+
 protected:
 
 private:
@@ -37,7 +57,8 @@ private:
 	glm::mat4 totalScale;
 	std::list<Node*> children;
 	glm::mat4 (*animate)(glm::mat4 M);
-
 };
+
+
 
 #endif

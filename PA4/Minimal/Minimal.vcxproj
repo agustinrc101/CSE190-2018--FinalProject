@@ -88,13 +88,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\OpenAL\include;$(SolutionDir)\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\OpenAL\include;$(SolutionDir)\..\BulletPhysics\src;$(SolutionDir)\Include\LibOVR;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>LibOVR.lib;OpenAL32.lib;opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\OpenAL\libs\Win64;$(SolutionDir)\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LibOVR.lib;OpenAL32.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\OpenAL\libs\Win64;$(SolutionDir)\..\BulletPhysics\bin;$(SolutionDir)\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,14 +135,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="F:\CSE 190 - PA3\PA3\Minimal\TexturedCube.cpp" />
     <ClCompile Include="FrameManager.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="Networking.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="Skybox.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="F:\CSE 190 - PA3\PA3\Minimal\TexturedCube.h" />
     <ClInclude Include="FilepathsAndDefinitions.h" />
     <ClInclude Include="FrameManager.h" />
     <ClInclude Include="Geometry.h" />
@@ -159,9 +162,10 @@
     <ClInclude Include="NetworkData.h" />
     <ClInclude Include="Networking.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="Skybox.h" />
-    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UsefulFunctions.h" />
@@ -175,15 +179,6 @@
     </ProjectReference>
     <ProjectReference Include="..\BulletPhysics\build3\vs2010\LinearMath.vcxproj">
       <Project>{eaf25dfd-d6aa-9f4a-3fb2-78a62b893a3b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\BulletPhysics\src\BulletCollision\BulletCollision.vcxproj">
-      <Project>{368d446d-77f6-3de7-bf77-2c0132498263}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\BulletPhysics\src\BulletDynamics\BulletDynamics.vcxproj">
-      <Project>{506cc582-ea0f-3aec-a0ac-41ae0d6d2184}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\BulletPhysics\src\LinearMath\LinearMath.vcxproj">
-      <Project>{0ed791d3-739d-3552-944a-0380c108a8d0}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

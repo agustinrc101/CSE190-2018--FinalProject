@@ -32,7 +32,6 @@ Geometry& Geometry::init(std::string filepath, std::string ppmpath)
 		initialized = true;
 		toWorld = glm::mat4(1.0f);
 		model = Model(filepath, ppmpath);
-
 		//centerAndResize();
 		scalePointAmount = 1;
 		x = 0;

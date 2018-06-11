@@ -4,7 +4,9 @@
 //Shaders
 Shader colorShader;
 Shader textureShader;
-Shader skyboxShader;
+GLuint skyboxShader;
+GLuint texShader;
+
 
 //Skyboxes
 Skybox* skybox;
@@ -12,18 +14,28 @@ Skybox* skybox;
 //Networking
 Networking * server;
 
+//Scenegraph
+Scene * sceneGraph;
+
+//PlayerBody
+TexturedCube * leftHand;
+TexturedCube * rightHand;
+
 //Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
 	initShaders();
 	initSkybox();
 	initObjects();
+	sceneGraph = new Scene();
 	server = new Networking();
 }
 
 void FrameManager::initShaders() {
-	skyboxShader = Shader(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
 	colorShader = Shader(SHADER_COLOR_VERT_PATH, SHADER_COLOR_FRAG_PATH);
-	textureShader = Shader(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
+	textureShader = Shader(SHADER_TEXTURE_VERT_PATH, SHADER_TEXTURE_FRAG_PATH);
+
+	skyboxShader = LoadShaders(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
+	texShader = LoadShaders(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
 }
 
 void FrameManager::initSkybox() {
@@ -38,16 +50,20 @@ void FrameManager::initSkybox() {
 		std::string(SKY_TEX_PATH) + "nx.tga",
 	};
 
-	skybox = new Skybox(faces, &skyboxShader);
+	skybox = new Skybox(SKY_TEX_PATH);
 }
 
 void FrameManager::initObjects() {
-
+	leftHand = new TexturedCube(0.1f, TEXTURE_CUBE_PPM);
+	rightHand = new TexturedCube(0.1f, TEXTURE_CUBE_PPM);
 }
 
 FrameManager::~FrameManager() {
 	delete(skybox);
 	delete(server);
+	delete(sceneGraph);
+	delete(leftHand);
+	delete(rightHand);
 }
 
 //Update method (called before draw)*********************************************************************
@@ -59,20 +75,20 @@ void FrameManager::update(double deltaTime) {
 	}
 
 	//do non-network things
-	//
+	sceneGraph->update(deltaTime);
 }
 
 //Draw Methods (Called in order: drawSkybox, drawBody, draw)********************************************
 void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 view) {
 	//Draws the skybox(es)
-	skybox->draw(&skyboxShader, projection, view);
+	skybox->draw(projection, view, skyboxShader);
 }
 
 void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
 	//Draws the player(s) head(s) and hands
 	//Draw this player
-		//draw lh
-		//draw rh
+	leftHand->draw(projection, view, texShader, glm::mat4(1.0f));
+	rightHand->draw(projection, view, texShader, glm::mat4(1.0f));
 	//Draw other player
 		//draw head
 		//draw lh
@@ -81,8 +97,7 @@ void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
 
 void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
 	//Draws the scene normally	
-	//scenegraph1->draw(projection, view);
-	//scenegraph2->draw(projection, view);
+	sceneGraph->draw(projection, view, &textureShader);
 }
 
 //Network Helpers *************************************************************************************
@@ -249,5 +264,14 @@ void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	_head = hmd;
 	_leftHand = lh;
 	_rightHand = rh;
+}
+
+void FrameManager::setPlayerHandPosition(glm::mat4 lh, glm::mat4 rh) {
+	leftHand->toWorld = lh;
+	leftHand->toWorld[3][0] = -leftHand->toWorld[3][0];
+	leftHand->toWorld[3][2] = -leftHand->toWorld[3][2];
+	rightHand->toWorld = rh;
+	rightHand->toWorld[3][0] = -rightHand->toWorld[3][0];
+	rightHand->toWorld[3][2] = -rightHand->toWorld[3][2];
 }
 

@@ -1,38 +1,45 @@
-#ifndef SKYBOX_H
-#define SKYBOX_H
+#ifndef _SKYBOX_H_
+#define _SKYBOX_H_
 
+#define GLFW_INCLUDE_GLEXT
 #ifdef __APPLE__
-// If modern OpenGL replace gl.h with gl3.h
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <OpenGL/gl3.h>
 #include <OpenGL/glext.h>
+#define GLFW_INCLUDE_GLCOREARB
 #else
 #include <GL/glew.h>
 #endif
 
 #include <GLFW/glfw3.h>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <iostream>
 #include <vector>
-#include <string>
-#include<glm/gtc/matrix_transform.hpp>
-#include "shader.h"
+#include <float.h>
 
-class Skybox
-{
-private:
-	unsigned int skyboxVAO, skyboxVBO;
-	unsigned int cubemapTexture;
-
-	glm::mat4 totalRot;
-
+class Skybox{
 public:
-	Skybox();
-	Skybox(std::vector<std::string> faces, Shader* skyboxShaderProgram);
+	Skybox(std::string path);
 	~Skybox();
-	unsigned int loadCubemap(std::vector<std::string> faces);
-	void draw(Shader* skyboxShader, const glm::mat4& projection, const glm::mat4& view);
+	unsigned int getTextureID();
+	void draw(glm::mat4 projection, glm::mat4 headPose, GLint shader);
 
-	Skybox& rotate(glm::vec3 rotAxis, float deg);
+	void setPos(glm::vec3 pos);
+
+private:
+	unsigned int textureID;
+	std::vector<glm::vec3> vertices;
+	
+	glm::mat4 toWorld = glm::mat4(1.0f);
+
+	GLuint VBO, VAO, EBO, VBO2;
+
+	void loadCubeMap(std::vector<std::string> faces);
+	void initVertices(float p);
+	void initCubeMap();
+	void helperPrint(int i);
+
 };
 
-#endif // !SKYBOX_H
+#endif

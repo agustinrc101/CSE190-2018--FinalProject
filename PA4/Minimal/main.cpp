@@ -45,7 +45,7 @@ limitations under the License.
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 
 // Import the most commonly used types into the default namespace
 using glm::ivec3;
@@ -664,6 +664,8 @@ protected:
 		glm::mat4 rh = (ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
 		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
 
+		frameManager->setPlayerHandPosition(lh, rh);
+
 		//Handles movement
 		if (frameManager->locomotion(deltaTime)) {	//Locomotion Begin
 			OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
@@ -721,8 +723,8 @@ protected:
 
 			//Draw scene
 			frameManager->drawSkybox(projection, modelview);
-			frameManager->draw(projection, modelview);
 			frameManager->drawBody(projection, modelview);
+			frameManager->draw(projection, modelview);
 		});
 
 		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
