@@ -12,11 +12,15 @@ Skybox* skybox;
 //Networking
 Networking * server;
 
+//SoundManager
+SoundManager* soundManager;
+
 //Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
 	initShaders();
 	initSkybox();
 	initObjects();
+	initSoundManager();
 	server = new Networking();
 }
 
@@ -43,6 +47,10 @@ void FrameManager::initSkybox() {
 
 void FrameManager::initObjects() {
 
+}
+
+void FrameManager::initSoundManager() {
+	soundManager = new SoundManager();
 }
 
 FrameManager::~FrameManager() {
@@ -127,7 +135,7 @@ void FrameManager::pressA() {
 }
 
 void FrameManager::pressB() {
-	
+	soundManager->testing(SOUND_FX_BULLET_FLYBY);
 }
 
 void FrameManager::pressX() {

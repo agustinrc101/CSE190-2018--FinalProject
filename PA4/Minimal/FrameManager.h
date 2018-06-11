@@ -19,6 +19,7 @@
 #include "Skybox.h"
 #include "Networking.h"
 #include "NetworkData.h"
+#include "SoundManager.h"
 
 class FrameManager {
 public:
@@ -64,6 +65,7 @@ private:
 	void initSkybox();
 	void initShaders();
 	void initObjects();
+	void initSoundManager();
 
 	void getNetworkData();
 	void setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT);

@@ -45,7 +45,7 @@ limitations under the License.
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 
 // Import the most commonly used types into the default namespace
 using glm::ivec3;
