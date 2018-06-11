@@ -36,6 +36,10 @@ public:
 	Transform& setAnimation(glm::mat4 (*animate)(glm::mat4 M));
 	glm::mat4 getToWorld(glm::mat4 C = glm::mat4(1.0f)) final;
 
+	glm::vec3 getForwardVector();
+	void setToWorld(glm::mat4 m);
+	glm::mat4 extraRot = glm::mat4(1.0f);
+
 	//BulletPhysics
 	btCollisionShape * collider;
 	btDefaultMotionState * motionState;
@@ -44,7 +48,6 @@ public:
 
 	void setCollisionShapeSphere(float radius);
 	void setCollisionShapePlane(btVector3 planeNormal = btVector3(0, 1, 0));
-	void setCollisionShapeBox(btVector3 halfExtents);
 
 	btRigidBody * getRigidbody();
 

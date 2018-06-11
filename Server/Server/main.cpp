@@ -6,7 +6,7 @@
 #pragma comment (lib, "ws2_32.lib")
 
 #define DEFAULT_PORT 54000
-#define MAX_PACKET_SIZE 208
+#define MAX_PACKET_SIZE 224
 
 //Source: https://www.youtube.com/watch?v=WDn-htpBlnU
 void main() {

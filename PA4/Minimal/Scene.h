@@ -10,6 +10,7 @@
 //std
 #include <iostream>
 #include <list>
+#include <vector>
 //our scripts
 #include "shader.h"
 #include "Skybox.h"
@@ -24,7 +25,15 @@ public:
 	~Scene();
 
 	void update(float deltaTime);
-	void draw(glm::mat4 projection, glm::mat4 modelview, Shader* shaderProgram);
+	void drawStaticObjects(glm::mat4 projection, glm::mat4 modelview, Shader* shaderProgram);
+	void drawObjects(glm::mat4 projection, glm::mat4 modelview, Shader* shaderProgram, Shader* colorShader, int indexL, int indexR);
+
+	std::vector<glm::vec3> getListOfPositions();
+	glm::mat4 getObjMatrix(int index);
+	void setObjMatrix(int index, glm::mat4 m);
+	void resetObj(int index);
+	glm::vec3 getForwardVector(int index);
+	glm::vec3 getPosition(int index);
 
 private:
 	//BulletPhysicsVars
@@ -36,8 +45,9 @@ private:
 	
 
 	//Objects
-	std::list<Transform*> staticObjects;
-	std::list<Transform*> objects;
+	std::vector<Transform*> staticObjects;
+	std::vector<Transform*> objects;
+	std::vector<Transform*> cans;
 
 	//Init functions
 	void initBullet();

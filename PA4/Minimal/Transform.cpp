@@ -36,7 +36,8 @@ Transform::~Transform()
 
 int Transform::draw(glm::mat4 C, Shader* shaderProgram, int n)
 {
-	glm::mat4 totalTransformation = C * totalTrans * totalRot * totalScale * M;
+	glm::mat4 totalTransformation = C * totalTrans * totalRot * M * extraRot * totalScale;
+	
 	std::list<Node*>::iterator it = children.begin();
 	std::list<Node*>::iterator end = children.end();
 	for (it; it != end; ++it)
@@ -49,23 +50,6 @@ int Transform::draw(glm::mat4 C, Shader* shaderProgram, int n)
 
 void Transform::update()
 {
-	//BulletPhysics
-	btTransform t;
-	rigidbody->getMotionState()->getWorldTransform(t);
-
-	if (t.getOrigin().getY() > 1) {
-		std::cout << "height: " << t.getOrigin().getY() << std::endl;
-	}
-
-	{
-		GLfloat * newMat = new GLfloat[16];
-		t.getOpenGLMatrix(newMat);
-		M[0][0] = newMat[0]; M[1][0] = newMat[4]; M[2][0] = newMat[8]; M[3][0] = newMat[12];
-		M[0][1] = newMat[1]; M[1][1] = newMat[5]; M[2][1] = newMat[9]; M[3][1] = newMat[13];
-		M[0][2] = newMat[2]; M[1][2] = newMat[6]; M[2][2] = newMat[10]; M[3][2] = newMat[14];
-		M[0][3] = newMat[3]; M[1][3] = newMat[7]; M[2][3] = newMat[11]; M[3][3] = newMat[15];
-	}
-
 	//Do regular stuff
 	if (animate)
 	{
@@ -150,8 +134,17 @@ Transform& Transform::setAnimation(glm::mat4 (*animate)(glm::mat4 M))
 
 glm::mat4 Transform::getToWorld(glm::mat4 C)
 {
-	return C * totalTrans * totalRot * totalScale * M;
+	return C * totalTrans * totalRot * M;//totalScale;
 }
+
+glm::vec3 Transform::getForwardVector() {
+	glm::vec3 dir = glm::vec3(0, 0, -1);
+	glm::mat4 m(1.0f); m[3] = glm::vec4(dir, 1.0f);
+	m = totalTrans * totalRot * M * extraRot * totalScale;
+	dir = m[3];
+	return dir;
+}
+
 
 //BULLET PHYSICS FUNCTIONS
 void Transform::setCollisionShapeSphere(float radius) {
@@ -173,10 +166,29 @@ void Transform::setCollisionShapePlane(btVector3 planeNormal) {
 	rigidbody = new btRigidBody(rigidbodyCI);
 }
 
-void Transform::setCollisionShapeBox(btVector3 halfExtents) {
-	collider = new btBoxShape(halfExtents);
-}
-
 btRigidBody * Transform::getRigidbody() {
 	return rigidbody;
+}
+
+void Transform::setToWorld(glm::mat4 m) {
+	M = m ;
+
+	totalRot = glm::mat4(1.0f);
+	totalTrans = glm::mat4(1.0f);
+
+	btScalar t[16];
+	
+	int counter = 0;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			t[counter] = m[i][j];
+			counter++;
+		}	
+	}
+
+	btMatrix3x3 mat;
+	mat.setValue(t[0], t[1], t[2], t[4], t[5], t[6], t[8], t[9], t[10]);
+	btVector3 v = btVector3(t[3], t[7], t[11]);
+
+	rigidbody->getMotionState()->setWorldTransform(btTransform(mat, v));
 }

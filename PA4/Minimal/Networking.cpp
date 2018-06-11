@@ -29,16 +29,17 @@ void Networking::retryConnection() {
 	}
 }
 
-void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT) {
-	client->sendPacket(hmd, lh, rh, lT, rT);
+void Networking::sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, int lG, int rG) {
+	client->sendPacket(hmd, lh, rh, lG, rG);
 }
 
-void Networking::receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, float & lT, float & rT) {
+void Networking::receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, int & lG, int & rG) {
 	hmd = client->getHmd();
 	lh = client->getlh();
 	rh = client->getrh();
-	lT = client->getlTrigger();
-	rT = client->getrTrigger();
+	lG = client->getLeftGrab();
+	rG = client->getRightGrab();
+	isConnected = client->otherConnected;
 }
 
 void Networking::sendObjectData(glm::mat4 m, int id) {

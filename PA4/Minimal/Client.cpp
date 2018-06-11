@@ -69,6 +69,7 @@ Client::~Client() {
 		char buf[sizeof(Packet)];
 		Packet packet;
 		packet.type = PLAYER_INFO;
+		packet.inSession = false;
 		packet.serialize(buf);
 
 		int sendResult = send(sock, buf, sizeof(Packet), 0);
@@ -127,7 +128,7 @@ void Client::sendPacket() {
 }
 
 //Send player data
-void Client::sendPacket(glm::mat4 head, glm::mat4 left, glm::mat4 right, float lT, float rT) {
+void Client::sendPacket(glm::mat4 head, glm::mat4 left, glm::mat4 right, int lG, int rG) {
 	char buf[sizeof(Packet)];
 
 	Packet packet;
@@ -135,8 +136,9 @@ void Client::sendPacket(glm::mat4 head, glm::mat4 left, glm::mat4 right, float l
 		packet.m1 = head;
 		packet.m2 = left;
 		packet.m3 = right;
-		packet.lTrigger = lT;
-		packet.rTrigger = rT;
+		packet.lGrab = lG;
+		packet.rGrab = rG;
+		packet.inSession = true;
 	packet.serialize(buf);
 
 	int sendResult = send(sock, buf, sizeof(Packet), 0);
@@ -163,8 +165,9 @@ void Client::handlePlayerInfo(Packet & p) {
 	hmd = p.m1;
 	lh = p.m2;
 	rh = p.m3;
-	lTriggerStatus = p.lTrigger;
-	rTriggerStatus = p.rTrigger;
+	leftGrab = p.lGrab;
+	rightGrab = p.rGrab;
+	otherConnected = p.inSession;
 }
 
 void Client::handleObjectInfo(Packet & p) {

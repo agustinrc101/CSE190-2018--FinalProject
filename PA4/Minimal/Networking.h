@@ -12,11 +12,12 @@
 class Networking {
 public:
 	bool isConnected = false;
+	bool otherInSession = false;
 
 	void retryConnection();
 	static void clientLoop(void *);
-	void sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT);
-	void receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, float & lT, float & rT);
+	void sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, int lG, int rG);
+	void receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, int & lG, int & rG);
 	void sendObjectData(glm::mat4 m, int id);
 	void receiveObjectData(std::vector<Packet> & v);
 	void clearPacketVector();

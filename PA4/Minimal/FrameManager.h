@@ -20,6 +20,8 @@
 #include "Networking.h"
 #include "NetworkData.h"
 #include "Scene.h"
+#include "Transform.h"
+#include "Geometry.h"
 #include "TexturedCube.h"
 #include "SoundManager.h"
 
@@ -60,9 +62,6 @@ private:
 	
 	bool pressedLeftGrip = false;
 	bool pressedRightGrip = false;
-	
-	float _leftTrigger;
-	float _rightTrigger;
 
 	void initSkybox();
 	void initShaders();
@@ -70,7 +69,10 @@ private:
 	void initSoundManager();
 
 	void getNetworkData();
-	void setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, float lT, float rT);
+	void setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh);
+
+	void moveGrabbedObj();
+	void checkProximity();
 
 	void setUpLocomotionData();
 	void locomotionHelper(float higher, float lower);

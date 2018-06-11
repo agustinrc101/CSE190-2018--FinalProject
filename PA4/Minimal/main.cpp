@@ -664,7 +664,7 @@ protected:
 		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
 
 		//Handles movement
-		if (frameManager->locomotion(deltaTime)) {	//Locomotion Begin
+		if (frameManager->locomotion((double)deltaTime)) {	//Locomotion Begin
 			OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
 			OVR::Matrix4f finalRollPitchYaw = rollPitchYaw * OVR::Matrix4f(eyePoses[0].Orientation);
 			OVR::Vector3f finalForward = finalRollPitchYaw.Transform(OVR::Vector3f(0, 0, -1));
@@ -684,17 +684,18 @@ protected:
 		//Sets controllers and hmd pos/rot
 		//Use glm::translate if this is buggy
 
-		h[3] = glm::vec4(h[0].x - displacement.x, h[3][1], h[3][2] - displacement.z, 1.0f);
-		lh[3] = glm::vec4(lh[0].x - displacement.x, lh[3][1], lh[3][2] - displacement.z, 1.0f);
-		rh[3] = glm::vec4(rh[0].x - displacement.x, rh[3][1], rh[3][2] - displacement.z, 1.0f);
+		h[3] = glm::vec4(h[3][0] - displacement.x, h[3][1], h[3][2] - displacement.z, 1.0f);
+		lh[3] = glm::vec4(lh[3][0] - displacement.x, lh[3][1], lh[3][2] - displacement.z, 1.0f);
+		rh[3] = glm::vec4(rh[3][0] - displacement.x, rh[3][1], rh[3][2] - displacement.z, 1.0f);
 
+		frameManager->setPlayer(h, lh, rh);
 
 		//Update
 		oldTime = curTime;
 		curTime = ovr_GetTimeInSeconds();
 		if (oldTime != -1) {
 			deltaTime = curTime - oldTime;
-			frameManager->update(deltaTime);
+			frameManager->update((double)deltaTime);
 		}
 
 		//Iterate over each eye

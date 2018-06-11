@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 
 uniform int currentIndex = 0;
 uniform int chosenIndex = -1;
@@ -8,14 +8,12 @@ in vec3 vertNormal;
 in vec2 TexCoords;
 out vec4 fragColor;
 
-void main(void) {
+void main() {
     //vec3 color = vertNormal;
-	if(currentIndex == chosenIndex)
-	{
-		fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+	if(currentIndex == chosenIndex){
+		fragColor = vec4(1.0, 0.0, 1.0, 1.0);
 	}
-    else
-	{
+    else{
 		fragColor = texture(texture0, TexCoords);
 	}
 }
