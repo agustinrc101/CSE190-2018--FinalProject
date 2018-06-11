@@ -12,7 +12,7 @@ Skybox::Skybox(std::string path){
 				path + "nz.tga"		//front
 			};
 
-	initVertices(500.0f);	//parameter is the distance from the center
+	initVertices(250.0f);	//parameter is the distance from the center
 	initCubeMap();
 	loadCubeMap(faces);		
 }

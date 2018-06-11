@@ -37,7 +37,6 @@ public:
 
 	//Oculus Rift controllers and hmd matrix setters
 	void setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh);
-	void setPlayerHandPosition(glm::mat4 lh, glm::mat4 rh);
 
 	//ButtonPress
 	void pressA();

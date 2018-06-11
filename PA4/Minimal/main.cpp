@@ -571,7 +571,6 @@ protected:
 
 	//Vars
 	const float Yaw = PI;
-
 	glm::vec3 displacement = glm::vec3(0.0f, 0.0f, 0.0f);
 	OVR::Vector3f pos2 = OVR::Vector3f(0.0f, 0.0f, 0.0f);
 
@@ -664,8 +663,6 @@ protected:
 		glm::mat4 rh = (ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
 		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
 
-		frameManager->setPlayerHandPosition(lh, rh);
-
 		//Handles movement
 		if (frameManager->locomotion(deltaTime)) {	//Locomotion Begin
 			OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
@@ -681,13 +678,18 @@ protected:
 			pos2 += dir;
 			displacement += ovr::toGlm(dir);
 		}
+		glm::mat4 movementMat = glm::mat4(1.0f);
+
 
 		//Sets controllers and hmd pos/rot
 		//Use glm::translate if this is buggy
-		h[3] = glm::vec4(h[0].x + displacement.x, h[3][1], h[3][2] + displacement.z, 1.0f);
-		lh[3] = glm::vec4(lh[0].x + displacement.x, lh[3][1], lh[3][2] + displacement.z, 1.0f);
-		rh[3] = glm::vec4(rh[0].x + displacement.x, rh[3][1], rh[3][2] + displacement.z, 1.0f);
+		h[3] = glm::vec4(h[3][0] - displacement.x, h[3][1], h[3][2] - displacement.z, 1.0f);
+		lh[3] = glm::vec4(lh[3][0] - displacement.x, lh[3][1], lh[3][2] - displacement.z, 1.0f);
+		rh[3] = glm::vec4(rh[3][0] - displacement.x, rh[3][1], rh[3][2] - displacement.z, 1.0f);
+
+
 		frameManager->setPlayer(h, lh, rh);
+
 
 		//Update
 		oldTime = curTime;
@@ -707,6 +709,7 @@ protected:
 			glm::mat4 projection = _eyeProjections[eye];
 			glm::mat4 modelview = glm::inverse(ovr::toGlm(eyePoses[eye]));
 			
+
 			//
 			OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
 			OVR::Matrix4f finalRollPitchYaw = rollPitchYaw * OVR::Matrix4f(eyePoses[eye].Orientation);
@@ -720,6 +723,9 @@ protected:
 
 			modelview = ovr::toGlm(view);
 			projection = ovr::toGlm(proj);
+
+			modelview[0] = -modelview[0];
+			modelview[2] = -modelview[2];
 
 			//Draw scene
 			frameManager->drawSkybox(projection, modelview);
