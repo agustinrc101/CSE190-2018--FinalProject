@@ -8,29 +8,44 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include <iostream>
+#include <unordered_map>
 #include "UsefulFunctions.h"
 
 //Open AL
 #include <al.h>
 #include <alc.h>
 
-//irrKlang
-//#include <irrKlang.h>
+#include "SoundBox.h"
+#include "SoundEar.h"
+
+class SoundEar;
+class SoundBox;
 
 class SoundManager {
 public:
 	SoundManager();
 	~SoundManager();
-	void playSound();
-	void loadSound(std::string file);
+	void playSound(ALuint source, ALfloat* sourcePos, ALint buffer);
+	ALuint loadSound(std::string file);
+	SoundBox& createSource();
+	SoundEar& createListener();
 	void testing(std::string file);
 
 private:
+#define BYTE (sizeof(char))
+#define TWOBYTE (sizeof(char)*2)
+#define FOURBYTE (sizeof(char)*4)
+
 	ALCdevice* device;
-	ALCcontext *context;
+	ALCcontext* context;
+	std::vector<SoundBox> sources;
+	std::vector<ALuint> buffers;
+	std::vector<SoundEar> listeners;
+	std::vector<unsigned char*> soundBuffers;
 
 	void init();
 	static inline ALenum to_al_format(short channels, short samples);
+	void checkPlaying();
 	
 };
 

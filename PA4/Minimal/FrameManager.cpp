@@ -14,12 +14,15 @@ Skybox* skybox;
 //Networking
 Networking * server;
 
+<<<<<<< HEAD
 //Scenegraph
 Scene * sceneGraph;
 
 //PlayerBody
 TexturedCube * leftHand;
 TexturedCube * rightHand;
+//SoundManager
+SoundManager* soundManager;
 
 //Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
@@ -27,6 +30,7 @@ FrameManager::FrameManager() {
 	initSkybox();
 	initObjects();
 	sceneGraph = new Scene();
+	initSoundManager();
 	server = new Networking();
 }
 
@@ -56,6 +60,10 @@ void FrameManager::initSkybox() {
 void FrameManager::initObjects() {
 	leftHand = new TexturedCube(0.1f, TEXTURE_CUBE_PPM);
 	rightHand = new TexturedCube(0.1f, TEXTURE_CUBE_PPM);
+}
+
+void FrameManager::initSoundManager() {
+	soundManager = new SoundManager();
 }
 
 FrameManager::~FrameManager() {
@@ -142,7 +150,7 @@ void FrameManager::pressA() {
 }
 
 void FrameManager::pressB() {
-	
+	soundManager->testing(SOUND_FX_BULLET_FLYBY);
 }
 
 void FrameManager::pressX() {

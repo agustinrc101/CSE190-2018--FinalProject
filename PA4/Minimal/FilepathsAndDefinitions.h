@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef FILEPATHSANDDEFINITIONS_H
+#define FILEPATHSANDDEFINITIONS_H
+
 //Shader paths
 #define SHADER_COLOR_VERT_PATH "../assets/shaders/ColorShader.vert"
 #define SHADER_COLOR_FRAG_PATH "../assets/shaders/ColorShader.frag"
@@ -105,3 +108,5 @@
 //Definitions
 #define PI 3.14159265359f
 #define MINPRESS 0.7f //Defines the minimum press strength required for the triggers
+
+#endif //FILEPATHSANDDEFINITIONS_H
