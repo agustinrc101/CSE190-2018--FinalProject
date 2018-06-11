@@ -171,7 +171,7 @@ void FrameManager::pressRJoystick() {
 
 void FrameManager::moveLJoystick(glm::vec2 xy) {
 	soundCube->toWorld[3][0] += xy.x;
-	soundCube->toWorld[3][2] += xy.y;
+	soundCube->toWorld[3][2] -= xy.y;
 }
 
 void FrameManager::moveRJoystick(glm::vec2 xy) {
