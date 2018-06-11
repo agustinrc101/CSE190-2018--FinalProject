@@ -20,6 +20,7 @@ class SoundManager;
 
 class SoundBox {
 public:
+	SoundBox() {}
 	SoundBox(ALuint source);
 	~SoundBox();
 	void playSound(unsigned int sound);

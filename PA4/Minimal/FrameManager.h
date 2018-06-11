@@ -19,12 +19,9 @@
 #include "Skybox.h"
 #include "Networking.h"
 #include "NetworkData.h"
-<<<<<<< HEAD
 #include "Scene.h"
 #include "TexturedCube.h"
-=======
 #include "SoundManager.h"
->>>>>>> 236114dc383143e9014b08adb5149c41a03a227a
 
 class FrameManager {
 public:

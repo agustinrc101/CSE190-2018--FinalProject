@@ -20,6 +20,7 @@ class SoundManager;
 
 class SoundEar {
 public:
+	SoundEar() {}
 	SoundEar(ALuint source);
 	~SoundEar();
 	void setPos(glm::vec3 pos);
