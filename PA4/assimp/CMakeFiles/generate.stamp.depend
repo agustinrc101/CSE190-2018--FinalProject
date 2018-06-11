@@ -1,0 +1,55 @@
+# CMake generation dependency list for this directory.
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/CMakeLists.txt
+D:/gussug/CSE190-FinalProject/PA4/assimp/CMakeFiles/3.11.3/CMakeSystem.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeSystemSpecificInitialize.cmake
+D:/gussug/CSE190-FinalProject/PA4/assimp/CMakeFiles/3.11.3/CMakeCCompiler.cmake
+D:/gussug/CSE190-FinalProject/PA4/assimp/CMakeFiles/3.11.3/CMakeCXXCompiler.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Platform/Windows-MSVC.cmake
+D:/gussug/CSE190-FinalProject/PA4/assimp/CMakeFiles/3.11.3/CMakeRCCompiler.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindOpenMP.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CMakeParseImplicitLinkInfo.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageMessage.cmake
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/revision.h.in
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/include/assimp/config.h.in
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/cmake-modules/FindPkgMacros.cmake
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/cmake-modules/PrecompiledHeader.cmake
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/cmake-modules/cmake_uninstall.cmake.in
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/assimp-config.cmake.in
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/assimp-config-version.cmake.in
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/cmake-modules/FindDirectX.cmake
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/cmake-modules/FindPkgMacros.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CheckTypeSize.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CheckIncludeFileCXX.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/CheckFunctionExists.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPkgConfig.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageMessage.cmake
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/cmake-modules/FindDevIL.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindOpenGL.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.11/Modules/FindPackageMessage.cmake
+C:/Users/agr005/Downloads/assimp-4.0.1/assimp-4.0.1/assimp.pc.in

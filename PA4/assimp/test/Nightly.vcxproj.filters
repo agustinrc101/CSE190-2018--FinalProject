@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\gussug\CSE190-FinalProject\PA4\assimp\CMakeFiles\3db2b003e9e6399fe85f1235f4803d58\Nightly.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\agr005\Downloads\assimp-4.0.1\assimp-4.0.1\test\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\gussug\CSE190-FinalProject\PA4\assimp\test\CMakeFiles\Nightly" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E06964BF-4336-3A44-AE04-47DAF3CBEF7D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
