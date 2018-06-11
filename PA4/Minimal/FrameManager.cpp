@@ -21,6 +21,7 @@ Scene * sceneGraph;
 TexturedCube * leftHand;
 TexturedCube * rightHand;
 TexturedCube * soundCube;
+
 //SoundManager
 SoundManager* soundManager;
 SoundBox* src;
@@ -63,11 +64,9 @@ void FrameManager::initSkybox() {
 }
 
 void FrameManager::initObjects() {
-	leftHand = new TexturedCube(0.1f, TEXTURE_CUBE_PPM);
-	rightHand = new TexturedCube(0.1f, TEXTURE_CUBE_PPM);
-	std::string a = (std::string)TEXTURE_BUSH_TGA + (std::string)TEXTURE_TYPE_ALBEDO_PNG;
-	soundCube = new TexturedCube(1.0f, a.c_str());
-	position = glm::vec3(0.0);
+	leftHand = new TexturedCube(0.1f, TEXTURE_CUBE);
+	rightHand = new TexturedCube(0.1f, TEXTURE_CUBE);
+	soundCube = new TexturedCube(1.0f, TEXTURE_MATTHEW);
 }
 
 void FrameManager::initSoundManager() {
@@ -119,8 +118,8 @@ void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
 
 void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
 	//Draws the scene normally	
-	soundCube->draw(projection, view, texShader, glm::translate(glm::mat4(1.0f), position));
-	//sceneGraph->draw(projection, view, &textureShader);
+	soundCube->draw(projection, view, texShader, (glm::mat4(1.0f)));
+	sceneGraph->draw(projection, view, &textureShader);
 }
 
 //Network Helpers *************************************************************************************
@@ -188,6 +187,9 @@ void FrameManager::moveLJoystick(glm::vec2 xy) {
 	position.x += xy.x / 10.0f;
 	position.z += xy.y / 10.0f;
 	src->setPos(position);
+
+	soundCube->toWorld[3][0] += xy.x;
+	soundCube->toWorld[3][2] -= xy.y;
 }
 
 void FrameManager::moveRJoystick(glm::vec2 xy) {
@@ -290,14 +292,7 @@ void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	_head = hmd;
 	_leftHand = lh;
 	_rightHand = rh;
-}
-
-void FrameManager::setPlayerHandPosition(glm::mat4 lh, glm::mat4 rh) {
 	leftHand->toWorld = lh;
-	leftHand->toWorld[3][0] = -leftHand->toWorld[3][0];
-	leftHand->toWorld[3][2] = -leftHand->toWorld[3][2];
 	rightHand->toWorld = rh;
-	rightHand->toWorld[3][0] = -rightHand->toWorld[3][0];
-	rightHand->toWorld[3][2] = -rightHand->toWorld[3][2];
 }
 
