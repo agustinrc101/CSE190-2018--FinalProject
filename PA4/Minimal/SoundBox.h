@@ -21,9 +21,10 @@ class SoundManager;
 class SoundBox {
 public:
 	SoundBox() {}
-	SoundBox(ALuint source);
+	SoundBox(ALuint source, SoundManager* soundManager);
 	~SoundBox();
 	void playSound(unsigned int sound);
+	void playSound(std::string sound);
 	unsigned int loadSound(std::string file);
 	void setPos(glm::vec3 pos);
 	void setPos(float x, float y, float z);

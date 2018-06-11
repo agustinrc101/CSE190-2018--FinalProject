@@ -21,10 +21,12 @@ class SoundManager;
 class SoundEar {
 public:
 	SoundEar() {}
-	SoundEar(ALuint source);
+	SoundEar(ALuint source, SoundManager* soundManager);
 	~SoundEar();
 	void setPos(glm::vec3 pos);
 	void setPos(float x, float y, float z);
+	void setOrien(glm::mat4 orien);
+	glm::mat4 getOrien();
 	ALuint getID();
 	glm::vec3 getPos();
 
@@ -32,6 +34,7 @@ private:
 	ALuint listener;
 	SoundManager* soundManager;
 	glm::vec3 pos;
+	glm::mat4 orien;
 
 };
 

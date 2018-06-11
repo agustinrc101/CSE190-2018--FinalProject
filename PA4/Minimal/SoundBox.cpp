@@ -1,8 +1,9 @@
 #include "SoundBox.h"
 
-SoundBox::SoundBox(ALuint source)
+SoundBox::SoundBox(ALuint source, SoundManager* soundManager)
 {
 	this->source = source;
+	this->soundManager = soundManager;
 }
 
 SoundBox::~SoundBox()
@@ -16,6 +17,12 @@ void SoundBox::playSound(unsigned int sound)
 {
 	float newpos[] = { pos.x, pos.y, pos.z };
 	soundManager->playSound(source, newpos, sound);
+}
+
+void SoundBox::playSound(std::string sound)
+{
+	float newpos[] = { pos.x, pos.y, pos.z };
+	soundManager->testing2(source, newpos, 1, sound);
 }
 
 unsigned int SoundBox::loadSound(std::string file)

@@ -1,8 +1,9 @@
 #include "SoundEar.h"
 
-SoundEar::SoundEar(ALuint source)
+SoundEar::SoundEar(ALuint source, SoundManager* soundManager)
 {
 	this->listener = source;
+	this->soundManager = soundManager;
 }
 
 SoundEar::~SoundEar()
@@ -22,6 +23,11 @@ void SoundEar::setPos(float x, float y, float z)
 	pos = glm::vec3(x, y, z);
 }
 
+void SoundEar::setOrien(glm::mat4 orien)
+{
+	this->orien = orien;
+}
+
 ALuint SoundEar::getID()
 {
 	return listener;
@@ -30,4 +36,9 @@ ALuint SoundEar::getID()
 glm::vec3 SoundEar::getPos()
 {
 	return pos;
+}
+
+glm::mat4 SoundEar::getOrien()
+{
+	return orien;
 }

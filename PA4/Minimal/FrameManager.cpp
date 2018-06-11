@@ -23,8 +23,8 @@ TexturedCube * rightHand;
 TexturedCube * soundCube;
 //SoundManager
 SoundManager* soundManager;
-SoundBox src;
-SoundEar lis;
+SoundBox* src;
+SoundEar* lis;
 unsigned int explode;
 
 glm::vec3 position;
@@ -40,11 +40,8 @@ FrameManager::FrameManager() {
 }
 
 void FrameManager::initShaders() {
-	std::cerr << "one\n";
 	colorShader = Shader(SHADER_COLOR_VERT_PATH, SHADER_COLOR_FRAG_PATH);
-	std::cerr << "two\n";
 	textureShader = Shader(SHADER_TEXTURE_VERT_PATH, SHADER_TEXTURE_FRAG_PATH);
-	std::cerr << "tree\n";
 
 	skyboxShader = LoadShaders(SHADER_SKY_VERT_PATH, SHADER_SKY_FRAG_PATH);
 	texShader = LoadShaders(SHADER_TEX_VERT_PATH, SHADER_TEX_FRAG_PATH);
@@ -77,7 +74,7 @@ void FrameManager::initSoundManager() {
 	soundManager = new SoundManager();
 	src = soundManager->createSource();
 	lis = soundManager->createListener();
-	explode = src.loadSound(SOUND_FX_EXPLOSION);
+	explode = src->loadSound(SOUND_FX_EXPLOSION);
 }
 
 FrameManager::~FrameManager() {
@@ -98,6 +95,9 @@ void FrameManager::update(double deltaTime) {
 
 	//do non-network things
 	sceneGraph->update(deltaTime);
+	//UsefulFunctions::printVector(_head[3]);
+	lis->setPos(_head[3]);
+	lis->setOrien(_head);
 }
 
 //Draw Methods (Called in order: drawSkybox, drawBody, draw)********************************************
@@ -165,11 +165,11 @@ void FrameManager::pressA() {
 }
 
 void FrameManager::pressB() {
-	
+
 }
 
 void FrameManager::pressX() {
-	src.playSound(explode);
+	src->playSound(explode);
 }
 
 void FrameManager::pressY() {
@@ -187,8 +187,7 @@ void FrameManager::pressRJoystick() {
 void FrameManager::moveLJoystick(glm::vec2 xy) {
 	position.x += xy.x / 10.0f;
 	position.z += xy.y / 10.0f;
-	lis.setPos(position);
-	src.setPos(position);
+	src->setPos(position);
 }
 
 void FrameManager::moveRJoystick(glm::vec2 xy) {
