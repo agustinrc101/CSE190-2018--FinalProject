@@ -26,7 +26,9 @@ public:
 	void setPos(glm::vec3 pos);
 	void setPos(float x, float y, float z);
 	void setOrien(glm::mat4 orien);
-	glm::mat4 getOrien();
+	void setOrien(glm::vec3 forward, glm::vec3 up);
+	glm::vec3 getForward();
+	glm::vec3 getUp();
 	ALuint getID();
 	glm::vec3 getPos();
 
@@ -34,7 +36,8 @@ private:
 	ALuint listener;
 	SoundManager* soundManager;
 	glm::vec3 pos;
-	glm::mat4 orien;
+	glm::vec3 forward;
+	glm::vec3 up;
 
 };
 

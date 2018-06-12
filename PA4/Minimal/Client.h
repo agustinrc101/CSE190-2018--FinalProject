@@ -51,7 +51,6 @@ public:
 	bool getRightShoot() {return rightShoot; }
 	std::vector<int> getCanHits() { return canHits; }
 	bool getOtherIsConnected() { return otherIsConnected; }
-
 	void resetTriggers() { leftShoot = false; rightShoot = false; }
 
 private:

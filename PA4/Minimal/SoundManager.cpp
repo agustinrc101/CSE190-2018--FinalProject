@@ -117,35 +117,35 @@ void SoundManager::playSound(ALuint source, ALfloat* sourcePos, ALint buffer)
 	error = alGetError();
 	if (error != AL_NO_ERROR)
 	{
-		std::cerr << error << std::endl;
+		//std::cerr << error << std::endl;
 		return;
 	}
 	alSourcef(source, AL_GAIN, 1);
 	error = alGetError();
 	if (error != AL_NO_ERROR)
 	{
-		std::cerr << error << std::endl;
+		//std::cerr << error << std::endl;
 		return;
 	}
 	alSourcefv(source, AL_POSITION, sourcePos);
 	error = alGetError();
 	if (error != AL_NO_ERROR)
 	{
-		std::cerr << error << std::endl;
+		//std::cerr << error << std::endl;
 		return;
 	}
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 	error = alGetError();
 	if (error != AL_NO_ERROR)
 	{
-		std::cerr << error << std::endl;
+		//std::cerr << error << std::endl;
 		return;
 	}
 	alSourcei(source, AL_LOOPING, AL_FALSE);
 	error = alGetError();
 	if (error != AL_NO_ERROR)
 	{
-		std::cerr << error << std::endl;
+		//std::cerr << error << std::endl;
 		return;
 	}
 
@@ -154,11 +154,8 @@ void SoundManager::playSound(ALuint source, ALfloat* sourcePos, ALint buffer)
 	ALfloat listenerPos[3];
 	ALfloat listenerVel[] = { 0.0f, 0.0f, 0.0f };
 	ALfloat listenerOri[6];
-	glm::vec3 forward = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 newforward = glm::vec3(0.0f, 0.0f, 1.0f);
-	glm::vec3 newup = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::mat4 orien = glm::mat4(1.0f);
 
 	for(size_t i = 0; i < listeners.size(); ++i)
 	{
@@ -166,19 +163,20 @@ void SoundManager::playSound(ALuint source, ALfloat* sourcePos, ALint buffer)
 		listenerPos[0] = listenerVec.x;
 		listenerPos[1] = listenerVec.y;
 		listenerPos[2] = listenerVec.z;
-		//std::cerr << sourcePos[0] << " " << sourcePos[1] << " " << sourcePos[2] << std::endl;
+		std::cerr << "source pos\n";
+		std::cerr << sourcePos[0] << " " << sourcePos[1] << " " << sourcePos[2] << std::endl;
 
-		orien = listeners[i]->getOrien();
-		newforward = glm::vec3(glm::mat4(glm::mat3(orien)) * glm::vec4(forward, 1.0f));
-		newup = glm::vec3(glm::mat4(glm::mat3(orien)) * glm::vec4(up, 1.0f));
-		//UsefulFunctions::printVector(newforward);
+		forward = listeners[i]->getForward();
+		up = listeners[i]->getUp();
+		std::cerr << "forward pos\n";
+		UsefulFunctions::printVector(listenerVec + forward);
 		//UsefulFunctions::printVector(newup);
-		listenerOri[6] = newforward.x;
-		listenerOri[6] = newforward.y;
-		listenerOri[6] = newforward.z;
-		listenerOri[6] = newup.x;
-		listenerOri[6] = newup.y;
-		listenerOri[6] = newup.z;
+		listenerOri[6] = forward.x;
+		listenerOri[6] = forward.y;
+		listenerOri[6] = forward.z;
+		listenerOri[6] = up.x;
+		listenerOri[6] = up.y;
+		listenerOri[6] = up.z;
 
 		//Listener
 		alListenerfv(AL_POSITION, listenerPos);

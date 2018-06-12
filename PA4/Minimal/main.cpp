@@ -670,7 +670,7 @@ protected:
 		OVR::Vector3f finalForward = finalRollPitchYaw.Transform(OVR::Vector3f(0, 0, -1));
 
 		frameManager->setUpVector(finalUp.x, finalUp.y, finalUp.z);
-		frameManager->setFwVector(finalForward.x, finalForward.y, finalForward.z);
+		frameManager->setFwVector(finalForward.x, finalForward.y, -finalForward.z);
 
 		//Handles movement
 		if (frameManager->locomotion((double)deltaTime)) {	//Locomotion Begin

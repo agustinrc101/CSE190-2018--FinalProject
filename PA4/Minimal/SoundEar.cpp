@@ -25,7 +25,26 @@ void SoundEar::setPos(float x, float y, float z)
 
 void SoundEar::setOrien(glm::mat4 orien)
 {
-	this->orien = orien;
+	glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+	this->forward = glm::vec3(glm::mat4(glm::mat3(orien)) * glm::vec4(forward, 1.0f));
+	this->up = glm::vec3(glm::mat4(glm::mat3(orien)) * glm::vec4(up, 1.0f));
+}
+
+void SoundEar::setOrien(glm::vec3 forward, glm::vec3 up)
+{
+	this->forward = forward;
+	this->up = up;
+}
+
+glm::vec3 SoundEar::getForward()
+{
+	return forward;
+}
+
+glm::vec3 SoundEar::getUp()
+{
+	return up;
 }
 
 ALuint SoundEar::getID()
@@ -36,9 +55,4 @@ ALuint SoundEar::getID()
 glm::vec3 SoundEar::getPos()
 {
 	return pos;
-}
-
-glm::mat4 SoundEar::getOrien()
-{
-	return orien;
 }

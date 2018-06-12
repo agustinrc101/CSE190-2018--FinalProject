@@ -137,7 +137,7 @@ FrameManager::~FrameManager() {
 void FrameManager::update(double deltTime) {
 	updateTime(deltTime);
 
-	std::cout << "isCOnnected: " << server->isConnected << ", other in session: " << server->checkIfOtherPlayerConnected() << std::endl;
+	//std::cout << "isCOnnected: " << server->isConnected << ", other in session: " << server->checkIfOtherPlayerConnected() << std::endl;
 
 	//Get and send updates from and to the server
 	if (server->isConnected)
@@ -163,6 +163,7 @@ void FrameManager::update(double deltTime) {
 
 		lis->setPos(_head[3]);
 		lis->setOrien(_head);
+		lis->setOrien(playerFW, playerUP);
 }
 
 void FrameManager::updateTime(double dT) {
