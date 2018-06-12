@@ -441,6 +441,7 @@ void FrameManager::pressLTrigger(float f) {
 		}
 		else if(lTTime > LEFTGUNCOOLDOWN)
 		{
+			lGunSrc->setPos(_leftHand[3]);
 			lGunSrc->playSound(slap);
 			lTTime = 0;
 		}
@@ -495,6 +496,7 @@ void FrameManager::pressRTrigger(float f) {
 		}
 		else if(rTTime > RIGHTGUNCOOLDOWN)
 		{
+			rGunSrc->setPos(_rightHand[3]);
 			rGunSrc->playSound(slap);
 			rTTime = 0;
 		}
