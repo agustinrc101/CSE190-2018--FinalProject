@@ -122,13 +122,6 @@ glm::vec3 Scene::shootRaycast(glm::vec3 dir, glm::vec3 startPos) {
 			else
 				std::cout << "nullptr, dang\n";
 		}
-		else if (raycastHit.m_collisionObject->getCollisionShape()->getShapeType() == 8) {
-			int * canHit = (int *)raycastHit.m_collisionObject->getCollisionShape()->getUserPointer();
-			if (canHit != nullptr && *canHit == -2)
-				lastHit = *canHit;
-			else
-				std::cout << "nullptr, dang\n";
-		}
 
 		btVector3 hitPoint = raycastHit.m_hitPointWorld;
 		return glm::vec3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
