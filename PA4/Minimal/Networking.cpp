@@ -10,7 +10,7 @@ Networking::Networking() {
 	client = new Client(isConnected);
 	if (isConnected) {
 		_beginthread(clientLoop, 0, (void*)12);
-		//TODO send packet that tells server that player connected
+		client->sendPacket(true);
 	}
 }
 
@@ -28,7 +28,7 @@ void Networking::retryConnection() {
 		isConnected = client->connectToServer();
 		if (isConnected) {
 			_beginthread(clientLoop, 0, (void*)12);
-			//TODO send packet that tells server that player connected
+			client->sendPacket(true);
 		}
 	}
 }
@@ -77,4 +77,12 @@ void Networking::clearPacketVector() {
 
 bool Networking::checkIfOtherPlayerConnected() {
 	return client->getOtherIsConnected();
+}
+
+void Networking::sendImHerePacket() {
+	client->sendPacket(true);
+}
+
+void Networking::resetTriggers() {
+	client->resetTriggers();
 }

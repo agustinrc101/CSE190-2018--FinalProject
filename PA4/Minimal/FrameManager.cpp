@@ -137,7 +137,7 @@ FrameManager::~FrameManager() {
 void FrameManager::update(double deltTime) {
 	updateTime(deltTime);
 
-	std::cout << "isCOnnected: " << server->isConnected << ", other in session: " << server->otherInSession << std::endl;
+	std::cout << "isCOnnected: " << server->isConnected << ", other in session: " << server->checkIfOtherPlayerConnected() << std::endl;
 
 	//Get and send updates from and to the server
 	if (server->isConnected)
@@ -146,6 +146,7 @@ void FrameManager::update(double deltTime) {
 		getNetworkData();
 
 			if (newSecondPlayer) {
+				server->sendImHerePacket();
 				sceneGraph->resetCans();
 				newSecondPlayer = false;
 			}
@@ -162,8 +163,6 @@ void FrameManager::update(double deltTime) {
 
 		lis->setPos(_head[3]);
 		lis->setOrien(_head);
-		//glm::vec3 pos = glm::vec3(-soundCube->toWorld[3][0], soundCube->toWorld[3][1], -soundCube->toWorld[3][2]);
-		//src->setPos(soundCube->toWorld[3]);
 }
 
 void FrameManager::updateTime(double dT) {
@@ -221,6 +220,8 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 		otherRGunSrc->playSound(gunshot);
 	}
 
+	server->resetTriggers();
+
 	//Gets the can hit data
 	std::vector<int> canHitData;
 	server->receiveCanHitData(canHitData);
@@ -241,7 +242,7 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 //		A will be in different positions for the client and the other user
 void FrameManager::setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	//Update the other player's position, rotation
-	otherPlayerHead->setToWorld(hmd);
+	otherPlayerHead->setToWorld(hmd, false);
 	otherPlayerLH->toWorld = lh;
 	otherPlayerRH->toWorld = rh;
 
@@ -514,3 +515,10 @@ void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	rightHand->toWorld = rh;
 }
 
+void FrameManager::setUpVector(float x, float y, float z) {
+	playerUP = glm::vec3(x, y, z);
+}
+
+void FrameManager::setFwVector(float x, float y, float z) {
+	playerFW = glm::vec3(x, y, z);
+}

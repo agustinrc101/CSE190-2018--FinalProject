@@ -113,7 +113,7 @@ void Client::update() {	//Runs in a separate thread
 				handleHitInfo(packet);
 				break;
 			case NEW_PLAYER:
-
+				handleNewPlayer(packet);
 				break;
 			default:
 				std::cout << "SERVER> Received package of unknown type" << std::endl;

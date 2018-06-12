@@ -54,11 +54,15 @@ public:
 	void pressLTrigger(float f);
 	void pressRTrigger(float f);
 	bool locomotion(float deltaTime);
+	void setUpVector(float x, float y, float z);
+	void setFwVector(float x, float y, float z);
 
 private:
 	glm::mat4 _leftHand = glm::mat4(1.0f);
 	glm::mat4 _rightHand = glm::mat4(1.0f);
 	glm::mat4 _head = glm::mat4(1.0f);
+	glm::vec3 playerUP = glm::vec3(0, 1, 0);
+	glm::vec3 playerFW = glm::vec3(0, 0, -1);
 	
 	bool pressedLeftGrip = false;
 	bool pressedRightGrip = false;

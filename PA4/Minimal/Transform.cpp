@@ -180,24 +180,26 @@ btRigidBody * Transform::getRigidbody() {
 	return rigidbody;
 }
 
-void Transform::setToWorld(glm::mat4 m) {
+void Transform::setToWorld(glm::mat4 m, bool useBullet) {
 	M = m ;
 
 	totalRot = glm::mat4(1.0f);
 	totalTrans = glm::mat4(1.0f);
-
-	btScalar t[16];
 	
-	int counter = 0;
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			t[counter] = m[i][j];
-			counter++;
-		}	
-	}
+	if (useBullet) {
+		btScalar t[16];
 
-	btTransform transform;
-	transform.setFromOpenGLMatrix(t);
-	rigidbody->getMotionState()->setWorldTransform(transform);
-	rigidbody->setWorldTransform(transform);
+		int counter = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				t[counter] = m[i][j];
+				counter++;
+			}
+		}
+
+		btTransform transform;
+		transform.setFromOpenGLMatrix(t);
+		rigidbody->getMotionState()->setWorldTransform(transform);
+		rigidbody->setWorldTransform(transform);
+	}
 }

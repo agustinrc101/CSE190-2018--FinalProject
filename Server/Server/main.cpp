@@ -82,7 +82,7 @@ void main() {
 					//Send message to other clients, and definetely not the listening socket
 					for (int j = 0; j < master.fd_count; j++) {
 						SOCKET outSock = master.fd_array[j];
-						if (outSock != listening){// && outSock != sock) {							//TODO remove ){//
+						if (outSock != listening && outSock != sock) {
 							
 							//std::ostringstream ss;
 							//ss << "SOCKET #" << sock << ": " << buf << "\r\n";

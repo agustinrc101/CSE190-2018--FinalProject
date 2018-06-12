@@ -25,6 +25,8 @@ public:
 	void sendHitInfo(glm::vec3 hitpos);
 	void receiveHitInfo(glm::vec3 & hp);
 	void clearPacketVector();
+	void sendImHerePacket();
+	void resetTriggers();
 
 	bool checkIfOtherPlayerConnected();
 

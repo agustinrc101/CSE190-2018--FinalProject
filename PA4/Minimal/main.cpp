@@ -663,11 +663,17 @@ protected:
 		glm::mat4 rh = (ovr::toGlm(trackState.HandPoses[ovrHand_Right].ThePose));
 		glm::mat4 h = (ovr::toGlm(trackState.HeadPose.ThePose));
 
+		//Gets forward and up vector
+		OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
+		OVR::Matrix4f finalRollPitchYaw = rollPitchYaw * OVR::Matrix4f(eyePoses[0].Orientation);
+		OVR::Vector3f finalUp = finalRollPitchYaw.Transform(OVR::Vector3f(0, 1, 0));
+		OVR::Vector3f finalForward = finalRollPitchYaw.Transform(OVR::Vector3f(0, 0, -1));
+
+		frameManager->setUpVector(finalUp.x, finalUp.y, finalUp.z);
+		frameManager->setFwVector(finalForward.x, finalForward.y, finalForward.z);
+
 		//Handles movement
 		if (frameManager->locomotion((double)deltaTime)) {	//Locomotion Begin
-			OVR::Matrix4f rollPitchYaw = OVR::Matrix4f::RotationY(Yaw);
-			OVR::Matrix4f finalRollPitchYaw = rollPitchYaw * OVR::Matrix4f(eyePoses[0].Orientation);
-			OVR::Vector3f finalForward = finalRollPitchYaw.Transform(OVR::Vector3f(0, 0, -1));
 			finalForward.x = -finalForward.x;
 			finalForward.y = 0;
 			finalForward.z = -finalForward.z;
