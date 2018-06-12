@@ -369,7 +369,7 @@ void FrameManager::moveRJoystick(glm::vec2 xy) {
 
 void FrameManager::pressLTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjL >= 0 && lTTime > GUNCOOLDOWN) {
+		if (grabbedObjL > -1 && lTTime > GUNCOOLDOWN) {
 			
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjL);
@@ -386,13 +386,9 @@ void FrameManager::pressLTrigger(float f) {
 					server->sendTriggerInfo(false, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
 					lGunSrc->playSound(gunshot);
 				}
-				else if(grabbedObjL > -1)
-				{
-					lGunSrc->playSound(explode);
-				}
 				else
 				{
-					lGunSrc->playSound(slap);
+					lGunSrc->playSound(explode);
 				}
 			}
 			//Get forwards direction
@@ -415,13 +411,17 @@ void FrameManager::pressLTrigger(float f) {
 			}
 			lTTime = 0;
 		}
+		else if(lTTime > GUNCOOLDOWN)
+		{
+			lGunSrc->playSound(slap);
+		}
 	}
 	else {}
 }
 
 void FrameManager::pressRTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjR >= -1 && rTTime > GUNCOOLDOWN) {
+		if (grabbedObjR > -1 && rTTime > GUNCOOLDOWN) {
 
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjR);
@@ -439,13 +439,9 @@ void FrameManager::pressRTrigger(float f) {
 					server->sendTriggerInfo(true, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
 					rGunSrc->playSound(gunshot);
 				}
-				else if(grabbedObjR > -1)
-				{
-					rGunSrc->playSound(explode);
-				}
 				else
 				{
-					rGunSrc->playSound(slap);
+					rGunSrc->playSound(explode);
 				}
 			}
 			//Get forwards direction
@@ -467,6 +463,10 @@ void FrameManager::pressRTrigger(float f) {
 				hitPoint2->playSound(impact, 3);
 			}
 			rTTime = 0;
+		}
+		else if(rTTime > GUNCOOLDOWN)
+		{
+			rGunSrc->playSound(slap);
 		}
 	}
 	else {}
