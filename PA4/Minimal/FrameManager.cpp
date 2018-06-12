@@ -53,6 +53,7 @@ unsigned int gunshot;
 unsigned int impact;
 unsigned int slap;
 unsigned int submachineshot;
+unsigned int playerHurt;
 SoundBox * backgroundMusic;
 SoundBox * lGunSrc;
 SoundBox * rGunSrc;
@@ -131,6 +132,7 @@ void FrameManager::initObjects() {
 	otherPlayerRH->translate(0, -10, 0);
 
 
+	otherPlayerHead->id = -2;
 	otherPlayerHead->setCollisionShapeSphere(1.0f);
 	sceneGraph->setRigitBody(otherPlayerHead->getRigidbody());
 }
@@ -154,6 +156,7 @@ void FrameManager::initSoundManager() {
 	impact = src->loadSound(SOUND_FX_BULLET_IMPACT);
 	slap = src->loadSound(SOUND_FX_SLAP);
 	submachineshot = src->loadSound(SOUND_FX_GUN_SUBMACHINE);
+	playerHurt = src->loadSound(SOUND_FX_PLAYER_HURT);
 
 	backgroundMusic->playSound(music);
 }
@@ -244,7 +247,8 @@ void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
 }
 
 //Network Helpers *************************************************************************************
-void FrameManager::getNetworkData() {//Gets information for the other player's location
+void FrameManager::getNetworkData() {
+	//Gets information for the other player's location
 	//These values are obtained from the network
 	//Gets other player's position
 	glm::mat4 otherHmd, otherLH, otherRH;
@@ -314,17 +318,28 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 	//Gets the can hit data
 	std::vector<int> canHitData;
 	server->receiveCanHitData(canHitData);
+	bool hitPlayer = false;
 
-	for (int i = 0; i < canHitData.size(); i++)
-		sceneGraph->removeLastHit(canHitData[i]);
+	for (int i = 0; i < canHitData.size(); i++) {
+		if (canHitData[i] >= 0)
+			sceneGraph->removeLastHit(canHitData[i]);
+		else if (canHitData[i] == -2)
+			hitPlayer = true;
+	}
 	server->clearPacketVector();
 
 	//Gets info stuff
 	glm::vec3 hp;
 	server->receiveHitInfo(hp);
-	//TODO this breaks the audio buffer
-	hitPoint3->setPos(hp);
-	hitPoint3->playSound(impact, 3);
+
+	if (hitPlayer) {
+		hitPoint3->setPos(_head[3]);
+		hitPoint3->playSound(playerHurt);
+	}
+	else {
+		hitPoint3->setPos(hp);
+		hitPoint3->playSound(impact, 3);
+	}
 }
 
 //TODO if the other player is grabbing A and replaces it with B,
@@ -437,10 +452,14 @@ void FrameManager::pressLTrigger(float f) {
 			}
 			if (hitPoint.x > -10) {
 				server->sendHitInfo(hitPoint); //send packet notifying pos that got hit
-				
-				//TODO (this breaks the sound buffer)play sound hitPoint
-				hitPoint1->setPos(hitPoint);
-				hitPoint1->playSound(impact, 3);
+				if (lastHit == -2) {
+					hitPoint2->setPos(hitPoint);
+					hitPoint2->playSound(playerHurt);
+				}
+				else {
+					hitPoint2->setPos(hitPoint);
+					hitPoint2->playSound(impact, 3);
+				}
 			}
 			lTTime = 0;
 		}
@@ -492,10 +511,14 @@ void FrameManager::pressRTrigger(float f) {
 			}
 			if (hitPoint.x > -10) {
 				server->sendHitInfo(hitPoint); //send packet notifying pos that got hit
-
-				//TODO (this breaks the sound buffer)play sound hitPoint
-				hitPoint2->setPos(hitPoint);
-				hitPoint2->playSound(impact, 3);
+				if (lastHit == -2) {
+					hitPoint2->setPos(hitPoint);
+					hitPoint2->playSound(playerHurt);
+				}
+				else {
+					hitPoint2->setPos(hitPoint);
+					hitPoint2->playSound(impact, 3);
+				}
 			}
 			rTTime = 0;
 		}
