@@ -53,6 +53,7 @@
 #define TEXTURE_MATTHEW "../assets/models/Matthew/model_0.ppm"
 #define TEXTURE_CUBE "../assets/textures/pattern.ppm"
 #define TEXTURE_MASK "../assets/models/Mask/Mask_head.ppm"
+//#define TEXTURE_HAND "../assets/models/Hands/hand.ppm"
 
 //Models
 #define MODEL_ROCKS "../assets/models/Environment/Rocks/Rocks.fbx"
@@ -86,6 +87,7 @@
 #define MODEL_SHAPE_CUBE "../assets/models/cube.obj"
 #define MODEL_SHAPE_PLANE "../assets/models/plane.fbx"
 #define MODEL_MASK "../assets/models/Mask/Mask_head.fbx"
+#define MODEL_HAND "../assets/models/Hands/hand.obj"
 
 //Sounds
 #define SOUND_MUSIC_SWEETWATER "../assets/audio/Music/Sweetwater.wav"

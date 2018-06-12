@@ -18,13 +18,13 @@ Networking * server;
 Scene * sceneGraph;
 
 //PlayerBody
-TexturedCube * leftHand;
-TexturedCube * rightHand;
+Transform * leftHand;
+Transform * rightHand;
 
 //OtherPlayer
 Transform * otherPlayerHead;
-TexturedCube * otherPlayerLH;
-TexturedCube * otherPlayerRH;
+Transform * otherPlayerLH;
+Transform * otherPlayerRH;
 
 //Vars
 int closeObjL = -1;
@@ -90,18 +90,36 @@ void FrameManager::initSkybox() {
 }
 
 void FrameManager::initObjects() {
-	leftHand = new TexturedCube(0.1f, TEXTURE_CUBE);
-	rightHand = new TexturedCube(0.1f, TEXTURE_CUBE);
-	otherPlayerLH = new TexturedCube(0.1f, TEXTURE_CUBE);
-	otherPlayerRH = new TexturedCube(0.1f, TEXTURE_CUBE);
+	Geometry * geom = new Geometry(); geom->init(MODEL_HAND, "");
+
+	leftHand = new Transform();
+	rightHand = new Transform();
+
+	otherPlayerLH = new Transform();
+	otherPlayerRH = new Transform();
+	
+	
+	leftHand->addChild(geom); rightHand->addChild(geom); otherPlayerLH->addChild(geom); otherPlayerRH->addChild(geom);
+	
 	otherPlayerHead = new Transform();
-	Geometry * geom = new Geometry(); geom->init(MODEL_MASK, TEXTURE_MASK);
+	geom = new Geometry(); geom->init(MODEL_MASK, TEXTURE_MASK);
 	otherPlayerHead->addChild(geom);
+
 	otherPlayerHead->extraRot = glm::rotate(glm::mat4(1.0f), 180.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * otherPlayerHead->extraRot;
 	otherPlayerHead->scale(0.01f);
 	otherPlayerHead->translate(0, -10, 0);
-	otherPlayerLH->toWorld[3] = glm::vec4(0, -10, 0, 1);
-	otherPlayerRH->toWorld[3] = glm::vec4(0, -10, 0, 1);
+	leftHand->extraRot = glm::rotate(glm::mat4(1.0f), 180.0f / 180.0f * glm::pi<float>(), glm::vec3(1, 0, 0)) * leftHand->extraRot;
+	leftHand->scale(0.5f); leftHand->scale(1, -1, 1);
+	leftHand->translate(0, -10, 0);
+	rightHand->extraRot = glm::rotate(glm::mat4(1.0f), 180.0f / 180.0f * glm::pi<float>(), glm::vec3(1, 0, 0)) * rightHand->extraRot;
+	rightHand->scale(0.5f); rightHand->scale(-1, -1, 1);
+	rightHand->translate(0, -10, 0);
+	otherPlayerLH->extraRot = glm::rotate(glm::mat4(1.0f), 180.0f / 180.0f * glm::pi<float>(), glm::vec3(1, 0, 0)) * otherPlayerLH->extraRot;
+	otherPlayerLH->scale(0.5f); otherPlayerLH->scale(1, -1, 1);
+	otherPlayerLH->translate(0, -10, 0);
+	otherPlayerRH->extraRot = glm::rotate(glm::mat4(1.0f), 180.0f / 180.0f * glm::pi<float>(), glm::vec3(1, 0, 0)) * otherPlayerRH->extraRot;
+	otherPlayerRH->scale(0.5f); otherPlayerRH->scale(-1, -1, 1);
+	otherPlayerRH->translate(0, -10, 0);
 }
 
 void FrameManager::initSoundManager() {
@@ -178,21 +196,28 @@ void FrameManager::drawSkybox(glm::mat4 projection, glm::mat4 view) {
 }
 
 void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
-	//Draws the player(s) head(s) and hands
-	//Draw this player
-	if(grabbedObjL == -1)
-		leftHand->draw(projection, view, texShader, glm::mat4(1.0f));
-	if(grabbedObjR == -1)
-		rightHand->draw(projection, view, texShader, glm::mat4(1.0f));
-	//Draw other player
 	textureShader.use();
 	textureShader.setMat4("projection", projection);
 	textureShader.setMat4("view", view);
+	//Draws the player(s) head(s) and hands
+	//Draw other player
 	otherPlayerHead->draw(glm::mat4(1.0f), &textureShader);
+	
+	colorShader.use();
+	colorShader.setMat4("projection", projection);
+	colorShader.setMat4("view", view);
+	colorShader.setVec3("rgb", glm::vec3(210.0f / 255.0f, 249.0f / 255.0f, 37.0f / 255.0f));
+
 	if (otherPlayerGrabL == -1)
-		otherPlayerLH->draw(projection, view, texShader, glm::mat4(1.0f));
+		otherPlayerLH->draw(glm::mat4(1.0f), &colorShader);
 	if (otherPlayerGrabR == -1)
-		otherPlayerRH->draw(projection, view, texShader, glm::mat4(1.0f));
+		otherPlayerRH->draw(glm::mat4(1.0f), &colorShader);
+
+	//Draw this player
+	if(grabbedObjL == -1)
+		leftHand->draw(glm::mat4(1.0f), &colorShader);
+	if(grabbedObjR == -1)
+		rightHand->draw(glm::mat4(1.0f), &colorShader);
 }
 
 void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
@@ -244,8 +269,8 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 void FrameManager::setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	//Update the other player's position, rotation
 	otherPlayerHead->setToWorld(hmd, false);
-	otherPlayerLH->toWorld = lh;
-	otherPlayerRH->toWorld = rh;
+	otherPlayerLH->setToWorld(lh, false);
+	otherPlayerRH->setToWorld(rh, false);
 
 	if (otherPlayerGrabL != -1)
 		sceneGraph->setObjMatrix(otherPlayerGrabL, lh);
@@ -512,8 +537,8 @@ void FrameManager::setPlayer(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	_head = hmd;
 	_leftHand = lh;
 	_rightHand = rh;
-	leftHand->toWorld = lh;
-	rightHand->toWorld = rh;
+	leftHand->setToWorld(lh, false);
+	rightHand->setToWorld(rh, false);
 }
 
 void FrameManager::setUpVector(float x, float y, float z) {
