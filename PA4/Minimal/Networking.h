@@ -26,6 +26,8 @@ public:
 	void receiveHitInfo(glm::vec3 & hp);
 	void clearPacketVector();
 
+	bool checkIfOtherPlayerConnected();
+
 	Networking();
 	~Networking();
 };

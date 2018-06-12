@@ -97,7 +97,7 @@ void FrameManager::initObjects() {
 	otherPlayerHead = new Transform();
 	Geometry * geom = new Geometry(); geom->init(MODEL_MASK, TEXTURE_MASK);
 	otherPlayerHead->addChild(geom);
-	otherPlayerHead->rotate(glm::vec3(0, 1, 0), 180);
+	otherPlayerHead->extraRot = glm::rotate(glm::mat4(1.0f), 180.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * otherPlayerHead->extraRot;
 	otherPlayerHead->scale(0.01f);
 	otherPlayerHead->translate(0, -10, 0);
 	otherPlayerLH->toWorld[3] = glm::vec4(0, -10, 0, 1);
@@ -137,20 +137,21 @@ FrameManager::~FrameManager() {
 void FrameManager::update(double deltTime) {
 	updateTime(deltTime);
 
+	std::cout << "isCOnnected: " << server->isConnected << ", other in session: " << server->otherInSession << std::endl;
+
 	//Get and send updates from and to the server
-		if (server->isConnected)
-			server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, grabbedObjL, grabbedObjR);
-		if (server->otherInSession) {
-			getNetworkData();
-			
+	if (server->isConnected)
+		server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, grabbedObjL, grabbedObjR);
+	if (server->checkIfOtherPlayerConnected()) {
+		getNetworkData();
+
 			if (newSecondPlayer) {
 				sceneGraph->resetCans();
 				newSecondPlayer = false;
 			}
-		}
-		else
+	}
+	else
 			newSecondPlayer = true;
-
 	//do non-network things
 		//Proximity
 		moveGrabbedObj();

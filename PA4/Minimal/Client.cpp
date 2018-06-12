@@ -76,6 +76,8 @@ Client::~Client() {
 
 		if (sendResult == SOCKET_ERROR)
 			std::cerr << "Error sending packet, Err#" << WSAGetLastError() << std::endl;
+
+		otherIsConnected = false;
 	}
 
 	//Close down everything
@@ -109,6 +111,9 @@ void Client::update() {	//Runs in a separate thread
 				break;
 			case HIT_INFO:
 				handleHitInfo(packet);
+				break;
+			case NEW_PLAYER:
+
 				break;
 			default:
 				std::cout << "SERVER> Received package of unknown type" << std::endl;
@@ -194,6 +199,19 @@ void Client::sendPacket(glm::vec3 hitPos) {
 		std::cerr << "Error sending packet, Err#" << WSAGetLastError() << std::endl;
 }
 
+void Client::sendPacket(bool connected) {
+	char buf[sizeof(Packet)];
+
+	Packet packet;
+		packet.type = NEW_PLAYER;
+		packet.inSession = true;
+	packet.serialize(buf);
+	
+	int sendResult = send(sock, buf, sizeof(Packet), 0);
+	if (sendResult == SOCKET_ERROR)
+			std::cerr << "Error sending packet, Err#" << WSAGetLastError() << std::endl;
+}
+
 void Client::handlePlayerInfo(Packet & p) {
 	hmd = p.m1;
 	lh = p.m2;
@@ -214,6 +232,10 @@ void Client::handleTargetInfo(Packet & p) {
 
 void Client::handleHitInfo(Packet & p) {
 	hitPos = p.hitPos;
+}
+
+void Client::handleNewPlayer(Packet & p) {
+	otherIsConnected = p.inSession;
 }
 
 void Client::clearVector() {

@@ -8,8 +8,10 @@ Client * client;
 
 Networking::Networking() {
 	client = new Client(isConnected);
-	if (isConnected)
+	if (isConnected) {
 		_beginthread(clientLoop, 0, (void*)12);
+		//TODO send packet that tells server that player connected
+	}
 }
 
 Networking::~Networking() {
@@ -24,8 +26,10 @@ void Networking::clientLoop(void *) {
 void Networking::retryConnection() {
 	if (!isConnected) {
 		isConnected = client->connectToServer();
-		if (isConnected)
+		if (isConnected) {
 			_beginthread(clientLoop, 0, (void*)12);
+			//TODO send packet that tells server that player connected
+		}
 	}
 }
 
@@ -39,7 +43,7 @@ void Networking::receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat
 	rh = client->getrh();
 	lG = client->getLeftGrab();
 	rG = client->getRightGrab();
-	isConnected = client->otherConnected;
+	otherInSession = client->otherConnected;
 }
 
 void Networking::sendTriggerInfo(bool hand) {
@@ -69,4 +73,8 @@ void Networking::receiveHitInfo(glm::vec3 & hp) {
 
 void Networking::clearPacketVector() {
 	client->clearVector();
+}
+
+bool Networking::checkIfOtherPlayerConnected() {
+	return client->getOtherIsConnected();
 }

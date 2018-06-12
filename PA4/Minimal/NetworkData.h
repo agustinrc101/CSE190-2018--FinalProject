@@ -14,6 +14,7 @@ enum PacketTypes {
 	TRIGGER_INFO = 2,	//Sends trigger status (if player shot or not)
 	TARGET_INFO = 3,	//Sends last object hit (for cans)
 	HIT_INFO = 4,		//Sends hit position (to play audio there)
+	NEW_PLAYER = 5,
 };
 
 struct Packet {							//TOTAL SIZE: 224 bytes

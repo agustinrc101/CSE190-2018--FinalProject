@@ -14,9 +14,10 @@
 #include "NetworkData.h"
 #include "UsefulFunctions.h"
 
-#define DEFAULT_IP "127.0.0.1"
+//#define DEFAULT_IP "127.0.0.1"
 //#define DEFAULT_IP "192.168.0.128"
 //#define DEFAULT_IP "128.54.70.75"
+#define DEFAULT_IP "128.54.70.57"
 #define DEFAULT_PORT 54000
 
 class Client {
@@ -34,6 +35,7 @@ public:
 	void sendPacket(bool left, bool right);
 	void sendPacket(int index);
 	void sendPacket(glm::vec3 hitPos);
+	void sendPacket(bool connected);
 
 	void update();
 	void clearVector();
@@ -48,6 +50,7 @@ public:
 	bool getLeftShoot() { return leftShoot; }
 	bool getRightShoot() {return rightShoot; }
 	std::vector<int> getCanHits() { return canHits; }
+	bool getOtherIsConnected() { return otherIsConnected; }
 
 private:
 	SOCKET sock;
@@ -62,11 +65,13 @@ private:
 	bool rightShoot = false;
 
 	bool isConnected = false;
+	bool otherIsConnected = false;
 
 	bool connectionErrorHelper();
 	void handlePlayerInfo(Packet & p);
 	void handleTriggerInfo(Packet & p);
 	void handleTargetInfo(Packet & p);
 	void handleHitInfo(Packet & p);
+	void handleNewPlayer(Packet & p);
 };
 
