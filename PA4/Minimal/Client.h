@@ -14,10 +14,11 @@
 #include "NetworkData.h"
 #include "UsefulFunctions.h"
 
-//#define DEFAULT_IP "127.0.0.1"
+//local host
+#define DEFAULT_IP "127.0.0.1"
 //#define DEFAULT_IP "192.168.0.128"
 //#define DEFAULT_IP "128.54.70.75"
-#define DEFAULT_IP "128.54.70.57"
+//#define DEFAULT_IP "128.54.70.57"
 #define DEFAULT_PORT 54000
 
 class Client {

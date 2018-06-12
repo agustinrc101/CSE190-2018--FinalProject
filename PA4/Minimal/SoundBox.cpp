@@ -1,8 +1,13 @@
 #include "SoundBox.h"
 
-SoundBox::SoundBox(ALuint source, SoundManager* soundManager)
+/*SoundBox::SoundBox(ALuint source, SoundManager* soundManager)
 {
 	this->source = source;
+	this->soundManager = soundManager;
+}*/
+
+SoundBox::SoundBox(SoundManager* soundManager)
+{
 	this->soundManager = soundManager;
 }
 
@@ -13,10 +18,11 @@ SoundBox::~SoundBox()
 	pos = glm::vec3(0.0f);
 }
 
-void SoundBox::playSound(unsigned int sound)
+void SoundBox::playSound(unsigned int sound, float volume)
 {
 	float newpos[] = { pos.x, pos.y, pos.z };
-	soundManager->playSound(source, newpos, sound);
+	//soundManager->playSound(source, newpos, sound);
+	soundManager->playSound(newpos, sound, volume);
 }
 
 void SoundBox::playSound(std::string sound)

@@ -182,6 +182,8 @@ void FrameManager::update(double deltTime) {
 		lis->setPos(_head[3]);
 		lis->setOrien(_head);
 		lis->setOrien(playerFW, playerUP);
+
+		soundManager->update();
 }
 
 void FrameManager::updateTime(double dT) {
@@ -372,8 +374,8 @@ void FrameManager::pressRTrigger(float f) {
 				server->sendHitInfo(hitPoint); //send packet notifying pos that got hit
 
 				//TODO (this breaks the sound buffer)play sound hitPoint
-				//hitPoint2->setPos(hitPoint);
-				//hitPoint2->playSound(impact);
+				hitPoint2->setPos(hitPoint);
+				hitPoint2->playSound(impact, 3);
 			}
 			rTTime = 0;
 		}

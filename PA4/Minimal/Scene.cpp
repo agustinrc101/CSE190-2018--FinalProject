@@ -408,6 +408,18 @@ void Scene::initObjects(){
 			dirChild = new Transform();
 			dirChild->translate(1, 0, 0);
 			child->addChild(dirChild);
+
+			//i added
+			child = new Transform();
+			child->translate(0, 0, 0);
+			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
+			child->setCollisionShapeSphere(0.1f);
+			child->rotate(yRot, 90); dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
+			dirChild = new Transform();
+			dirChild->translate(1, 0, 0);
+			child->addChild(dirChild);
 		}
 		//CANS
 		{

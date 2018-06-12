@@ -10,11 +10,11 @@ SoundManager::~SoundManager()
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(context);
 	alcCloseDevice(device);
-	for (size_t i = 0; i < sources.size(); ++i)
+	/*for (size_t i = 0; i < sources.size(); ++i)
 	{
 		ALuint source = sources[i]->getID();
 		alDeleteSources(1, &source);
-	}
+	}*/
 	for (size_t i = 0; i < listeners.size(); ++i)
 	{
 		ALuint listener = listeners[i]->getID();
@@ -29,11 +29,11 @@ SoundManager::~SoundManager()
 		delete[] soundBuffers[i];
 		soundBuffers[i] = NULL;
 	}
-	for (size_t i = 0; i < sources.size(); ++i)
+	/*for (size_t i = 0; i < sources.size(); ++i)
 	{
 		delete sources[i];
 		sources[i] = NULL;
-	}
+	}*/
 	for (size_t i = 0; i < listeners.size(); ++i)
 	{
 		delete listeners[i];
@@ -103,73 +103,37 @@ ALuint SoundManager::loadSound(std::string file)
 	
 	fclose(fp);
 	buffers.push_back(buffer);
-	//delete [] buf;
 	soundBuffers.push_back(buf);
 
 	return buffer;
 }
 
-void SoundManager::playSound(ALuint source, ALfloat* sourcePos, ALint buffer)
+/*void SoundManager::playSound(ALuint source, ALfloat* sourcePos, ALint buffer)
 {
 	ALCenum error;
 
-	alSourcef(source, AL_PITCH, 1);
-	error = alGetError();
-	if (error != AL_NO_ERROR)
-	{
-		//std::cerr << error << std::endl;
-		return;
-	}
-	alSourcef(source, AL_GAIN, 1);
-	error = alGetError();
-	if (error != AL_NO_ERROR)
-	{
-		//std::cerr << error << std::endl;
-		return;
-	}
-	alSourcefv(source, AL_POSITION, sourcePos);
-	error = alGetError();
-	if (error != AL_NO_ERROR)
-	{
-		//std::cerr << error << std::endl;
-		return;
-	}
-	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	error = alGetError();
-	if (error != AL_NO_ERROR)
-	{
-		//std::cerr << error << std::endl;
-		return;
-	}
-	alSourcei(source, AL_LOOPING, AL_FALSE);
-	error = alGetError();
-	if (error != AL_NO_ERROR)
-	{
-		//std::cerr << error << std::endl;
-		return;
-	}
-
 	ALfloat sourceVel[] = { 0.0f, 0.0f, 0.0f };
 	glm::vec3 listenerVec = glm::vec3(0.0f);
-	ALfloat listenerPos[3];
+	ALfloat listenerPos[3] = { 0.0f, 0.0f, 0.0f };
 	ALfloat listenerVel[] = { 0.0f, 0.0f, 0.0f };
 	ALfloat listenerOri[6];
-	glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 forward = glm::vec3(0.0f, 0.0f, 1.0f);
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	for(size_t i = 0; i < listeners.size(); ++i)
 	{
 		listenerVec = listeners[i]->getPos();
-		listenerPos[0] = listenerVec.x;
-		listenerPos[1] = listenerVec.y;
-		listenerPos[2] = listenerVec.z;
-		std::cerr << "source pos\n";
-		std::cerr << sourcePos[0] << " " << sourcePos[1] << " " << sourcePos[2] << std::endl;
+		// correct
+		//listenerPos[0] = listenerVec.x;
+		//listenerPos[1] = listenerVec.y;
+		//listenerPos[2] = listenerVec.z;
+		//std::cerr << "source pos\n";
+		//std::cerr << sourcePos[0] << " " << sourcePos[1] << " " << sourcePos[2] << std::endl;
 
-		forward = listeners[i]->getForward();
-		up = listeners[i]->getUp();
-		std::cerr << "forward pos\n";
-		UsefulFunctions::printVector(listenerVec + forward);
+		//forward = listeners[i]->getForward();
+		//up = listeners[i]->getUp();
+		//std::cerr << "forward pos\n";
+		//UsefulFunctions::printVector(listenerVec + forward);
 		//UsefulFunctions::printVector(newup);
 		listenerOri[6] = forward.x;
 		listenerOri[6] = forward.y;
@@ -188,23 +152,152 @@ void SoundManager::playSound(ALuint source, ALfloat* sourcePos, ALint buffer)
 
 		//Source
 		alSourcei(source, AL_BUFFER, buffer);
-		alSourcef(source, AL_PITCH, 1.0f);
-		alSourcef(source, AL_GAIN, 1.0f);
+		alSourcef(source, AL_PITCH, 1);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alSourcef(source, AL_GAIN, 1);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
 		alSourcefv(source, AL_POSITION, sourcePos);
-		alSourcefv(source, AL_VELOCITY, sourceVel);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alSource3f(source, AL_VELOCITY, 0, 0, 0);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alSourcei(source, AL_LOOPING, AL_FALSE);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
 		alSourcei(source, AL_LOOPING, AL_FALSE);
 
 		alSourcePlay(source);
+	}
+
+}*/
+
+void SoundManager::playSound(ALfloat* sourcePos, ALint buffer, float volume)
+{
+	ALCenum error;
+	ALuint source;
+
+	for (size_t i = 0; i < listeners.size(); ++i)
+	{
+		alGenSources(1, &source);
+
+		ALfloat sourceVel[] = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 listenerPos = glm::vec3(0.0f);
+		ALfloat listenerVel[] = { 0.0f, 0.0f, 0.0f };
+		ALfloat listenerOri[6];
+		glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+		listenerPos = listeners[i]->getPos();
+		// correct
+		//std::cerr << "source pos\n";
+		//std::cerr << sourcePos[0] << " " << sourcePos[1] << " " << sourcePos[2] << std::endl;
+
+		forward = listeners[i]->getForward();
+		up = listeners[i]->getUp();
+		//std::cerr << "forward pos\n";
+		//UsefulFunctions::printVector(listenerVec + forward);
+		//UsefulFunctions::printVector(listenerPos);
+		//UsefulFunctions::printVector(newup);
+		listenerOri[6] = forward.x;
+		listenerOri[6] = forward.y;
+		listenerOri[6] = forward.z;
+		listenerOri[6] = up.x;
+		listenerOri[6] = up.y;
+		listenerOri[6] = up.z;
+
+		//Listener
+		alListener3f(AL_POSITION, listenerPos.x, listenerPos.y, listenerPos.z);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alListenerfv(AL_VELOCITY, listenerVel);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alListenerfv(AL_ORIENTATION, listenerOri);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+
+		//Source
+		alSourcei(source, AL_BUFFER, buffer);
+		alSourcef(source, AL_PITCH, 1);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alSourcef(source, AL_GAIN, volume);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alSource3f(source, AL_POSITION, sourcePos[0], sourcePos[1], sourcePos[2]);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alSourcefv(source, AL_VELOCITY, sourceVel);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+		alSourcei(source, AL_LOOPING, AL_FALSE);
+		error = alGetError();
+		if (error != AL_NO_ERROR)
+		{
+			std::cerr << error << std::endl;
+			return;
+		}
+
+		alSourcePlay(source);
+		sources.push_back(source);
 	}
 
 }
 
 SoundBox* SoundManager::createSource()
 {
-	ALuint source;
-	alGenSources(1, &source);
-	sources.push_back(new SoundBox(source, this));
-	return sources.back();
+	return new SoundBox(this);
 }
 
 SoundEar* SoundManager::createListener()
@@ -425,6 +518,11 @@ void SoundManager::testing2(ALuint source, ALfloat* sourcePos, ALint buffer1, st
 
 }
 
+void SoundManager::update()
+{
+	removeUnusedSources();
+}
+
 void SoundManager::init()
 {
 	ALCenum error;
@@ -480,5 +578,19 @@ ALenum SoundManager::to_al_format(short channels, short samples)
 		}
 	default:
 		return -1;
+	}
+}
+
+void SoundManager::removeUnusedSources()
+{
+	ALint source_state;
+	for (int i = 0; i < sources.size(); ++i)
+	{
+		alGetSourcei(sources[i], AL_SOURCE_STATE, &source_state);
+		if (source_state != AL_PLAYING)
+		{
+			alDeleteSources(1, &sources[i]);
+			sources.erase(sources.begin() + i);
+		}
 	}
 }

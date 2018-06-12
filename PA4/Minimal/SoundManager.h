@@ -25,12 +25,14 @@ class SoundManager {
 public:
 	SoundManager();
 	~SoundManager();
-	void playSound(ALuint source, ALfloat* sourcePos, ALint buffer);
+	//void playSound(ALuint source, ALfloat* sourcePos, ALint buffer);
+	void playSound(ALfloat* sourcePos, ALint buffer, float volume);
 	ALuint loadSound(std::string file);
 	SoundBox* createSource();
 	SoundEar* createListener();
 	void testing(std::string file);
 	void testing2(ALuint source, ALfloat* sourcePos, ALint buffer1, std::string file);
+	void update();
 
 private:
 #define BYTE (sizeof(char))
@@ -39,13 +41,14 @@ private:
 
 	ALCdevice* device;
 	ALCcontext* context;
-	std::vector<SoundBox*> sources;
+	std::vector<ALuint> sources;
 	std::vector<ALuint> buffers;
 	std::vector<SoundEar*> listeners;
 	std::vector<char*> soundBuffers;
 
 	void init();
 	static inline ALenum to_al_format(short channels, short samples);
+	void removeUnusedSources();
 	
 };
 
