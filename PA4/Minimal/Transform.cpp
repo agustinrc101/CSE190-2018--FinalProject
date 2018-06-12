@@ -138,18 +138,14 @@ glm::mat4 Transform::getToWorld(glm::mat4 C)
 }
 
 glm::vec3 Transform::getForwardVector() {
-	glm::vec3 dir = glm::vec3(0, 0, -1);
-	glm::mat4 m(1.0f); m[3] = glm::vec4(dir, 1.0f);
-	m = totalTrans * totalRot * M * extraRot * totalScale;
-	dir = m[3];
-	return dir;
+	glm::mat4 m = totalTrans * totalRot * M * extraRot;
+	return glm::normalize(glm::vec3(children.back()->getToWorld(m)[3]) - glm::vec3(m[3]));
 }
-
 
 //BULLET PHYSICS FUNCTIONS
 void Transform::setCollisionShapeSphere(float radius) {
 	collider = new btSphereShape(radius);
-	glm::vec3 pos = M[3];
+	glm::vec3 pos = totalTrans[3];
 	motionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(pos.x, pos.y, pos.z)));
 	mass = 1;
 	btVector3 fallInertia(0, 0, 0);
@@ -158,8 +154,22 @@ void Transform::setCollisionShapeSphere(float radius) {
 	rigidbody = new btRigidBody(rigidbodyCI);
 }
 
+void Transform::setCollisionShapeCylinder(btVector3 halfExtents) {
+	collider = new btCylinderShape(btVector3(0.125f, .25f, 0.125f));
+	glm::vec3 pos = totalTrans[3];
+	motionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(pos.x, pos.y, pos.z)));
+	mass = 1;
+	btVector3 fallInertia(0, 0, 0);
+	collider->calculateLocalInertia(mass, fallInertia);
+	btRigidBody::btRigidBodyConstructionInfo  rigidbodyCI(mass, motionState, collider, fallInertia);
+	rigidbody = new btRigidBody(rigidbodyCI);
+
+	int * i = &id;
+	collider->setUserPointer(i);
+}
+
 void Transform::setCollisionShapePlane(btVector3 planeNormal) {
-	glm::vec3 pos = M[3];
+	glm::vec3 pos = totalTrans[3];
 	collider = new btStaticPlaneShape(planeNormal, pos.y);
 	motionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(pos.x, pos.y, pos.z)));
 	btRigidBody::btRigidBodyConstructionInfo rigidbodyCI(0, motionState, collider, btVector3(0, 0, 0));
@@ -186,9 +196,8 @@ void Transform::setToWorld(glm::mat4 m) {
 		}	
 	}
 
-	btMatrix3x3 mat;
-	mat.setValue(t[0], t[1], t[2], t[4], t[5], t[6], t[8], t[9], t[10]);
-	btVector3 v = btVector3(t[3], t[7], t[11]);
-
-	rigidbody->getMotionState()->setWorldTransform(btTransform(mat, v));
+	btTransform transform;
+	transform.setFromOpenGLMatrix(t);
+	rigidbody->getMotionState()->setWorldTransform(transform);
+	rigidbody->setWorldTransform(transform);
 }

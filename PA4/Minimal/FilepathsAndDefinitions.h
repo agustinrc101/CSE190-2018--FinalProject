@@ -37,7 +37,7 @@
 #define TEXTURE_CONTAINER_RED "../assets/models/Props/Container/Textures/RedContainer_Albedo.ppm"
 #define TEXTURE_GRENADE "../assets/models/Props/Grenade/Textures/Grenade_Albedo.ppm"
 #define TEXTURE_LADDER "../assets/models/Props/Ladders/Textures/Ladder_Albedo.ppm"
-#define TEXTURE_TIRE "../assets/models/Props/Tires/Textures/TireWall_Albedo.ppm"
+//#define TEXTURE_TIRE "../assets/models/Props/Tires/Textures/TireWall_Albedo.ppm"
 #define TEXTURE_CRATE1 "../assets/models/Props/Textures/WoodenCrate_Albedo.ppm"
 #define TEXTURE_CRATE2 "../assets/models/Props/Textures/WoodenCrate2_Albedo.ppm"
 #define TEXTURE_WEAPON_SHOTGUN "../assets/models/modern-weapons/870 Shotgun/Textures/870_Shotgun_Albedo.ppm"
@@ -52,7 +52,7 @@
 #define TEXTURE_CAN "../assets/models/Props/Can/Matcha_Can_Albedo.ppm"
 #define TEXTURE_MATTHEW "../assets/models/Matthew/model_0.ppm"
 #define TEXTURE_CUBE "../assets/textures/pattern.ppm"
-#define TEXTURE_HORSE "../assets/models/horse/Horse.ppm"
+#define TEXTURE_MASK "../assets/models/Mask/Mask_head.ppm"
 
 //Models
 #define MODEL_ROCKS "../assets/models/Environment/Rocks/Rocks.fbx"
@@ -68,8 +68,8 @@
 #define MODEL_GRENADE	"../assets/models/Props/Grenade/Grenade.fbx"
 #define MODEL_LADDER_SMALL "../assets/models/Props/Ladders/SmallLadder.fbx"
 #define MODEL_LADDER_TALL "../assets/models/Props/Ladders/TallLadder.fbx"
-#define MODEL_TIRE "../assets/models/Props/Tires/SingleTire.fbx"
-#define MODEL_TIRE_WALL "../assets/models/Props/Tires/TireWall.fbx"
+//#define MODEL_TIRE "../assets/models/Props/Tires/SingleTire.fbx"
+//#define MODEL_TIRE_WALL "../assets/models/Props/Tires/TireWall.fbx"
 #define MODEL_CRATE "../assets/models/Props/WoodenCrate/WoodenCrate.fbx"
 #define MODEL_WEAPON_SHOTGUN "../assets/models/modern-weapons/870 Shotgun/870_Shotgun.fbx"
 #define MODEL_WEAPON_AK47 "../assets/models/modern-weapons/AK-47/AK-47.fbx"
@@ -85,7 +85,7 @@
 #define MODEL_SHAPE_SPHERE "../assets/models/sphere.obj"
 #define MODEL_SHAPE_CUBE "../assets/models/cube.obj"
 #define MODEL_SHAPE_PLANE "../assets/models/plane.fbx"
-#define MODEL_HORSE "../assets/models/horse/horse.obj"
+#define MODEL_MASK "../assets/models/Mask/Mask_head.fbx"
 
 //Sounds
 #define SOUND_MUSIC_SWEETWATER "../assets/audio/Music/Sweetwater.wav"
@@ -103,5 +103,6 @@
 //Definitions
 #define PI 3.14159265359f
 #define MINPRESS 0.7f //Defines the minimum press strength required for the triggers
+#define COOLDOWN 0.2f
 
 #endif //FILEPATHSANDDEFINITIONS_H

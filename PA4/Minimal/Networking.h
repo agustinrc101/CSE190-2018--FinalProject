@@ -18,8 +18,12 @@ public:
 	static void clientLoop(void *);
 	void sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, int lG, int rG);
 	void receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, int & lG, int & rG);
-	void sendObjectData(glm::mat4 m, int id);
-	void receiveObjectData(std::vector<Packet> & v);
+	void sendTriggerInfo(bool hand);
+	void receiveTriggerInfo(bool & left, bool & right);
+	void sendCanHitData(int index);
+	void receiveCanHitData(std::vector<int> & v);
+	void sendHitInfo(glm::vec3 hitpos);
+	void receiveHitInfo(glm::vec3 & hp);
 	void clearPacketVector();
 
 	Networking();

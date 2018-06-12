@@ -31,33 +31,42 @@ public:
 
 	void sendPacket();
 	void sendPacket(glm::mat4 head, glm::mat4 left, glm::mat4 right, int lg, int rg);
-	void sendPacket(glm::mat4 toWorld, int objId);
+	void sendPacket(bool left, bool right);
+	void sendPacket(int index);
+	void sendPacket(glm::vec3 hitPos);
 
 	void update();
-
 	void clearVector();
 
 	//Getters
-	void recievePackets(std::vector<Packet> & v);
 	glm::mat4 getHmd() { return hmd; }
 	glm::mat4 getlh() { return lh; }
 	glm::mat4 getrh() { return rh; }
+	glm::vec3 getHitPos() { return hitPos; }
 	int getLeftGrab() { return leftGrab; }
 	int getRightGrab() { return rightGrab; }
+	bool getLeftShoot() { return leftShoot; }
+	bool getRightShoot() {return rightShoot; }
+	std::vector<int> getCanHits() { return canHits; }
 
 private:
 	SOCKET sock;
-	std::vector<Packet> objChanges;
+	std::vector<int> canHits;
 	glm::mat4 hmd = glm::mat4(1.0f);
 	glm::mat4 lh = glm::mat4(1.0f);
 	glm::mat4 rh = glm::mat4(1.0f);
+	glm::vec3 hitPos = glm::vec3(-100.0f);
 	int leftGrab = -1;
 	int rightGrab = -1;
+	bool leftShoot = false;
+	bool rightShoot = false;
 
 	bool isConnected = false;
 
 	bool connectionErrorHelper();
 	void handlePlayerInfo(Packet & p);
-	void handleObjectInfo(Packet & p);
+	void handleTriggerInfo(Packet & p);
+	void handleTargetInfo(Packet & p);
+	void handleHitInfo(Packet & p);
 };
 

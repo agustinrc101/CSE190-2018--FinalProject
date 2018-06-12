@@ -101,8 +101,14 @@ void Client::update() {	//Runs in a separate thread
 			case PLAYER_INFO:
 				handlePlayerInfo(packet);
 				break;
-			case OBJECT_INFO:
-				handleObjectInfo(packet);
+			case TRIGGER_INFO:
+				handleTriggerInfo(packet);
+				break;
+			case TARGET_INFO:
+				handleTargetInfo(packet);
+				break;
+			case HIT_INFO:
+				handleHitInfo(packet);
 				break;
 			default:
 				std::cout << "SERVER> Received package of unknown type" << std::endl;
@@ -146,14 +152,41 @@ void Client::sendPacket(glm::mat4 head, glm::mat4 left, glm::mat4 right, int lG,
 		std::cerr << "Error sending packet, Err#" << WSAGetLastError() << std::endl;
 }
 
-//Send object data
-void Client::sendPacket(glm::mat4 toWorld, int objId) {
+//Sends shooting info if player sent shooting info
+void Client::sendPacket(bool left, bool right) {
+	char buf[sizeof(Packet)];
+	
+	Packet packet;
+		packet.type = TRIGGER_INFO;
+		packet.shotLeft = left;
+		packet.shotRight = right;
+	packet.serialize(buf);
+
+	int sendResult = send(sock, buf, sizeof(Packet), 0);
+	if (sendResult == SOCKET_ERROR)
+		std::cerr << "Error sending packet, Err#" << WSAGetLastError() << std::endl;
+}
+
+void Client::sendPacket(int index) {
 	char buf[sizeof(Packet)];
 
 	Packet packet;
-		packet.type = OBJECT_INFO;
-		packet.m1 = toWorld;
-		packet.objectId = objId;
+		packet.type = TARGET_INFO;
+		packet.objectId = index;
+	packet.serialize(buf);
+
+	int sendResult = send(sock, buf, sizeof(Packet), 0);
+	if (sendResult == SOCKET_ERROR)
+		std::cerr << "Error sending packet, Err#" << WSAGetLastError() << std::endl;
+
+}
+
+void Client::sendPacket(glm::vec3 hitPos) {
+	char buf[sizeof(Packet)];
+
+	Packet packet;
+		packet.type = HIT_INFO;
+		packet.hitPos = hitPos;
 	packet.serialize(buf);
 
 	int sendResult = send(sock, buf, sizeof(Packet), 0);
@@ -170,14 +203,19 @@ void Client::handlePlayerInfo(Packet & p) {
 	otherConnected = p.inSession;
 }
 
-void Client::handleObjectInfo(Packet & p) {
-	objChanges.push_back(p);
+void Client::handleTriggerInfo(Packet & p) {
+	leftShoot = p.shotLeft;
+	rightShoot = p.shotRight;
 }
 
-void Client::recievePackets(std::vector<Packet> & v) {
-	v = objChanges;
+void Client::handleTargetInfo(Packet & p) {
+	canHits.push_back(p.objectId);
+}
+
+void Client::handleHitInfo(Packet & p) {
+	hitPos = p.hitPos;
 }
 
 void Client::clearVector() {
-	objChanges.clear();
+	canHits.clear();
 }

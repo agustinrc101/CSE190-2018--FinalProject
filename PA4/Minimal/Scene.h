@@ -34,6 +34,13 @@ public:
 	void resetObj(int index);
 	glm::vec3 getForwardVector(int index);
 	glm::vec3 getPosition(int index);
+	
+	glm::vec3 shootRaycast(glm::vec3 dir, glm::vec3 pos);
+	bool removeLastHit(int index);
+	bool getCheckIfHit(int index);
+	void resetCans();
+
+	int lastHit = -1;
 
 private:
 	//BulletPhysicsVars
@@ -52,5 +59,7 @@ private:
 	//Init functions
 	void initBullet();
 	void initObjects();
+
+	bool drawCan[15];
 };
 

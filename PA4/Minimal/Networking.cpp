@@ -42,12 +42,29 @@ void Networking::receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat
 	isConnected = client->otherConnected;
 }
 
-void Networking::sendObjectData(glm::mat4 m, int id) {
-	client->sendPacket(m, id);
+void Networking::sendTriggerInfo(bool hand) {
+	client->sendPacket(!hand, hand);
 }
 
-void Networking::receiveObjectData(std::vector<Packet> & v) {
-	client->recievePackets(v);
+void Networking::receiveTriggerInfo(bool & left, bool & right) {
+	left = client->getLeftShoot();
+	right = client->getRightShoot();
+}
+
+void Networking::sendCanHitData(int index) {
+	client->sendPacket(index);
+}
+
+void Networking::receiveCanHitData(std::vector<int> & v) {
+	v = client->getCanHits();
+}
+
+void Networking::sendHitInfo(glm::vec3 hitPos) {
+	client->sendPacket(hitPos);
+}
+
+void Networking::receiveHitInfo(glm::vec3 & hp) {
+	hp = client->getHitPos();
 }
 
 void Networking::clearPacketVector() {

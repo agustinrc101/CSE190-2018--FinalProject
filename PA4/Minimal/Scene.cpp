@@ -1,12 +1,12 @@
 #include "Scene.h"
 
 void Scene::update(float deltaTime) {
-	//dynamicsWorld->stepSimulation(1.0f / 90.0f, 10);
+	dynamicsWorld->stepSimulation(1.0f / 90.0f, 10);
 
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->update();
-	
-
+	for (int i = 0; i < cans.size(); i++)
+		cans[i]->update();
 }
 
 void Scene::drawStaticObjects(glm::mat4 projection, glm::mat4 modelview, Shader* shaderProgram) {
@@ -16,6 +16,11 @@ void Scene::drawStaticObjects(glm::mat4 projection, glm::mat4 modelview, Shader*
 
 	for (int i = 0; i < staticObjects.size(); i++)
 		staticObjects[i]->draw(glm::mat4(1.0f), shaderProgram);
+
+	for (int i = 0; i < cans.size() && i < 15; i++) {
+		if(drawCan[i])
+			cans[i]->draw(glm::mat4(1.0f), shaderProgram);
+	}
 
 }
 
@@ -49,6 +54,9 @@ Scene::~Scene() {
 Scene::Scene(){
 	initBullet();
 	initObjects();
+
+	for (int i = 0; i < 15; i++)
+		drawCan[i] = true;
 }
 
 void Scene::initBullet() {
@@ -89,7 +97,79 @@ glm::vec3 Scene::getForwardVector(int index) {
 }
 
 glm::vec3 Scene::getPosition(int index) {
-	return objects[index]->getPositionWithMat(glm::mat4(1.0f));
+	return objects[index]->getPositionWithMat(objects[index]->getToWorld());
+}
+
+glm::vec3 Scene::shootRaycast(glm::vec3 dir, glm::vec3 startPos) {
+	glm::vec3 endPos = startPos + (dir * 1000.0f);
+	btCollisionWorld::ClosestRayResultCallback raycastHit(
+		btVector3(startPos.x, startPos.y, startPos.z),
+		btVector3(endPos.x, endPos.y, endPos.z)
+	);
+	dynamicsWorld->rayTest(
+		btVector3(startPos.x, startPos.y, startPos.z),
+		btVector3(endPos.x, endPos.y, endPos.z),
+		raycastHit
+	);
+
+	if (raycastHit.hasHit()) {
+		//ids Plane 28 Sphere 8 Cylinder 13
+		if (raycastHit.m_collisionObject->getCollisionShape()->getShapeType() == 13) {	//13 is id for cylinders
+			//Hit a can
+			int * canHit = (int *)raycastHit.m_collisionObject->getCollisionShape()->getUserPointer();
+			if (canHit != nullptr)
+				lastHit = *canHit;
+			else
+				std::cout << "nullptr, dang\n";
+		}
+
+		btVector3 hitPoint = raycastHit.m_hitPointWorld;
+		return glm::vec3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
+	}
+
+	return glm::vec3(-100);
+}
+
+bool Scene::removeLastHit(int index) {
+	if (drawCan[index]) {
+		drawCan[index] = false;
+
+		int count = 0;
+		for (int i = 0; i < 15; i++) {
+			if (drawCan[i])
+				count++;
+		}
+		if (count != 1)
+			std::cout << count << " cans remain!" << std::endl;
+		else if(count == 0)
+			std::cout << "conglaturations! you done it!" << std::endl;
+		else
+			std::cout << count << " can remains!" << std::endl;
+
+		return true;
+	}
+	else
+		return false;
+}
+
+bool Scene::getCheckIfHit(int index) {
+	if (index < 0)
+		return false;
+
+	return drawCan[index];
+}
+
+void Scene::resetCans() {
+	int count = 0;
+	for (int i = 0; i < 15; i++) {
+		if (drawCan[i])
+			count++;
+
+		drawCan[i] = true;
+	}
+	if(count == 15)
+		std::cout << "The cans have been reset!" << std::endl;
+	std::cout << "15 cans remain!" << std::endl;
 }
 
 void Scene::initObjects(){
@@ -250,19 +330,20 @@ void Scene::initObjects(){
 		path2 = TEXTURE_GRENADE;
 		geom->init(path1, path2);
 		child->translate(0, -.5f, -3);child->scale(0.005f);
-		child->setCollisionShapeSphere(0.01);
+		child->setCollisionShapeSphere(0.1);
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
 		objects.push_back(child);
 
 		child = new Transform();
 		child->translate(0, 50, 0);
-		child->setCollisionShapeSphere(1.0);
+		child->setCollisionShapeSphere(10.0);
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
 		objects.push_back(child);
 
 		//GUN
+		Transform * dirChild;
 		geom = new Geometry();
 		path1 = MODEL_WEAPON_PISTOL;
 		path2 = TEXTURE_WEAPON_PISTOL;
@@ -271,54 +352,72 @@ void Scene::initObjects(){
 		child = new Transform();
 		child->translate(16, -.5f, -4);
 		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0,1,0)) * child->extraRot;
-		child->setCollisionShapeSphere(1.0);
+		child->setCollisionShapeSphere(0.1f);
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
 		objects.push_back(child);
+		dirChild = new Transform();
+		dirChild->translate(1, 0, 0);
+		child->addChild(dirChild);
 
 		child = new Transform();
 		child->translate(-2.5, -.5f, 7);
 		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
-		child->setCollisionShapeSphere(1.0);
+		child->setCollisionShapeSphere(0.1f);
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
 		objects.push_back(child);
+		dirChild = new Transform();
+		dirChild->translate(1, 0, 0);
+		child->addChild(dirChild);
 
 		child = new Transform();
 		child->translate(-14, -.75, -7);
 		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
-		child->setCollisionShapeSphere(1.0);
+		child->setCollisionShapeSphere(0.1f);
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
 		objects.push_back(child);
+		dirChild = new Transform();
+		dirChild->translate(1, 0, 0);
+		child->addChild(dirChild);
 
 		child = new Transform();
 		child->translate(4, 0, -6.5);
 		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
-		child->setCollisionShapeSphere(1.0);
+		child->setCollisionShapeSphere(0.1f);
 		child->rotate(yRot, 90);dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
 		objects.push_back(child);
+		dirChild = new Transform();
+		dirChild->translate(1, 0, 0);
+		child->addChild(dirChild);
 	
 	//CANS
 		//Cans
+		int id = 0;
 		geom = new Geometry();
 		path1 = MODEL_CAN;
 		path2 = TEXTURE_CAN;
 		geom->init(path1, path2);
+		btVector3 colliderSize(0.1f, 0.125f, 0.1f);
 
 		child = new Transform();
 		child->translate(-.1, -.5f, -2.8);child->scale(0.002f);
-		child->setCollisionShapeSphere(0.01);
+		child->id = id++;
+		child->setCollisionShapeCylinder(colliderSize);
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
-		objects.push_back(child);
+		cans.push_back(child);
 
 		child = new Transform();
-		geom = new Geometry();
 		child->translate(-3, -.5f, 7.5);child->scale(0.002f);
-		child->setCollisionShapeSphere(0.01);
+		child->id = id++;
+		child->setCollisionShapeCylinder(colliderSize);
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
-		objects.push_back(child);
+		cans.push_back(child);
+
+		//TODO add 13 more cans
+
 }

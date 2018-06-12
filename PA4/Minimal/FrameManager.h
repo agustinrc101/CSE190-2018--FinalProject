@@ -68,6 +68,8 @@ private:
 	void initObjects();
 	void initSoundManager();
 
+	void updateTime(double dT);
+
 	void getNetworkData();
 	void setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh);
 

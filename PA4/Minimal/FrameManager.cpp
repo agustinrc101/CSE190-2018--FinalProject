@@ -33,15 +33,26 @@ int grabbedObjL = -1;
 int grabbedObjR = -1;
 int otherPlayerGrabL = -1;
 int otherPlayerGrabR = -1;
-
-//Test objects
-TexturedCube * soundCube;
+bool newSecondPlayer = true;
+double lTTime = 0;
+double rTTime = 0;
 
 //SoundManager
 SoundManager* soundManager;
 SoundBox* src;
 SoundEar* lis;
+unsigned int music;
 unsigned int explode;
+unsigned int gunshot;
+unsigned int impact;
+SoundBox * backgroundMusic;
+SoundBox * lGunSrc;
+SoundBox * rGunSrc;
+SoundBox * otherLGunSrc;
+SoundBox * otherRGunSrc;
+SoundBox * hitPoint1;
+SoundBox * hitPoint2;
+SoundBox * hitPoint3;
 
 //Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
@@ -51,6 +62,8 @@ FrameManager::FrameManager() {
 	sceneGraph = new Scene();
 	initSoundManager();
 	server = new Networking();
+
+	std::cout << "Size of internet packets: " << sizeof(Packet) << std::endl;
 }
 
 void FrameManager::initShaders() {
@@ -82,18 +95,34 @@ void FrameManager::initObjects() {
 	otherPlayerLH = new TexturedCube(0.1f, TEXTURE_CUBE);
 	otherPlayerRH = new TexturedCube(0.1f, TEXTURE_CUBE);
 	otherPlayerHead = new Transform();
-	Geometry * geom = new Geometry(); geom->init(MODEL_HORSE, TEXTURE_HORSE);
+	Geometry * geom = new Geometry(); geom->init(MODEL_MASK, TEXTURE_MASK);
+	otherPlayerHead->addChild(geom);
+	otherPlayerHead->rotate(glm::vec3(0, 1, 0), 180);
+	otherPlayerHead->scale(0.01f);
+	otherPlayerHead->translate(0, -10, 0);
 	otherPlayerLH->toWorld[3] = glm::vec4(0, -10, 0, 1);
 	otherPlayerRH->toWorld[3] = glm::vec4(0, -10, 0, 1);
-
-	soundCube = new TexturedCube(1.0f, TEXTURE_MATTHEW);
 }
 
 void FrameManager::initSoundManager() {
 	soundManager = new SoundManager();
 	src = soundManager->createSource();
+	backgroundMusic = soundManager->createSource();
+	lGunSrc = soundManager->createSource();
+	rGunSrc = soundManager->createSource();
+	otherLGunSrc = soundManager->createSource();
+	otherRGunSrc = soundManager->createSource();
+	hitPoint1 = soundManager->createSource();
+	hitPoint2 = soundManager->createSource();
+	hitPoint3 = soundManager->createSource();
+
 	lis = soundManager->createListener();
+	music = backgroundMusic->loadSound(SOUND_MUSIC_SWEETWATER);
 	explode = src->loadSound(SOUND_FX_EXPLOSION);
+	gunshot = src->loadSound(SOUND_FX_GUNSHOT);
+	impact = src->loadSound(SOUND_FX_BULLET_IMPACT);
+
+	backgroundMusic->playSound(music);
 }
 
 FrameManager::~FrameManager() {
@@ -105,12 +134,22 @@ FrameManager::~FrameManager() {
 }
 
 //Update method (called before draw)*********************************************************************
-void FrameManager::update(double deltaTime) {
+void FrameManager::update(double deltTime) {
+	updateTime(deltTime);
+
 	//Get and send updates from and to the server
 		if (server->isConnected)
 			server->sendPlayerBodyInfo(_head, _leftHand, _rightHand, grabbedObjL, grabbedObjR);
-		if(server->otherInSession)
+		if (server->otherInSession) {
 			getNetworkData();
+			
+			if (newSecondPlayer) {
+				sceneGraph->resetCans();
+				newSecondPlayer = false;
+			}
+		}
+		else
+			newSecondPlayer = true;
 
 	//do non-network things
 		//Proximity
@@ -118,12 +157,17 @@ void FrameManager::update(double deltaTime) {
 		checkProximity();
 
 		//Sound
-		sceneGraph->update((double)deltaTime);
-	//	UsefulFunctions::printVector(_head[3]);
+		sceneGraph->update((double)deltTime);
+
 		lis->setPos(_head[3]);
 		lis->setOrien(_head);
-		glm::vec3 pos = glm::vec3(-soundCube->toWorld[3][0], soundCube->toWorld[3][1], -soundCube->toWorld[3][2]);
-		src->setPos(soundCube->toWorld[3]);
+		//glm::vec3 pos = glm::vec3(-soundCube->toWorld[3][0], soundCube->toWorld[3][1], -soundCube->toWorld[3][2]);
+		//src->setPos(soundCube->toWorld[3]);
+}
+
+void FrameManager::updateTime(double dT) {
+	lTTime += dT;
+	rTTime += dT;
 }
 
 //Draw Methods (Called in order: drawSkybox, drawBody, draw)********************************************
@@ -165,21 +209,36 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 	server->receivePlayerBodyInfo(otherHmd, otherLH, otherRH, otherPlayerGrabL, otherPlayerGrabR);
 	setOtherPlayerInfo(otherHmd, otherLH, otherRH);
 
-	//Gets object position (if affected by the other user)
-	std::vector<Packet> objData;
-	server->receiveObjectData(objData);
-
-	//TODO --Play a sound whenever one of these objects are hit
-	for (int i = 0; i < objData.size(); i++) {
-		if (objData[i].objectId == -1)	//Ignore when objectId = -1
-			continue;
-		//objData[i].objectId : index of the object in the scenegraph
-		// objData[i].m1      : new toWorld matrix of the object
+	//Get triggers
+	bool left, right;
+	server->receiveTriggerInfo(left, right);
+	if (left) {
+		otherLGunSrc->setPos(otherLH[3]);
+		otherLGunSrc->playSound(gunshot);
+	}
+	if (right) {
+		otherRGunSrc->setPos(otherRH[3]);
+		otherRGunSrc->playSound(gunshot);
 	}
 
+	//Gets the can hit data
+	std::vector<int> canHitData;
+	server->receiveCanHitData(canHitData);
+
+	for (int i = 0; i < canHitData.size(); i++)
+		sceneGraph->removeLastHit(canHitData[i]);
 	server->clearPacketVector();
+
+	//Gets info stuff
+	glm::vec3 hp;
+	server->receiveHitInfo(hp);
+	//TODO this breaks the audio buffer
+	//hitPoint3->setPos(hp);
+	//hitPoint3->playSound(impact);
 }
 
+//TODO if the other player is grabbing A and replaces it with B,
+//		A will be in different positions for the client and the other user
 void FrameManager::setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	//Update the other player's position, rotation
 	otherPlayerHead->setToWorld(hmd);
@@ -202,7 +261,7 @@ void FrameManager::pressB() {
 }
 
 void FrameManager::pressX() {
-	src->playSound(explode);
+
 }
 
 void FrameManager::pressY() {
@@ -218,8 +277,7 @@ void FrameManager::pressRJoystick() {
 }
 
 void FrameManager::moveLJoystick(glm::vec2 xy) {
-	soundCube->toWorld[3][0] += xy.x / 10.0f;
-	soundCube->toWorld[3][2] -= xy.y / 10.0f;
+
 }
 
 void FrameManager::moveRJoystick(glm::vec2 xy) {
@@ -228,22 +286,71 @@ void FrameManager::moveRJoystick(glm::vec2 xy) {
 
 void FrameManager::pressLTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjL > 1) {
-			//Get forwards direction
-			glm::vec3 dir = sceneGraph->getForwardVector(grabbedObjL);
+		if (grabbedObjL > 1 && lTTime > COOLDOWN) {
+			server->sendTriggerInfo(false);	//Tells other player that a gun was fire
+			
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjL);
-			std::cout << "===\n";
-			UsefulFunctions::printVector(dir);
-			UsefulFunctions::printVector(pos);
-			UsefulFunctions::printVector(_leftHand[3]);
+			{	//Play sound
+				lGunSrc->setPos(pos);
+				lGunSrc->playSound(gunshot);
+			}
+			//Get forwards direction
+			glm::vec3 dir = sceneGraph->getForwardVector(grabbedObjL);
+			glm::vec3 hitPoint = sceneGraph->shootRaycast(dir, pos);
+			int lastHit = sceneGraph->lastHit;
+
+			if (lastHit != -1 && sceneGraph->getCheckIfHit(lastHit)) {
+				if (sceneGraph->removeLastHit(lastHit)) {
+					server->sendCanHitData(lastHit); //send packet with the index that got hit
+				}
+				sceneGraph->lastHit = -1;
+			}
+			if (hitPoint.x > -10) {
+				server->sendHitInfo(hitPoint); //send packet notifying pos that got hit
+				
+				//TODO (this breaks the sound buffer)play sound hitPoint
+				//hitPoint1->setPos(hitPoint);
+				//hitPoint1->playSound(impact);
+			}
+			lTTime = 0;
 		}
 	}
 	else {}
 }
 
 void FrameManager::pressRTrigger(float f) {
-	if (f > MINPRESS) {}
+	if (f > MINPRESS) {
+		if (grabbedObjR > 1 && rTTime > COOLDOWN) {
+			server->sendTriggerInfo(true);	//Tells other player that a gun was fire
+
+			//Get pos
+			glm::vec3 pos = sceneGraph->getPosition(grabbedObjR);
+			{	//Play sound
+				rGunSrc->setPos(pos);
+				rGunSrc->playSound(gunshot);
+			}
+			//Get forwards direction
+			glm::vec3 dir = sceneGraph->getForwardVector(grabbedObjR);
+			glm::vec3 hitPoint = sceneGraph->shootRaycast(dir, pos);
+			int lastHit = sceneGraph->lastHit;
+
+			if (lastHit != -1 && sceneGraph->getCheckIfHit(lastHit)) {
+				if (sceneGraph->removeLastHit(lastHit)) {
+					server->sendCanHitData(lastHit); //send packet with the index that got hit
+				}
+				sceneGraph->lastHit = -1;
+			}
+			if (hitPoint.x > -10) {
+				server->sendHitInfo(hitPoint); //send packet notifying pos that got hit
+
+				//TODO (this breaks the sound buffer)play sound hitPoint
+				//hitPoint2->setPos(hitPoint);
+				//hitPoint2->playSound(impact);
+			}
+			rTTime = 0;
+		}
+	}
 	else {}
 }
 

@@ -41,12 +41,14 @@ public:
 	glm::mat4 extraRot = glm::mat4(1.0f);
 
 	//BulletPhysics
+	int id = -1;
 	btCollisionShape * collider;
 	btDefaultMotionState * motionState;
 	btRigidBody * rigidbody;
 	btScalar mass;
 
 	void setCollisionShapeSphere(float radius);
+	void setCollisionShapeCylinder(btVector3 halfExtents);
 	void setCollisionShapePlane(btVector3 planeNormal = btVector3(0, 1, 0));
 
 	btRigidBody * getRigidbody();
