@@ -172,10 +172,6 @@ void Scene::resetCans() {
 	std::cout << "15 cans remain!" << std::endl;
 }
 
-void Scene::setRigitBody(btRigidBody * rb) {
-	dynamicsWorld->addRigidBody(rb);
-}
-
 void Scene::initObjects(){
 	Transform * child;
 	Geometry * geom;

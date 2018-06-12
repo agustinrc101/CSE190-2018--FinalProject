@@ -39,7 +39,6 @@ public:
 	bool removeLastHit(int index);
 	bool getCheckIfHit(int index);
 	void resetCans();
-	void setRigitBody(btRigidBody * rb);
 
 	int lastHit = -1;
 

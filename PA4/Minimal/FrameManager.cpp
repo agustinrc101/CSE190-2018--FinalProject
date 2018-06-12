@@ -67,6 +67,7 @@ FrameManager::FrameManager() {
 	initShaders();
 	initSkybox();
 	initObjects();
+	sceneGraph = new Scene();
 	initSoundManager();
 	server = new Networking();
 
@@ -97,8 +98,6 @@ void FrameManager::initSkybox() {
 }
 
 void FrameManager::initObjects() {
-	sceneGraph = new Scene();
-
 	Geometry * geom = new Geometry(); geom->init(MODEL_HAND, "");
 
 	leftHand = new Transform();
@@ -129,10 +128,6 @@ void FrameManager::initObjects() {
 	otherPlayerRH->extraRot = glm::rotate(glm::mat4(1.0f), 180.0f / 180.0f * glm::pi<float>(), glm::vec3(1, 0, 0)) * otherPlayerRH->extraRot;
 	otherPlayerRH->scale(0.5f); otherPlayerRH->scale(-1, -1, 1);
 	otherPlayerRH->translate(0, -10, 0);
-
-
-	otherPlayerHead->setCollisionShapeSphere(1.0f);
-	sceneGraph->setRigitBody(otherPlayerHead->getRigidbody());
 }
 
 void FrameManager::initSoundManager() {
@@ -331,7 +326,7 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 //		A will be in different positions for the client and the other user
 void FrameManager::setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh) {
 	//Update the other player's position, rotation
-	otherPlayerHead->setToWorld(hmd);
+	otherPlayerHead->setToWorld(hmd, false);
 	otherPlayerLH->setToWorld(lh, false);
 	otherPlayerRH->setToWorld(rh, false);
 
