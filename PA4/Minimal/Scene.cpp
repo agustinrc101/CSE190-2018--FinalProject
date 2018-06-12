@@ -139,12 +139,12 @@ bool Scene::removeLastHit(int index) {
 			if (drawCan[i])
 				count++;
 		}
-		if (count != 1)
+		if (count > 1)
 			std::cout << count << " cans remain!" << std::endl;
-		else if(count == 0)
-			std::cout << "conglaturations! you done it!" << std::endl;
+		else if(count == 1)
+			std::cout << count << " can remains!!!!" << std::endl;
 		else
-			std::cout << count << " can remains!" << std::endl;
+			std::cout << "you done it" << std::endl;
 
 		return true;
 	}
@@ -180,6 +180,7 @@ void Scene::initObjects(){
 	glm::vec3 xRot = glm::vec3(1, 0, 0);
 	//STATIC OBJECTS
 		//Ground Plane
+		{
 		child = new Transform();
 		geom = new Geometry();
 		path1 = MODEL_SHAPE_PLANE;
@@ -192,232 +193,349 @@ void Scene::initObjects(){
 		dynamicsWorld->addRigidBody(child->getRigidbody());
 		child->addChild(geom);
 		staticObjects.push_back(child);
+	}
 		//Objects
 		//Matthew
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_MATTHEW;
-		path2 = TEXTURE_MATTHEW;
-		geom->init(path1, path2);
-		child->rotate(xRot, 270);child->translate(4, -1.5, -6); child->scale(0.001f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_MATTHEW;
+			path2 = TEXTURE_MATTHEW;
+			geom->init(path1, path2);
+			child->rotate(xRot, 270);child->translate(4, -1.5, -6); child->scale(0.001f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+		}
 		//Houses
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_HOUSE1;
-		path2 = TEXTURE_HOUSE;
-		geom->init(path1, path2);
-		child->translate(5, -1.5, -7); child->scale(0.05f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
-		
-		child = new Transform();
-		child->rotate(yRot, 135); child->translate(-7, -1.5, -16); child->scale(0.05f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_HOUSE1;
+			path2 = TEXTURE_HOUSE;
+			geom->init(path1, path2);
+			child->translate(5, -1.5, -7); child->scale(0.05f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->rotate(yRot, 270); child->translate(0, -1.5, 6); child->scale(0.05f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->rotate(yRot, 135); child->translate(-7, -1.5, -16); child->scale(0.05f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->rotate(yRot, 90); child->translate(-20, -1.5, 0); child->scale(0.05f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->rotate(yRot, 270); child->translate(0, -1.5, 6); child->scale(0.05f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+
+			child = new Transform();
+			child->rotate(yRot, 90); child->translate(-20, -1.5, 0); child->scale(0.05f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+		}
 		//Rocks
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_ROCKS;
-		path2 = TEXTURE_ROCKS;
-		geom->init(path1, path2);
-		child->rotate(yRot, 85); child->translate(-10, -1.5, -3); child->scale(0.01f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_ROCKS;
+			path2 = TEXTURE_ROCKS;
+			geom->init(path1, path2);
+			child->rotate(yRot, 85); child->translate(-10, -1.5, -3); child->scale(0.01f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+		}
 		//Barrels
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_BARREL;
-		path2 = TEXTURE_BARREL;
-		geom->init(path1, path2);
-		child->translate(0, -1, -3); child->scale(0.35f, 0.4f, 0.35f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_BARREL;
+			path2 = TEXTURE_BARREL;
+			geom->init(path1, path2);
+			child->translate(0, -1, -3); child->scale(0.35f, 0.4f, 0.35f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->translate(-2.5, -1, 7); child->scale(0.35f, 0.4f, 0.35f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->translate(-2.5, -1, 7); child->scale(0.35f, 0.4f, 0.35f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->translate(-3, -1, 7.6f); child->scale(0.35f, 0.4f, 0.35f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->translate(-3, -1, 7.6f); child->scale(0.35f, 0.4f, 0.35f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->translate(16, -1, -4); child->scale(0.35f, 0.4f, 0.35f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->translate(16, -1, -4); child->scale(0.35f, 0.4f, 0.35f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+		}
 		//Barriers
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_BARRIER;
-		path2 = TEXTURE_BARRIER;
-		geom->init(path1, path2);
-		child->rotate(yRot, 45); child->translate(-15, -1.5, -8); child->scale(0.01f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_BARRIER;
+			path2 = TEXTURE_BARRIER;
+			geom->init(path1, path2);
+			child->rotate(yRot, 45); child->translate(-15, -1.5, -8); child->scale(0.01f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->rotate(yRot, 45);child->translate(15, -1.5, -3); child->scale(0.01f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->rotate(yRot, 45);child->translate(15, -1.5, -3); child->scale(0.01f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->rotate(yRot, 45); child->translate(11, -1.5, 1); child->scale(0.01f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
-		//Metal container
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_CONTAINER;
-		path2 = TEXTURE_CONTAINER_GREEN;
-		geom->init(path1, path2);
-		child->rotate(yRot, 315);child->translate(20, 0, 2); child->scale(0.01f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->rotate(yRot, 45); child->translate(11, -1.5, 1); child->scale(0.01f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+			//Metal container
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_CONTAINER;
+			path2 = TEXTURE_CONTAINER_GREEN;
+			geom->init(path1, path2);
+			child->rotate(yRot, 315);child->translate(20, 0, 2); child->scale(0.01f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->rotate(yRot, 45);child->translate(24, 0, -8); child->scale(0.01f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->rotate(yRot, 45);child->translate(24, 0, -8); child->scale(0.01f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+		}
 		//Ammo box
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_AMMOBOX;
-		path2 = TEXTURE_AMMOBOX;
-		geom->init(path1, path2);
-		child->translate(-2.5, -.5f, 7); child->scale(0.0025f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_AMMOBOX;
+			path2 = TEXTURE_AMMOBOX;
+			geom->init(path1, path2);
+			child->translate(-2.5, -.5f, 7); child->scale(0.0025f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->translate(16, -.5f, -4); child->scale(0.0025f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->translate(16, -.5f, -4); child->scale(0.0025f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
 
-		child = new Transform();
-		child->translate(-14, -.75, -7); child->scale(0.0025f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
+			child = new Transform();
+			child->rotate(yRot, 315); child->translate(-14, -.7f, -7); child->scale(0.0025f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+		}
 		//Ladders
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_LADDER_SMALL;
-		path2 = TEXTURE_LADDER;
-		geom->init(path1, path2);
-		child->rotate(yRot, 180);child->translate(-17.5, -1.5, 1.5); child->scale(0.01f);
-		child->addChild(geom);
-		staticObjects.push_back(child);
-
-
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_LADDER_SMALL;
+			path2 = TEXTURE_LADDER;
+			geom->init(path1, path2);
+			child->rotate(yRot, 180);child->translate(-17.5, -1.5, 1.25); child->scale(0.01f);
+			child->addChild(geom);
+			staticObjects.push_back(child);
+		}
 	//DYNAMIC OBJECTS
 		//Grenades
-		child = new Transform();
-		geom = new Geometry();
-		path1 = MODEL_GRENADE;
-		path2 = TEXTURE_GRENADE;
-		geom->init(path1, path2);
-		child->translate(0, -.5f, -3);child->scale(0.005f);
-		child->setCollisionShapeSphere(0.1);
-		dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		objects.push_back(child);
+		{
+			child = new Transform();
+			geom = new Geometry();
+			path1 = MODEL_GRENADE;
+			path2 = TEXTURE_GRENADE;
+			geom->init(path1, path2);
+			child->translate(0, -.5f, -3);child->scale(0.005f);
+			child->setCollisionShapeSphere(0.1);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
 
-		child = new Transform();
-		child->translate(0, 50, 0);
-		child->setCollisionShapeSphere(10.0);
-		dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		objects.push_back(child);
-
+			child = new Transform();
+			child->translate(0, 50, 0);
+			child->setCollisionShapeSphere(10.0);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
+		}
 		//GUN
-		Transform * dirChild;
-		geom = new Geometry();
-		path1 = MODEL_WEAPON_PISTOL;
-		path2 = TEXTURE_WEAPON_PISTOL;
-		geom->init(path1, path2);
+		{
+			Transform * dirChild;
+			geom = new Geometry();
+			path1 = MODEL_WEAPON_PISTOL;
+			path2 = TEXTURE_WEAPON_PISTOL;
+			geom->init(path1, path2);
 
-		child = new Transform();
-		child->translate(16, -.5f, -4);
-		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0,1,0)) * child->extraRot;
-		child->setCollisionShapeSphere(0.1f);
-		dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		objects.push_back(child);
-		dirChild = new Transform();
-		dirChild->translate(1, 0, 0);
-		child->addChild(dirChild);
+			child = new Transform();
+			child->translate(16, -.5f, -4);
+			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
+			child->setCollisionShapeSphere(0.1f);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
+			dirChild = new Transform();
+			dirChild->translate(1, 0, 0);
+			child->addChild(dirChild);
 
-		child = new Transform();
-		child->translate(-2.5, -.5f, 7);
-		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
-		child->setCollisionShapeSphere(0.1f);
-		dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		objects.push_back(child);
-		dirChild = new Transform();
-		dirChild->translate(1, 0, 0);
-		child->addChild(dirChild);
+			child = new Transform();
+			child->translate(-2.5, -.5f, 7);
+			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
+			child->setCollisionShapeSphere(0.1f);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
+			dirChild = new Transform();
+			dirChild->translate(1, 0, 0);
+			child->addChild(dirChild);
 
-		child = new Transform();
-		child->translate(-14, -.75, -7);
-		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
-		child->setCollisionShapeSphere(0.1f);
-		dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		objects.push_back(child);
-		dirChild = new Transform();
-		dirChild->translate(1, 0, 0);
-		child->addChild(dirChild);
+			child = new Transform();
+			child->rotate(yRot, 315); child->translate(-14, -.7, -7);
+			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
+			child->setCollisionShapeSphere(0.1f);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
+			dirChild = new Transform();
+			dirChild->translate(1, 0, 0);
+			child->addChild(dirChild);
 
-		child = new Transform();
-		child->translate(4, 0, -6.5);
-		child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
-		child->setCollisionShapeSphere(0.1f);
-		child->rotate(yRot, 90);dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		objects.push_back(child);
-		dirChild = new Transform();
-		dirChild->translate(1, 0, 0);
-		child->addChild(dirChild);
-	
-	//CANS
-		//Cans
-		int id = 0;
-		geom = new Geometry();
-		path1 = MODEL_CAN;
-		path2 = TEXTURE_CAN;
-		geom->init(path1, path2);
-		btVector3 colliderSize(0.1f, 0.125f, 0.1f);
-
-		child = new Transform();
-		child->translate(-.1, -.5f, -2.8);child->scale(0.002f);
-		child->id = id++;
-		child->setCollisionShapeCylinder(colliderSize);
-		dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		cans.push_back(child);
-
-		child = new Transform();
-		child->translate(-3, -.5f, 7.5);child->scale(0.002f);
-		child->id = id++;
-		child->setCollisionShapeCylinder(colliderSize);
-		dynamicsWorld->addRigidBody(child->getRigidbody());
-		child->addChild(geom);
-		cans.push_back(child);
-
-		//TODO add 13 more cans
-
+			child = new Transform();
+			child->translate(4, 0, -6.5);
+			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
+			child->setCollisionShapeSphere(0.1f);
+			child->rotate(yRot, 90);dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
+			dirChild = new Transform();
+			dirChild->translate(1, 0, 0);
+			child->addChild(dirChild);
+		}
+		//CANS
+		{
+			int id = 0;
+			geom = new Geometry();
+			path1 = MODEL_CAN;
+			path2 = TEXTURE_CAN;
+			geom->init(path1, path2);
+			btVector3 colliderSize(0.1f, 0.125f, 0.1f);
+			//Over barrel (front)
+			child = new Transform();
+			child->translate(-.1, -.5f, -2.8);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//Over barrel (back)
+			child = new Transform();
+			child->translate(-3, -.5f, 7.5);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On top of storage container
+			child = new Transform();
+			child->translate(18.65f, 1.25f, 1.75);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On ladder
+			child = new Transform();
+			child->translate(-17.5, .2f, 1.25);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On rock(?)
+			child = new Transform();
+			child->translate(-10, -.75f, -3);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//Inside storage container
+			child = new Transform();
+			child->translate(20, 0, 2);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On top of left barrier
+			child = new Transform();
+			child->translate(-13.6, -.7f, -7.5);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On top of left barrier
+			child = new Transform();
+			child->translate(-14.6, -.7f, -6.5);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On top of the right barrier
+			child = new Transform();
+			child->translate(17, -.7f, -3);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On top of the right barrier
+			child = new Transform();
+			child->translate(13, -.7f, 1);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On top of house (back)
+			child = new Transform();
+			child->translate(3, 1.6f, 4.6f);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//On top of house front
+			child = new Transform();
+			child->translate(0.8f, 1.6f, -10.1f);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//Floor left side and back
+			child = new Transform();
+			child->translate(-15, -1.5f, 15);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//Matthew room
+			child = new Transform();
+			child->translate(4, 0, -5.5);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+			//Under big grenade (directly on top)
+			child = new Transform();
+			child->translate(0, 20, 0);child->scale(0.002f);
+			child->id = id++;
+			child->setCollisionShapeCylinder(colliderSize);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			cans.push_back(child);
+		}
 }

@@ -196,7 +196,6 @@ void FrameManager::drawBody(glm::mat4 projection, glm::mat4 view) {
 
 void FrameManager::draw(glm::mat4 projection, glm::mat4 view) {
 	//Draws the scene normally	
-	//soundCube->draw(projection, view, texShader, (glm::mat4(1.0f)));
 	sceneGraph->drawStaticObjects(projection, view, &textureShader);
 	sceneGraph->drawObjects(projection, view, &textureShader, &colorShader, closeObjL, closeObjR);
 }

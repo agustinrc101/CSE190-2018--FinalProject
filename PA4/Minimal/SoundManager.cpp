@@ -166,13 +166,13 @@ void SoundManager::playSound(ALuint source, ALfloat* sourcePos, ALint buffer)
 		listenerPos[0] = listenerVec.x;
 		listenerPos[1] = listenerVec.y;
 		listenerPos[2] = listenerVec.z;
-		std::cerr << sourcePos[0] << " " << sourcePos[1] << " " << sourcePos[2] << std::endl;
+		//std::cerr << sourcePos[0] << " " << sourcePos[1] << " " << sourcePos[2] << std::endl;
 
 		orien = listeners[i]->getOrien();
 		newforward = glm::vec3(glm::mat4(glm::mat3(orien)) * glm::vec4(forward, 1.0f));
 		newup = glm::vec3(glm::mat4(glm::mat3(orien)) * glm::vec4(up, 1.0f));
-		UsefulFunctions::printVector(newforward);
-		UsefulFunctions::printVector(newup);
+		//UsefulFunctions::printVector(newforward);
+		//UsefulFunctions::printVector(newup);
 		listenerOri[6] = newforward.x;
 		listenerOri[6] = newforward.y;
 		listenerOri[6] = newforward.z;
@@ -461,23 +461,23 @@ ALenum SoundManager::to_al_format(short channels, short samples)
 	case 16:
 		if (stereo)
 		{
-			std::cerr << "Stereo 16\n";
+			//std::cerr << "Stereo 16\n";
 			return AL_FORMAT_STEREO16;
 		}
 		else
 		{
-			std::cerr << "Mono 16\n";
+			//std::cerr << "Mono 16\n";
 			return AL_FORMAT_MONO16;
 		}
 	case 8:
 		if (stereo)
 		{
-			std::cerr << "Stereo 8\n";
+			//std::cerr << "Stereo 8\n";
 			return AL_FORMAT_STEREO8;
 		}
 		else
 		{
-			std::cerr << "Mono 8\n";
+			//std::cerr << "Mono 8\n";
 			return AL_FORMAT_MONO8;
 		}
 	default:
