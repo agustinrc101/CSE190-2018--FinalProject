@@ -402,7 +402,8 @@ void Scene::initObjects(){
 			child->translate(4, 0, -6.5);
 			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
 			child->setCollisionShapeSphere(0.1f);
-			child->rotate(yRot, 90);dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->rotate(yRot, 90);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
 			child->addChild(geom);
 			objects.push_back(child);
 			dirChild = new Transform();
@@ -413,15 +414,34 @@ void Scene::initObjects(){
 		{
 			Transform * dirChild;
 			geom = new Geometry();
-			path1 = MODEL_WEAPON_PISTOL;
-			path2 = TEXTURE_WEAPON_PISTOL;
+			path1 = MODEL_WEAPON_AK47;
+			path2 = TEXTURE_WEAPON_AK47;
 			geom->init(path1, path2);
 
 			child = new Transform();
-			child->translate(0, 0, 0);
+			child->rotate(glm::vec3(1, 0, 0), 90);
+			child->rotate(glm::vec3(0, 0, 1), -15);
+			child->rotate(glm::vec3(0, 1, 0), -30);
+			child->translate(9.4f, -1.2, -9.75);
 			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
-			child->setCollisionShapeSphere(0.1f);
-			child->rotate(yRot, 90); dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->setCollisionShapeSphere(0.3f);
+			child->rotate(yRot, 90);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
+			child->addChild(geom);
+			objects.push_back(child);
+			dirChild = new Transform();
+			dirChild->translate(1, 0, 0);
+			child->addChild(dirChild);
+
+			child = new Transform();
+			child->rotate(glm::vec3(1, 0, 0), 90);
+			child->rotate(glm::vec3(0, 0, 1), -15);
+			child->rotate(glm::vec3(0, 1, 0), 90);
+			child->translate(0.05, -1.2, 6.5);
+			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
+			child->setCollisionShapeSphere(0.3f);
+			child->rotate(yRot, 90);
+			dynamicsWorld->addRigidBody(child->getRigidbody());
 			child->addChild(geom);
 			objects.push_back(child);
 			dirChild = new Transform();

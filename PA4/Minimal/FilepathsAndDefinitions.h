@@ -25,6 +25,7 @@
 //Textures
 #define TEXTURE_GROUND1 "../assets/models/Environment/Ground/Textures/Ground_Albedo.ppm"
 #define TEXTURE_GROUND2 "../assets/textures/floor/Sand/Sand_Albedo.ppm"
+#define TEXTURE_GROUND3 "../assets/textures/floor/sand.ppm"
 #define TEXTURE_ROCKS "../assets/models/Environment/Rocks/Textures/Rocks_Albedo.ppm"
 //#define TEXTURE_BUSH "../assets/models/Environment/Vegetation/Textures/BushBig_Albedo.ppm"
 //#define TEXTURE_PALMTREE "../assets/models/Environment/Vegetation/Textures/PalmTree/Palm_Tree_Albedo.ppm"
@@ -106,6 +107,6 @@
 //Definitions
 #define PI 3.14159265359f
 #define MINPRESS 0.7f //Defines the minimum press strength required for the triggers
-#define COOLDOWN 0.5f
+#define COOLDOWN 0.7f
 
 #endif //FILEPATHSANDDEFINITIONS_H

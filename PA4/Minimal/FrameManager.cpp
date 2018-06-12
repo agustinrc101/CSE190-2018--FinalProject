@@ -20,6 +20,8 @@ Scene * sceneGraph;
 //PlayerBody
 Transform * leftHand;
 Transform * rightHand;
+int leftLocomotionDir;
+int rightLocomotionDir;
 
 //OtherPlayer
 Transform * otherPlayerHead;
@@ -36,7 +38,8 @@ int otherPlayerGrabR = -1;
 bool newSecondPlayer = true;
 double lTTime = 0;
 double rTTime = 0;
-float GUNCOOLDOWN = COOLDOWN;
+float LEFTGUNCOOLDOWN = COOLDOWN;
+float RIGHTGUNCOOLDOWN = COOLDOWN;
 unsigned int leftWeapon;
 unsigned int rightWeapon;
 
@@ -336,15 +339,26 @@ void FrameManager::setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh)
 
 //Buttons *********************************************************************************************
 void FrameManager::pressA() {
-
+	//soundManager->testing(SOUND_FX_EXPLOSION);
+	if (grabbedObjR != -1)
+	{
+		glm::mat4 oldGrab = sceneGraph->getObjMatrix(grabbedObjR);
+		sceneGraph->setObjMatrix(grabbedObjR, oldGrab);
+		grabbedObjR = -1;
+	}
 }
 
 void FrameManager::pressB() {
-
+	sceneGraph->resetCans();
 }
 
 void FrameManager::pressX() {
-
+	if (grabbedObjL != -1)
+	{
+		glm::mat4 oldGrab = sceneGraph->getObjMatrix(grabbedObjL);
+		sceneGraph->setObjMatrix(grabbedObjL, oldGrab);
+		grabbedObjL = -1;
+	}
 }
 
 void FrameManager::pressY() {
@@ -360,16 +374,30 @@ void FrameManager::pressRJoystick() {
 }
 
 void FrameManager::moveLJoystick(glm::vec2 xy) {
-
+	if (xy.y < 0)
+	{
+		leftLocomotionDir = -1;
+	}
+	else
+	{
+		leftLocomotionDir = 1;
+	}
 }
 
 void FrameManager::moveRJoystick(glm::vec2 xy) {
-
+	if (xy.y < 0)
+	{
+		rightLocomotionDir = -1;
+	}
+	else
+	{
+		rightLocomotionDir = 1;
+	}
 }
 
 void FrameManager::pressLTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjL > -1 && lTTime > GUNCOOLDOWN) {
+		if (grabbedObjL > -1 && lTTime > LEFTGUNCOOLDOWN) {
 			
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjL);
@@ -411,9 +439,10 @@ void FrameManager::pressLTrigger(float f) {
 			}
 			lTTime = 0;
 		}
-		else if(lTTime > GUNCOOLDOWN)
+		else if(lTTime > LEFTGUNCOOLDOWN)
 		{
 			lGunSrc->playSound(slap);
+			lTTime = 0;
 		}
 	}
 	else {}
@@ -421,7 +450,7 @@ void FrameManager::pressLTrigger(float f) {
 
 void FrameManager::pressRTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjR > -1 && rTTime > GUNCOOLDOWN) {
+		if (grabbedObjR > -1 && rTTime > RIGHTGUNCOOLDOWN) {
 
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjR);
@@ -464,9 +493,10 @@ void FrameManager::pressRTrigger(float f) {
 			}
 			rTTime = 0;
 		}
-		else if(rTTime > GUNCOOLDOWN)
+		else if(rTTime > RIGHTGUNCOOLDOWN)
 		{
 			rGunSrc->playSound(slap);
+			rTTime = 0;
 		}
 	}
 	else {}
@@ -493,24 +523,28 @@ void FrameManager::pressLGrip(float f) {
 					sceneGraph->setObjMatrix(closeObjL, oldGrab);
 					//switch grabbedObj var
 					grabbedObjL = closeObjL;
-					// Changing Cooldown based on weapon
-					if (grabbedObjL > 6)
-					{
-						GUNCOOLDOWN = 0.2f;
-					}
-					else if (grabbedObjL > 1)
-					{
-						GUNCOOLDOWN = 1.0f;
-					}
-					else if(grabbedObjL > -1)
-					{
-						GUNCOOLDOWN = 2.0f;
-					}
-					else
-					{
-						GUNCOOLDOWN = 0.5f;
-					}
 				}
+			}
+			// Changing Cooldown based on weapon
+			// submachines
+			if (grabbedObjL > 5)
+			{
+				LEFTGUNCOOLDOWN = 0.1f;
+			}
+			// pistols
+			else if (grabbedObjL > 1)
+			{
+				LEFTGUNCOOLDOWN = 1.0f;
+			}
+			// grenades
+			else if (grabbedObjL > -1)
+			{
+				LEFTGUNCOOLDOWN = 2.0f;
+			}
+			// hand
+			else
+			{
+				LEFTGUNCOOLDOWN = 0.7f;
 			}
 		}
 	}
@@ -535,24 +569,28 @@ void FrameManager::pressRGrip(float f) {
 					sceneGraph->setObjMatrix(closeObjR, oldGrab);
 					//switch grabbedObj var
 					grabbedObjR = closeObjR;
-					// Changing Cooldown based on weapon
-					if (grabbedObjR > 1)
-					{
-						GUNCOOLDOWN = 0.2f;
-					}
-					else if (grabbedObjR > 1)
-					{
-						GUNCOOLDOWN = 1.0f;
-					}
-					else if(grabbedObjR > -1)
-					{
-						GUNCOOLDOWN = 2.0f;
-					}
-					else
-					{
-						GUNCOOLDOWN = 0.5f;
-					}
 				}
+			}
+			// Changing Cooldown based on weapon
+			// submachines
+			if (grabbedObjR > 5)
+			{
+				RIGHTGUNCOOLDOWN = 0.1f;
+			}
+			// pistols
+			else if (grabbedObjR > 1)
+			{
+				RIGHTGUNCOOLDOWN = 1.0f;
+			}
+			// grenades
+			else if (grabbedObjR > -1)
+			{
+				RIGHTGUNCOOLDOWN = 2.0f;
+			}
+			// hand
+			else
+			{
+				RIGHTGUNCOOLDOWN = 0.7f;
 			}
 		}
 	}
@@ -570,7 +608,7 @@ float _rightY;
 
 bool isGetData = true;
 
-bool FrameManager::locomotion(float deltaTime) {
+int FrameManager::locomotion(float deltaTime) {
 		if (pressedLeftGrip && pressedRightGrip) {
 			_leftY = _leftHand[3][1];
 			_rightY = _rightHand[3][1];
@@ -591,7 +629,7 @@ bool FrameManager::locomotion(float deltaTime) {
 
 		if (_coolDown > 0.0f) {
 			_coolDown -= deltaTime;
-			return true;
+			return leftLocomotionDir | rightLocomotionDir;
 		}
 		
 		return false;

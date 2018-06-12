@@ -60,7 +60,7 @@ public:
 	void pressRGrip(float f);
 	void pressLTrigger(float f);
 	void pressRTrigger(float f);
-	bool locomotion(float deltaTime);
+	int locomotion(float deltaTime);
 	void setUpVector(float x, float y, float z);
 	void setFwVector(float x, float y, float z);
 

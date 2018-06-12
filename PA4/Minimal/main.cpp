@@ -673,10 +673,11 @@ protected:
 		frameManager->setFwVector(finalForward.x, finalForward.y, -finalForward.z);
 
 		//Handles movement
-		if (frameManager->locomotion((double)deltaTime)) {	//Locomotion Begin
-			finalForward.x = -finalForward.x;
+		int direction = 0;
+		if ((direction = frameManager->locomotion((double)deltaTime))) {	//Locomotion Begin
+			finalForward.x = -finalForward.x * (float)direction;
 			finalForward.y = 0;
-			finalForward.z = -finalForward.z;
+			finalForward.z = -finalForward.z * (float)direction;
 
 			finalForward *= 2.5f * deltaTime;
 		
