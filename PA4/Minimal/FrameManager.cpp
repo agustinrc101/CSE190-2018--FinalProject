@@ -53,6 +53,10 @@ SoundBox * otherRGunSrc;
 SoundBox * hitPoint1;
 SoundBox * hitPoint2;
 SoundBox * hitPoint3;
+sf::SoundBuffer buffer;
+sf::Sound sound;
+
+float GUNCOOLDOWN = COOLDOWN;
 
 //Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
@@ -181,7 +185,7 @@ void FrameManager::update(double deltTime) {
 
 		lis->setPos(_head[3]);
 		lis->setOrien(_head);
-		lis->setOrien(playerFW, playerUP);
+		//lis->setOrien(playerFW, playerUP);
 
 		soundManager->update();
 }
@@ -262,8 +266,8 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 	glm::vec3 hp;
 	server->receiveHitInfo(hp);
 	//TODO this breaks the audio buffer
-	//hitPoint3->setPos(hp);
-	//hitPoint3->playSound(impact);
+	hitPoint3->setPos(hp);
+	hitPoint3->playSound(impact, 3);
 }
 
 //TODO if the other player is grabbing A and replaces it with B,
@@ -283,6 +287,7 @@ void FrameManager::setOtherPlayerInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh)
 
 //Buttons *********************************************************************************************
 void FrameManager::pressA() {
+
 }
 
 void FrameManager::pressB() {
@@ -315,14 +320,21 @@ void FrameManager::moveRJoystick(glm::vec2 xy) {
 
 void FrameManager::pressLTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjL > 1 && lTTime > COOLDOWN) {
-			server->sendTriggerInfo(false);	//Tells other player that a gun was fire
+		if (grabbedObjL >= 0 && lTTime > GUNCOOLDOWN) {
 			
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjL);
 			{	//Play sound
 				lGunSrc->setPos(pos);
-				lGunSrc->playSound(gunshot);
+				if (grabbedObjR > 1)
+				{
+					server->sendTriggerInfo(false);	//Tells other player that a gun was fire
+					rGunSrc->playSound(gunshot);
+				}
+				else
+				{
+					rGunSrc->playSound(explode);
+				}
 			}
 			//Get forwards direction
 			glm::vec3 dir = sceneGraph->getForwardVector(grabbedObjL);
@@ -339,8 +351,8 @@ void FrameManager::pressLTrigger(float f) {
 				server->sendHitInfo(hitPoint); //send packet notifying pos that got hit
 				
 				//TODO (this breaks the sound buffer)play sound hitPoint
-				//hitPoint1->setPos(hitPoint);
-				//hitPoint1->playSound(impact);
+				hitPoint1->setPos(hitPoint);
+				hitPoint1->playSound(impact, 3);
 			}
 			lTTime = 0;
 		}
@@ -350,14 +362,22 @@ void FrameManager::pressLTrigger(float f) {
 
 void FrameManager::pressRTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjR > 1 && rTTime > COOLDOWN) {
+		if (grabbedObjR >= 0 && rTTime > GUNCOOLDOWN) {
 			server->sendTriggerInfo(true);	//Tells other player that a gun was fire
 
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjR);
 			{	//Play sound
 				rGunSrc->setPos(pos);
-				rGunSrc->playSound(gunshot);
+				//std::cerr << grabbedObjR << std::endl;
+				if(grabbedObjR > 1)
+				{
+					rGunSrc->playSound(gunshot);
+				}
+				else
+				{
+					rGunSrc->playSound(explode);
+				}
 			}
 			//Get forwards direction
 			glm::vec3 dir = sceneGraph->getForwardVector(grabbedObjR);
@@ -404,6 +424,14 @@ void FrameManager::pressLGrip(float f) {
 					sceneGraph->setObjMatrix(closeObjL, oldGrab);
 					//switch grabbedObj var
 					grabbedObjL = closeObjL;
+					if (closeObjL > 1)
+					{
+						GUNCOOLDOWN = 1.0f;
+					}
+					else
+					{
+						GUNCOOLDOWN = 2.0f;
+					}
 				}
 			}
 		}
@@ -429,6 +457,14 @@ void FrameManager::pressRGrip(float f) {
 					sceneGraph->setObjMatrix(closeObjR, oldGrab);
 					//switch grabbedObj var
 					grabbedObjR = closeObjR;
+					if (closeObjL > 1)
+					{
+						GUNCOOLDOWN = 1.0f;
+					}
+					else
+					{
+						GUNCOOLDOWN = 2.0f;
+					}
 				}
 			}
 		}

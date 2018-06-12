@@ -18,6 +18,8 @@
 #include "SoundBox.h"
 #include "SoundEar.h"
 
+#include <SFML\Audio.hpp>
+
 class SoundEar;
 class SoundBox;
 
@@ -26,7 +28,7 @@ public:
 	SoundManager();
 	~SoundManager();
 	//void playSound(ALuint source, ALfloat* sourcePos, ALint buffer);
-	void playSound(ALfloat* sourcePos, ALint buffer, float volume);
+	void playSound(glm::vec3 sourcePos, unsigned int buffer, float volume);
 	ALuint loadSound(std::string file);
 	SoundBox* createSource();
 	SoundEar* createListener();
@@ -41,8 +43,8 @@ private:
 
 	ALCdevice* device;
 	ALCcontext* context;
-	std::vector<ALuint> sources;
-	std::vector<ALuint> buffers;
+	std::vector<sf::Sound*> sources;
+	std::vector<sf::SoundBuffer*> buffers;
 	std::vector<SoundEar*> listeners;
 	std::vector<char*> soundBuffers;
 

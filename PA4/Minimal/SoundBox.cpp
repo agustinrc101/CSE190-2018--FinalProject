@@ -20,9 +20,8 @@ SoundBox::~SoundBox()
 
 void SoundBox::playSound(unsigned int sound, float volume)
 {
-	float newpos[] = { pos.x, pos.y, pos.z };
 	//soundManager->playSound(source, newpos, sound);
-	soundManager->playSound(newpos, sound, volume);
+	soundManager->playSound(pos, sound, volume);
 }
 
 void SoundBox::playSound(std::string sound)
