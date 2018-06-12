@@ -101,10 +101,11 @@
 #define SOUND_FX_GUN_SUBMACHINE "../assets/audio/FX/gun_submachine.wav"
 #define SOUND_FX_GUNSHOT "../assets/audio/FX/gunshot.wav"
 #define SOUND_FX_GUNSHOT_SILENCED "../assets/audio/FX/silence_gunshot.wav"
+#define SOUND_FX_SLAP "../assets/audio/FX/slap.wav"
 
 //Definitions
 #define PI 3.14159265359f
 #define MINPRESS 0.7f //Defines the minimum press strength required for the triggers
-#define COOLDOWN 0.2f
+#define COOLDOWN 0.5f
 
 #endif //FILEPATHSANDDEFINITIONS_H

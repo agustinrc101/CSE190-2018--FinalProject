@@ -25,6 +25,13 @@
 #include "TexturedCube.h"
 #include "SoundManager.h"
 
+enum WeaponType {
+	HAND = 0,
+	GRENADE = 1,
+	PISTOL = 2,
+	SUBMACHINE = 3,
+};
+
 class FrameManager {
 public:
 	bool setSkyboxPos = true;

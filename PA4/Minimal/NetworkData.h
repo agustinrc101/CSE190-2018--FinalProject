@@ -32,6 +32,8 @@ struct Packet {							//TOTAL SIZE: 224 bytes
 	bool inSession = false;				//Size 4 bytes
 	bool shotLeft = false;				//-----------
 	bool shotRight = false;				//-----------
+	unsigned int leftWeapon;			//-----------
+	unsigned int rightWeapon;			//-----------
 										//-----------
 
 	void serialize(char * data) {

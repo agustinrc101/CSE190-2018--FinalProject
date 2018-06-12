@@ -18,8 +18,8 @@ public:
 	static void clientLoop(void *);
 	void sendPlayerBodyInfo(glm::mat4 hmd, glm::mat4 lh, glm::mat4 rh, int lG, int rG);
 	void receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat4 & rh, int & lG, int & rG);
-	void sendTriggerInfo(bool hand);
-	void receiveTriggerInfo(bool & left, bool & right);
+	void sendTriggerInfo(bool hand, unsigned int leftWeapon, unsigned int rightWeapon);
+	void receiveTriggerInfo(bool & left, bool & right, unsigned int& leftWeapon, unsigned int& rightWeapon);
 	void sendCanHitData(int index);
 	void receiveCanHitData(std::vector<int> & v);
 	void sendHitInfo(glm::vec3 hitpos);

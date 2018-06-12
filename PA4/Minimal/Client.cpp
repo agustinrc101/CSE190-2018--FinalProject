@@ -158,13 +158,15 @@ void Client::sendPacket(glm::mat4 head, glm::mat4 left, glm::mat4 right, int lG,
 }
 
 //Sends shooting info if player sent shooting info
-void Client::sendPacket(bool left, bool right) {
+void Client::sendPacket(bool left, bool right, unsigned int leftWeapon, unsigned int rightWeapon) {
 	char buf[sizeof(Packet)];
 	
 	Packet packet;
 		packet.type = TRIGGER_INFO;
 		packet.shotLeft = left;
 		packet.shotRight = right;
+		packet.leftWeapon = leftWeapon;
+		packet.rightWeapon = rightWeapon;
 	packet.serialize(buf);
 
 	int sendResult = send(sock, buf, sizeof(Packet), 0);

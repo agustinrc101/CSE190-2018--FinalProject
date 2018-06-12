@@ -36,6 +36,9 @@ int otherPlayerGrabR = -1;
 bool newSecondPlayer = true;
 double lTTime = 0;
 double rTTime = 0;
+float GUNCOOLDOWN = COOLDOWN;
+unsigned int leftWeapon;
+unsigned int rightWeapon;
 
 //SoundManager
 SoundManager* soundManager;
@@ -45,6 +48,8 @@ unsigned int music;
 unsigned int explode;
 unsigned int gunshot;
 unsigned int impact;
+unsigned int slap;
+unsigned int submachineshot;
 SoundBox * backgroundMusic;
 SoundBox * lGunSrc;
 SoundBox * rGunSrc;
@@ -53,10 +58,6 @@ SoundBox * otherRGunSrc;
 SoundBox * hitPoint1;
 SoundBox * hitPoint2;
 SoundBox * hitPoint3;
-sf::SoundBuffer buffer;
-sf::Sound sound;
-
-float GUNCOOLDOWN = COOLDOWN;
 
 //Initializing the FrameManager Object *********************************************************************
 FrameManager::FrameManager() {
@@ -143,6 +144,8 @@ void FrameManager::initSoundManager() {
 	explode = src->loadSound(SOUND_FX_EXPLOSION);
 	gunshot = src->loadSound(SOUND_FX_GUNSHOT);
 	impact = src->loadSound(SOUND_FX_BULLET_IMPACT);
+	slap = src->loadSound(SOUND_FX_SLAP);
+	submachineshot = src->loadSound(SOUND_FX_GUN_SUBMACHINE);
 
 	backgroundMusic->playSound(music);
 }
@@ -242,14 +245,60 @@ void FrameManager::getNetworkData() {//Gets information for the other player's l
 
 	//Get triggers
 	bool left, right;
-	server->receiveTriggerInfo(left, right);
+	unsigned int weapon;
+	server->receiveTriggerInfo(left, right, leftWeapon, rightWeapon);
 	if (left) {
 		otherLGunSrc->setPos(otherLH[3]);
-		otherLGunSrc->playSound(gunshot);
+		switch(leftWeapon)
+		{
+			case WeaponType::HAND:
+			{
+				otherLGunSrc->playSound(slap);
+				break;
+			}
+			case WeaponType::GRENADE:
+			{
+				otherLGunSrc->playSound(explode);
+				break;
+			}
+			case WeaponType::PISTOL:
+			{
+				otherLGunSrc->playSound(gunshot);
+				break;
+			}
+			case WeaponType::SUBMACHINE:
+			{
+				otherLGunSrc->playSound(submachineshot);
+				break;
+			}
+		}
 	}
 	if (right) {
 		otherRGunSrc->setPos(otherRH[3]);
 		otherRGunSrc->playSound(gunshot);
+		switch(rightWeapon)
+		{
+			case WeaponType::HAND:
+			{
+				otherRGunSrc->playSound(slap);
+				break;
+			}
+			case WeaponType::GRENADE:
+			{
+				otherRGunSrc->playSound(explode);
+				break;
+			}
+			case WeaponType::PISTOL:
+			{
+				otherRGunSrc->playSound(gunshot);
+				break;
+			}
+			case WeaponType::SUBMACHINE:
+			{
+				otherRGunSrc->playSound(submachineshot);
+				break;
+			}
+		}
 	}
 
 	server->resetTriggers();
@@ -326,14 +375,24 @@ void FrameManager::pressLTrigger(float f) {
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjL);
 			{	//Play sound
 				lGunSrc->setPos(pos);
-				if (grabbedObjR > 1)
+				// selecting the correct sound to play
+				if (grabbedObjL > 6)
 				{
-					server->sendTriggerInfo(false);	//Tells other player that a gun was fire
-					rGunSrc->playSound(gunshot);
+					server->sendTriggerInfo(false, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
+					lGunSrc->playSound(submachineshot);
+				}
+				else if (grabbedObjL > 1)
+				{
+					server->sendTriggerInfo(false, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
+					lGunSrc->playSound(gunshot);
+				}
+				else if(grabbedObjL > -1)
+				{
+					lGunSrc->playSound(explode);
 				}
 				else
 				{
-					rGunSrc->playSound(explode);
+					lGunSrc->playSound(slap);
 				}
 			}
 			//Get forwards direction
@@ -362,21 +421,31 @@ void FrameManager::pressLTrigger(float f) {
 
 void FrameManager::pressRTrigger(float f) {
 	if (f > MINPRESS) {
-		if (grabbedObjR >= 0 && rTTime > GUNCOOLDOWN) {
-			server->sendTriggerInfo(true);	//Tells other player that a gun was fire
+		if (grabbedObjR >= -1 && rTTime > GUNCOOLDOWN) {
 
 			//Get pos
 			glm::vec3 pos = sceneGraph->getPosition(grabbedObjR);
 			{	//Play sound
 				rGunSrc->setPos(pos);
 				//std::cerr << grabbedObjR << std::endl;
-				if(grabbedObjR > 1)
+				// selecting the correct sound to play
+				if (grabbedObjR > 6)
 				{
+					server->sendTriggerInfo(true, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
+					rGunSrc->playSound(submachineshot);
+				}
+				else if(grabbedObjR > 1)
+				{
+					server->sendTriggerInfo(true, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
 					rGunSrc->playSound(gunshot);
+				}
+				else if(grabbedObjR > -1)
+				{
+					rGunSrc->playSound(explode);
 				}
 				else
 				{
-					rGunSrc->playSound(explode);
+					rGunSrc->playSound(slap);
 				}
 			}
 			//Get forwards direction
@@ -424,13 +493,22 @@ void FrameManager::pressLGrip(float f) {
 					sceneGraph->setObjMatrix(closeObjL, oldGrab);
 					//switch grabbedObj var
 					grabbedObjL = closeObjL;
-					if (closeObjL > 1)
+					// Changing Cooldown based on weapon
+					if (grabbedObjL > 6)
+					{
+						GUNCOOLDOWN = 0.2f;
+					}
+					else if (grabbedObjL > 1)
 					{
 						GUNCOOLDOWN = 1.0f;
 					}
-					else
+					else if(grabbedObjL > -1)
 					{
 						GUNCOOLDOWN = 2.0f;
+					}
+					else
+					{
+						GUNCOOLDOWN = 0.5f;
 					}
 				}
 			}
@@ -457,13 +535,22 @@ void FrameManager::pressRGrip(float f) {
 					sceneGraph->setObjMatrix(closeObjR, oldGrab);
 					//switch grabbedObj var
 					grabbedObjR = closeObjR;
-					if (closeObjL > 1)
+					// Changing Cooldown based on weapon
+					if (grabbedObjR > 1)
+					{
+						GUNCOOLDOWN = 0.2f;
+					}
+					else if (grabbedObjR > 1)
 					{
 						GUNCOOLDOWN = 1.0f;
 					}
-					else
+					else if(grabbedObjR > -1)
 					{
 						GUNCOOLDOWN = 2.0f;
+					}
+					else
+					{
+						GUNCOOLDOWN = 0.5f;
 					}
 				}
 			}

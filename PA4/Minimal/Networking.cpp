@@ -46,13 +46,15 @@ void Networking::receivePlayerBodyInfo(glm::mat4 & hmd, glm::mat4 & lh, glm::mat
 	otherInSession = client->otherConnected;
 }
 
-void Networking::sendTriggerInfo(bool hand) {
-	client->sendPacket(!hand, hand);
+void Networking::sendTriggerInfo(bool hand, unsigned int leftWeapon, unsigned int rightWeapon) {
+	client->sendPacket(!hand, hand, leftWeapon, rightWeapon);
 }
 
-void Networking::receiveTriggerInfo(bool & left, bool & right) {
+void Networking::receiveTriggerInfo(bool & left, bool & right, unsigned int& leftWeapon, unsigned int& rightWeapon) {
 	left = client->getLeftShoot();
 	right = client->getRightShoot();
+	leftWeapon = client->getLeftWeapon();
+	rightWeapon = client->getRightWeapon();
 }
 
 void Networking::sendCanHitData(int index) {

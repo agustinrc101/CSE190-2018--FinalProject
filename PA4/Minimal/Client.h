@@ -33,7 +33,7 @@ public:
 
 	void sendPacket();
 	void sendPacket(glm::mat4 head, glm::mat4 left, glm::mat4 right, int lg, int rg);
-	void sendPacket(bool left, bool right);
+	void sendPacket(bool left, bool right, unsigned int leftWeapon, unsigned int rightWeapon);
 	void sendPacket(int index);
 	void sendPacket(glm::vec3 hitPos);
 	void sendPacket(bool connected);
@@ -50,6 +50,8 @@ public:
 	int getRightGrab() { return rightGrab; }
 	bool getLeftShoot() { return leftShoot; }
 	bool getRightShoot() {return rightShoot; }
+	unsigned int getLeftWeapon() {return leftWeapon;}
+	unsigned int getRightWeapon() {return rightWeapon;}
 	std::vector<int> getCanHits() { return canHits; }
 	bool getOtherIsConnected() { return otherIsConnected; }
 	void resetTriggers() { leftShoot = false; rightShoot = false; }
@@ -65,6 +67,8 @@ private:
 	int rightGrab = -1;
 	bool leftShoot = false;
 	bool rightShoot = false;
+	unsigned int leftWeapon;
+	unsigned int rightWeapon;
 
 	bool isConnected = false;
 	bool otherIsConnected = false;

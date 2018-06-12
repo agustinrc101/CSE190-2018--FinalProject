@@ -408,8 +408,15 @@ void Scene::initObjects(){
 			dirChild = new Transform();
 			dirChild->translate(1, 0, 0);
 			child->addChild(dirChild);
+		}
+		//Sub machine
+		{
+			Transform * dirChild;
+			geom = new Geometry();
+			path1 = MODEL_WEAPON_PISTOL;
+			path2 = TEXTURE_WEAPON_PISTOL;
+			geom->init(path1, path2);
 
-			//i added
 			child = new Transform();
 			child->translate(0, 0, 0);
 			child->extraRot = glm::rotate(glm::mat4(1.0f), 90.0f / 180.0f * glm::pi<float>(), glm::vec3(0, 1, 0)) * child->extraRot;
