@@ -133,7 +133,7 @@ void FrameManager::initObjects() {
 
 
 	otherPlayerHead->id = -2;
-	otherPlayerHead->setCollisionShapeSphere(0.25f);
+	otherPlayerHead->setCollisionShapeSphere(1.0f);
 	sceneGraph->setRigitBody(otherPlayerHead->getRigidbody());
 }
 
