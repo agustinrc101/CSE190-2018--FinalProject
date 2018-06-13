@@ -259,6 +259,7 @@ void FrameManager::getNetworkData() {
 	bool left, right;
 	unsigned int weapon;
 	server->receiveTriggerInfo(left, right, leftWeapon, rightWeapon);
+	/*
 	if (left) {
 		otherLGunSrc->setPos(otherLH[3]);
 		switch(leftWeapon)
@@ -312,7 +313,7 @@ void FrameManager::getNetworkData() {
 			}
 		}
 	}
-
+	*/
 	server->resetTriggers();
 
 	//Gets the can hit data
@@ -332,6 +333,7 @@ void FrameManager::getNetworkData() {
 	glm::vec3 hp;
 	server->receiveHitInfo(hp);
 
+	/*
 	if (hitPlayer) {
 		hitPoint3->setPos(_head[3]);
 		hitPoint3->playSound(playerHurt);
@@ -340,6 +342,7 @@ void FrameManager::getNetworkData() {
 		hitPoint3->setPos(hp);
 		hitPoint3->playSound(impact, 3);
 	}
+	*/
 }
 
 //TODO if the other player is grabbing A and replaces it with B,
