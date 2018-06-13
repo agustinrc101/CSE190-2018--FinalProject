@@ -424,7 +424,7 @@ void FrameManager::pressLTrigger(float f) {
 			{	//Play sound
 				lGunSrc->setPos(pos);
 				// selecting the correct sound to play
-				if (grabbedObjL > 6)
+				if (grabbedObjL > 5)
 				{
 					server->sendTriggerInfo(false, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
 					lGunSrc->playSound(submachineshot);
@@ -483,7 +483,7 @@ void FrameManager::pressRTrigger(float f) {
 				rGunSrc->setPos(pos);
 				//std::cerr << grabbedObjR << std::endl;
 				// selecting the correct sound to play
-				if (grabbedObjR > 6)
+				if (grabbedObjR > 5)
 				{
 					server->sendTriggerInfo(true, leftWeapon, rightWeapon);	//Tells other player that a gun was fire
 					rGunSrc->playSound(submachineshot);
